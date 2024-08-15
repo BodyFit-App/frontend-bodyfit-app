@@ -12,5 +12,8 @@ module.exports = {
     "!**/babel.config.js",
     "!**/expo-env.d.ts",
     "!**/.expo/**",
+    "!**/types/**",
+    "!**/lib/supabase.ts",
+    "!jest.config.js",
   ],
 };
