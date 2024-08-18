@@ -16,5 +16,5 @@ module.exports = {
     "!**/lib/supabase.ts",
     "!jest.config.js",
   ],
-  setupFilesAfterEnv: ["<rootDir>/__mocks__/supabase.ts"],
+  setupFilesAfterEnv: ["<rootDir>/__mocks__/jest.setup.js"],
 };
