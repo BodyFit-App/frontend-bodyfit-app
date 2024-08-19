@@ -1,0 +1,5 @@
+# Handle line endings for all text files
+* text=auto
+
+# Ensure coverage files and specific files have LF line endings
+coverage/* text eol=lf
