@@ -7,7 +7,7 @@ export const fetchExerciseById = async (
 ) => {
   const { data, error } = await client
     .from("exercises")
-    .select("*,categories(*)")
+    .select("*,categories(*),profiles(id,pseudo,avatar)")
     .eq("exercise_id", id)
     .single();
 
@@ -21,7 +21,7 @@ export const fetchExercises = async (
 ) => {
   const { data, error } = await client
     .from("exercises")
-    .select("*,categories(*)")
+    .select("*,categories(*),profiles(id,pseudo,avatar)")
     .range(page * NB_ELTS_PER_PAGE, page * NB_ELTS_PER_PAGE + NB_ELTS_PER_PAGE);
 
   if (error) throw new Error(error.message);
@@ -40,13 +40,14 @@ export const upsertExercise = async (
 
   if (error) throw new Error(error.message);
 
+  const exerciceCategories = categories.map(
+    (catId) => ({ exercise_id: data[0].id, category_id: catId }),
+  );
   addExerciseCategories(
-    categories.map(
-      (catId) => ({ exercise_id: data[0].id, category_id: catId }),
-    ),
+    exerciceCategories,
   );
 
-  return data;
+  return { data, categories: exerciceCategories };
 };
 
 export const deleteExercise = async (
@@ -63,11 +64,14 @@ export const deleteExercise = async (
 export const addExerciseCategories = async (
   categories: TablesInsert<"categories_exercises">[],
 ) => {
-  const { error } = await client
+  const { data, error } = await client
     .from("categories_exercises")
-    .insert(categories);
+    .insert(categories)
+    .select();
 
   if (error) throw new Error(error.message);
+
+  return data;
 };
 
 export const deleteExerciseCategories = async (

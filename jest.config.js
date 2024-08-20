@@ -13,7 +13,10 @@ module.exports = {
     "!**/.expo/**",
     "!**/types/**",
     "!**/lib/supabase.ts",
+    "!**/lib/constants.ts",
     "!jest.config.js",
+    "!theme.ts",
+    "!App.tsx",
   ],
   setupFilesAfterEnv: ["<rootDir>/__mocks__/jest.setup.js"],
 };
