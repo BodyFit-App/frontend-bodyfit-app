@@ -29,6 +29,17 @@ export const fetchExercises = async (
   return data;
 };
 
+export const deleteExercise = async (
+  id: number,
+) => {
+  const { error } = await client
+    .from("exercises")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+};
+
 export const upsertExercise = async (
   body: TablesInsert<"exercises">,
   categories: number[] = [],
@@ -43,35 +54,17 @@ export const upsertExercise = async (
   const exerciceCategories = categories.map(
     (catId) => ({ exercise_id: data[0].id, category_id: catId }),
   );
-  addExerciseCategories(
-    exerciceCategories,
-  );
-
-  return { data, categories: exerciceCategories };
-};
-
-export const deleteExercise = async (
-  id: number,
-) => {
-  const { error } = await client
-    .from("exercises")
-    .delete()
-    .eq("id", id);
-
-  if (error) throw new Error(error.message);
+  addExerciseCategories(exerciceCategories);
 };
 
 export const addExerciseCategories = async (
   categories: TablesInsert<"categories_exercises">[],
 ) => {
-  const { data, error } = await client
+  const { error } = await client
     .from("categories_exercises")
-    .insert(categories)
-    .select();
+    .insert(categories);
 
   if (error) throw new Error(error.message);
-
-  return data;
 };
 
 export const deleteExerciseCategories = async (

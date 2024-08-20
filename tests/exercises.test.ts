@@ -74,21 +74,12 @@ describe("Tests api/exercices", () => {
     it(
       "should return data and categories when upsert is successful",
       async () => {
-        const mockData = [{ id: 1, title: "Push-up" }];
-        const mockCats = [
-          { exercise_id: 1, category_id: 1 },
-          { exercise_id: 1, category_id: 2 },
-        ];
-        setTestData(mockData);
-
         const body = { title: "Push-up" };
         const categories = [1, 2];
+        const mockData = [{ id: 1, ...body }];
+        setTestData(mockData);
 
-        const result = await upsertExercise(body, categories);
-        expect(result).toEqual({
-          data: mockData,
-          categories: mockCats,
-        });
+        await expect(upsertExercise(body, categories)).resolves.not.toThrow();
       },
     );
 
@@ -115,20 +106,12 @@ describe("Tests api/exercices", () => {
 
   describe("addExerciseCategories", () => {
     it("should return data when insert is successful", async () => {
-      const mockData = [
-        { exercise_id: 1, category_id: 1 },
-        { exercise_id: 1, category_id: 2 },
-      ];
-      setTestData(mockData);
-
       const categories = [
         { exercise_id: 1, category_id: 1 },
         { exercise_id: 1, category_id: 2 },
       ];
 
-      const data = await addExerciseCategories(categories);
-
-      expect(data).toEqual(mockData);
+      await expect(addExerciseCategories(categories)).resolves.not.toThrow();
     });
 
     it("should throw when insert fails", async () => {
