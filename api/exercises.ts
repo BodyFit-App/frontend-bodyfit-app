@@ -1,4 +1,5 @@
 import { NB_ELTS_PER_PAGE } from "../lib/constants";
+import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 
@@ -8,7 +9,7 @@ export const fetchExerciseById = async (
   const { data, error } = await client
     .from("exercises")
     .select("*,categories(*),profiles(id,pseudo,avatar)")
-    .eq("exercise_id", id)
+    .eq("id", id)
     .single();
 
   if (error) throw new Error(error.message);
@@ -19,10 +20,11 @@ export const fetchExerciseById = async (
 export const fetchExercises = async (
   page: number = 1,
 ) => {
+  const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
   const { data, error } = await client
     .from("exercises")
     .select("*,categories(*),profiles(id,pseudo,avatar)")
-    .range(page * NB_ELTS_PER_PAGE, page * NB_ELTS_PER_PAGE + NB_ELTS_PER_PAGE);
+    .range(start, end);
 
   if (error) throw new Error(error.message);
 

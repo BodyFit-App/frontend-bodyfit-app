@@ -3,15 +3,9 @@ import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 
-export const fetchProgramById = async (
-  id: number,
-) => {
-  const { data, error } = await client
-    .from("programs")
-    .select(
-      "*,sessions(*,exercises(*,categories(*),profiles(id,pseudo,avatar))),profiles(*)",
-    )
-    .eq("id", id)
+export const fetchGoalById = async (id: number) => {
+  const { data, error } = await client.from("goals")
+    .select("*, steps(*)").eq("id", id)
     .single();
 
   if (error) throw new Error(error.message);
@@ -19,15 +13,13 @@ export const fetchProgramById = async (
   return data;
 };
 
-export const fetchPrograms = async (
+export const fetchGoals = async (
   page: number = 1,
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
   const { data, error } = await client
-    .from("programs")
-    .select(
-      "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar))),profiles(*)",
-    )
+    .from("goals")
+    .select("*")
     .range(start, end);
 
   if (error) throw new Error(error.message);
@@ -35,23 +27,23 @@ export const fetchPrograms = async (
   return data;
 };
 
-export const deleteProgram = async (
-  id: number,
+export const upsertGoal = async (
+  body: TablesInsert<"goals">,
 ) => {
   const { error } = await client
-    .from("programs")
-    .delete()
-    .eq("id", id);
+    .from("goals")
+    .upsert(body);
 
   if (error) throw new Error(error.message);
 };
 
-export const upsertProgram = async (
-  body: TablesInsert<"programs">,
+export const deleteGoal = async (
+  id: number,
 ) => {
   const { error } = await client
-    .from("programs")
-    .upsert(body);
+    .from("goals")
+    .delete()
+    .eq("id", id);
 
   if (error) throw new Error(error.message);
 };
