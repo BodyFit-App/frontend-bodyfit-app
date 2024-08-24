@@ -59,41 +59,41 @@ export type Database = {
       }
       exercises: {
         Row: {
-          author: string
           banner_image: string | null
           created_at: string
           description: Json | null
           estimated_time_seconds: number | null
           id: number
+          profile_id: number | null
           title: string
           visible: boolean
         }
         Insert: {
-          author?: string
           banner_image?: string | null
           created_at?: string
           description?: Json | null
           estimated_time_seconds?: number | null
           id?: number
+          profile_id?: number | null
           title: string
           visible?: boolean
         }
         Update: {
-          author?: string
           banner_image?: string | null
           created_at?: string
           description?: Json | null
           estimated_time_seconds?: number | null
           id?: number
+          profile_id?: number | null
           title?: string
           visible?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "exercise_author_fkey"
-            columns: ["author"]
+            foreignKeyName: "exercises_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -132,17 +132,17 @@ export type Database = {
         Row: {
           created_at: string
           exercise_id: number
-          user_id: string
+          profile_id: number | null
         }
         Insert: {
           created_at?: string
           exercise_id: number
-          user_id?: string
+          profile_id?: number | null
         }
         Update: {
           created_at?: string
           exercise_id?: number
-          user_id?: string
+          profile_id?: number | null
         }
         Relationships: [
           {
@@ -153,10 +153,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "favorite_exercises_follower_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "favorite_exercises_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -164,20 +164,27 @@ export type Database = {
       favorite_programs: {
         Row: {
           created_at: string
+          profile_id: number | null
           program_id: number
-          user_id: string
         }
         Insert: {
           created_at?: string
+          profile_id?: number | null
           program_id: number
-          user_id?: string
         }
         Update: {
           created_at?: string
+          profile_id?: number | null
           program_id?: number
-          user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "favorite_programs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "favorite_programs_program_id_fkey"
             columns: ["program_id"]
@@ -185,91 +192,84 @@ export type Database = {
             referencedRelation: "programs"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "favorite_programs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       followings: {
         Row: {
           created_at: string
-          followee_id: string
-          follower_id: string
+          followee_id: number
           id: number
+          profile_id: number
         }
         Insert: {
           created_at?: string
-          followee_id: string
-          follower_id?: string
+          followee_id: number
           id?: number
+          profile_id: number
         }
         Update: {
           created_at?: string
-          followee_id?: string
-          follower_id?: string
+          followee_id?: number
           id?: number
+          profile_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "followings_followed_id_fkey"
+            foreignKeyName: "followings_followee_id_fkey"
             columns: ["followee_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "followings_follower_id_fkey"
-            columns: ["follower_id"]
+            foreignKeyName: "followings_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
       goals: {
         Row: {
-          author: string
           created_at: string
           date_end: string | null
           date_start: string | null
           description: Json | null
           id: number
+          profile_id: number | null
           program_id: number | null
           title: string
           visible: boolean
         }
         Insert: {
-          author?: string
           created_at?: string
           date_end?: string | null
           date_start?: string | null
           description?: Json | null
           id?: number
+          profile_id?: number | null
           program_id?: number | null
           title: string
           visible?: boolean
         }
         Update: {
-          author?: string
           created_at?: string
           date_end?: string | null
           date_start?: string | null
           description?: Json | null
           id?: number
+          profile_id?: number | null
           program_id?: number | null
           title?: string
           visible?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "goals_author_fkey"
-            columns: ["author"]
+            foreignKeyName: "goals_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -315,35 +315,35 @@ export type Database = {
       }
       programs: {
         Row: {
-          author: string
           created_at: string
           description: Json | null
           id: number
+          profile_id: number | null
           title: string
           visible: boolean
         }
         Insert: {
-          author?: string
           created_at?: string
           description?: Json | null
           id?: number
+          profile_id?: number | null
           title: string
           visible?: boolean
         }
         Update: {
-          author?: string
           created_at?: string
           description?: Json | null
           id?: number
+          profile_id?: number | null
           title?: string
           visible?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "programs_author_fkey"
-            columns: ["author"]
+            foreignKeyName: "programs_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

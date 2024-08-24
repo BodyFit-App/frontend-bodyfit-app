@@ -2,13 +2,18 @@ import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 
 export const upsertSession = async (
+  exercise_id: number,
   body: TablesInsert<"sessions">,
 ) => {
-  const { error } = await client
+  const { data, error } = await client
     .from("sessions")
-    .upsert(body);
+    .upsert(body).select();
 
   if (error) throw new Error(error.message);
+
+  addExerciseSession({ exercise_id, session_id: data[0].id });
+
+  return data;
 };
 
 export const deleteSession = async (
@@ -33,12 +38,14 @@ export const addExerciseSession = async (
 };
 
 export const deleteExerciseSession = async (
-  id: number,
+  exercise_id: number,
+  session_id: number,
 ) => {
   const { error } = await client
     .from("exercises_sessions")
     .delete()
-    .eq("id", id);
+    .eq("exercise_id", exercise_id)
+    .eq("session_id", session_id);
 
   if (error) throw new Error(error.message);
 };

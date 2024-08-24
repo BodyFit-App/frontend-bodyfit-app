@@ -43,13 +43,13 @@ describe("Tests api/exercices", () => {
       const mockData = [
         {
           id: 1,
-          name: "Push-up",
+          title: "Push-up",
           categories: [{ id: 1, name: "Strength" }],
           profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
         },
         {
           id: 2,
-          name: "Squat",
+          title: "Squat",
           categories: [{ id: 2, name: "Legs" }],
           profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
         },
@@ -59,6 +59,32 @@ describe("Tests api/exercices", () => {
       const data = await fetchExercises(1);
 
       expect(data).toEqual(mockData);
+    });
+
+    it("should apply filters correctly", async () => {
+      const mockData = [
+        {
+          id: 1,
+          title: "Push-up",
+          categories: [{ id: 1, name: "Strength" }],
+          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
+        },
+      ];
+      setTestData(mockData);
+
+      const filter = { category: "Strength", author: "User1", title: "Push" };
+      const data = await fetchExercises(1, filter);
+
+      expect(data).toEqual(mockData);
+    });
+
+    it("should return empty array if no data matches filters", async () => {
+      setTestData([]);
+
+      const filter = { category: "Cardio", author: "User3", title: "Run" };
+      const data = await fetchExercises(1, filter);
+
+      expect(data).toEqual([]);
     });
 
     it("should throw when fetch fails", async () => {

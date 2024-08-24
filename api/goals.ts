@@ -30,11 +30,12 @@ export const fetchGoals = async (
 export const upsertGoal = async (
   body: TablesInsert<"goals">,
 ) => {
-  const { error } = await client
+  const { data, error } = await client
     .from("goals")
-    .upsert(body);
+    .upsert(body).select();
 
   if (error) throw new Error(error.message);
+  return data;
 };
 
 export const deleteGoal = async (
@@ -42,6 +43,28 @@ export const deleteGoal = async (
 ) => {
   const { error } = await client
     .from("goals")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+};
+
+export const upsertStep = async (
+  body: TablesInsert<"goals">,
+) => {
+  const { data, error } = await client
+    .from("goals")
+    .upsert(body).select();
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const deleteStep = async (
+  id: number,
+) => {
+  const { error } = await client
+    .from("steps")
     .delete()
     .eq("id", id);
 
