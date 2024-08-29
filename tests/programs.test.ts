@@ -36,19 +36,42 @@ describe("Tests api/programs", () => {
       );
     });
   });
-
   describe("fetchPrograms", () => {
     it("should return data when fetch is successful", async () => {
       const mockData = [
         {
           id: 1,
-          name: "Fitness Program",
+          title: "Fitness Program",
           description: "A program for general fitness",
+          sessions: [
+            {
+              exercises: [
+                {
+                  title: "Push-up",
+                  categories: [{ id: 1, name: "Strength" }],
+                  profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
+                },
+              ],
+            },
+          ],
+          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
         },
         {
           id: 2,
-          name: "Strength Program",
+          title: "Strength Program",
           description: "A program to build strength",
+          sessions: [
+            {
+              exercises: [
+                {
+                  title: "Squat",
+                  categories: [{ id: 2, name: "Legs" }],
+                  profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
+                },
+              ],
+            },
+          ],
+          profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
         },
       ];
       setTestData(mockData);
@@ -56,6 +79,51 @@ describe("Tests api/programs", () => {
       const data = await fetchPrograms(1);
 
       expect(data).toEqual(mockData);
+    });
+
+    it("should apply filters correctly", async () => {
+      const mockData = [
+        {
+          id: 1,
+          title: "Fitness Program",
+          description: "A program for general fitness",
+          sessions: [
+            {
+              exercises: [
+                {
+                  title: "Push-up",
+                  categories: [{ id: 1, name: "Strength" }],
+                  profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
+                },
+              ],
+            },
+          ],
+          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
+        },
+      ];
+      setTestData(mockData);
+
+      const filter = {
+        category: "Strength",
+        author: "User1",
+        title: "Fitness",
+      };
+      const data = await fetchPrograms(1, filter);
+
+      expect(data).toEqual(mockData);
+    });
+
+    it("should return empty array if no data matches filters", async () => {
+      setTestData([]);
+
+      const filter = {
+        category: "Cardio",
+        author: "User3",
+        title: "Endurance",
+      };
+      const data = await fetchPrograms(1, filter);
+
+      expect(data).toEqual([]);
     });
 
     it("should throw when fetch fails", async () => {

@@ -16,6 +16,7 @@ jest.mock("@supabase/supabase-js", () => {
           single: jest.fn().mockReturnThis(),
           range: jest.fn().mockReturnThis(),
           ilike: jest.fn().mockReturnThis(),
+          contains: jest.fn().mockReturnThis(),
           data: testData,
           error: testError,
         })),

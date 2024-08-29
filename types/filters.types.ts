@@ -3,3 +3,9 @@ export type ExerciseFilter = {
   author?: string;
   title?: string;
 };
+
+export type ProgramFilter = {
+  category?: string;
+  author?: string;
+  title?: string;
+};
