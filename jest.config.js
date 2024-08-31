@@ -4,7 +4,6 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!(react-native|@react-native|@react-navigation)/)",
   ],
-  collectCoverage: true,
   collectCoverageFrom: [
     "**/*.{ts,tsx,js,jsx}",
     "!**/coverage/**",
@@ -12,5 +11,12 @@ module.exports = {
     "!**/babel.config.js",
     "!**/expo-env.d.ts",
     "!**/.expo/**",
+    "!**/types/**",
+    "!**/lib/supabase.ts",
+    "!**/lib/constants.ts",
+    "!jest.config.js",
+    "!theme.ts",
+    "!App.tsx",
   ],
+  setupFilesAfterEnv: ["<rootDir>/__mocks__/jest.setup.js"],
 };
