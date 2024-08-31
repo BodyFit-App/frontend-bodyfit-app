@@ -9,7 +9,7 @@ import {
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
-describe("Tests api/exercices", () => {
+describe("Tests api/favorites", () => {
   afterEach(() => {
     jest.clearAllMocks();
     setTestData(null);

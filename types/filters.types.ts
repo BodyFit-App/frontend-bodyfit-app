@@ -9,3 +9,7 @@ export type ProgramFilter = {
   author?: string;
   title?: string;
 };
+
+export type ProfileFilter = {
+  pseudo?: string;
+};

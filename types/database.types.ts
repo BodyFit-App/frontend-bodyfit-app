@@ -132,16 +132,19 @@ export type Database = {
         Row: {
           created_at: string
           exercise_id: number
+          id: number
           profile_id: number | null
         }
         Insert: {
           created_at?: string
           exercise_id: number
+          id?: number
           profile_id?: number | null
         }
         Update: {
           created_at?: string
           exercise_id?: number
+          id?: number
           profile_id?: number | null
         }
         Relationships: [
@@ -164,16 +167,19 @@ export type Database = {
       favorite_programs: {
         Row: {
           created_at: string
+          id: number
           profile_id: number | null
           program_id: number
         }
         Insert: {
           created_at?: string
+          id?: number
           profile_id?: number | null
           program_id: number
         }
         Update: {
           created_at?: string
+          id?: number
           profile_id?: number | null
           program_id?: number
         }
@@ -199,19 +205,19 @@ export type Database = {
           created_at: string
           followee_id: number
           id: number
-          profile_id: number
+          profile_id: number | null
         }
         Insert: {
           created_at?: string
           followee_id: number
           id?: number
-          profile_id: number
+          profile_id?: number | null
         }
         Update: {
           created_at?: string
           followee_id?: number
           id?: number
-          profile_id?: number
+          profile_id?: number | null
         }
         Relationships: [
           {

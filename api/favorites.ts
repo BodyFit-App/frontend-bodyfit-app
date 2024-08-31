@@ -20,10 +20,10 @@ export const addFavExercise = async (exerciseId: number) => {
   if (error) throw new Error(error.message);
 };
 
-export const deleteFavExercise = async (exerciseId: number) => {
+export const deleteFavExercise = async (id: number) => {
   const { error } = await client.from("favorite_exercises").delete().eq(
-    "exercise_id",
-    exerciseId,
+    "id",
+    id,
   );
   if (error) throw new Error(error.message);
 };
@@ -46,10 +46,10 @@ export const addFavProgram = async (programId: number) => {
   if (error) throw new Error(error.message);
 };
 
-export const deleteFavProgram = async (programId: number) => {
+export const deleteFavProgram = async (id: number) => {
   const { error } = await client.from("favorite_programs").delete().eq(
-    "program_id",
-    programId,
+    "id",
+    id,
   );
   if (error) throw new Error(error.message);
 };
