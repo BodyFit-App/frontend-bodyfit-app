@@ -9,6 +9,7 @@ export const HomeScreen = () => {
   return (
     <View>
       <Button onPress={() => navigate("/")}>LoginScreen</Button>
+      <Button onPress={() => navigate("/exercises")}>ExercisesScreen</Button>
     </View>
   );
 };
