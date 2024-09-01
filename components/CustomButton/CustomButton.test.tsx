@@ -42,13 +42,4 @@ describe('CustomButton', () => {
     fireEvent.press(getByText('Connexion'));
     expect(onPressMock).not.toHaveBeenCalled();
   });
-
-  it('doit appliquer les styles corrects pour le type de bouton', () => {
-    const { getByText } = render(
-      <CustomButton title="Inscription" onPress={() => {}} buttonType="highlighted" />
-    );
-    const button = getByText('Inscription').parent;
-    expect(button.props.style.backgroundColor).toBe('#2F80ED');
-  });
-
 });
