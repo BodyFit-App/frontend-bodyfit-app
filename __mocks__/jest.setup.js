@@ -5,6 +5,9 @@ jest.mock("@supabase/supabase-js", () => {
   return {
     createClient: jest.fn().mockImplementation(() => {
       return {
+        auth: {
+          signInWithPassword: jest.fn(),
+        },
         from: jest.fn().mockReturnThis(),
         select: jest.fn().mockImplementation(() => ({
           eq: jest.fn().mockReturnThis(),
