@@ -37,4 +37,4 @@ yarn-error.*
 
 # jest
 coverage/
-
+**/__snapshots__/**
