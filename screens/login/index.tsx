@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { client } from "../../lib/supabase";
 import { useNavigate } from "react-router-native";
+import CustomTextField from "../../components/CustomTextField/CustomTextField";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -28,10 +29,16 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <View>
-        <TextInput
-          label="Email"
+        <CustomTextField
+          label="email"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text: string) => setEmail(text)}
+        />
+        <CustomTextField
+          label="Mot de passe"
+          value={password}
+          onChangeText={(text: string) => setPassword(text)}
+          secureTextEntry
         />
 
         <TextInput

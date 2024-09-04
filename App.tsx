@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { PaperProvider } from 'react-native-paper';
-import Screens from './screens';
-import theme from './theme';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PaperProvider } from "react-native-paper";
+import Screens from "./screens";
+import theme from "./theme";
+import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NavigationContainer } from '@react-navigation/native';
+import BottomNavigationComponent from './components/BottomNavigation/BottomNavigation';
+
 
 export default function App() {
   return (
@@ -13,6 +16,9 @@ export default function App() {
         <SafeAreaView style={styles.container}>
           <Screens />
         </SafeAreaView>
+        <NavigationContainer>
+          <BottomNavigationComponent />
+        </NavigationContainer>
       </PaperProvider>
     </SafeAreaProvider>
   );
