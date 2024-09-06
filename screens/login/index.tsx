@@ -29,20 +29,16 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <View>
-        <CustomTextField
+        <TextInput
           label="email"
           value={email}
           onChangeText={(text: string) => setEmail(text)}
-        />
-        <CustomTextField
-          label="Mot de passe"
-          value={password}
-          onChangeText={(text: string) => setPassword(text)}
-          secureTextEntry
+          mode="outlined"
         />
 
         <TextInput
           label="Mot de passe"
+          mode="outlined"
           value={password}
           onChangeText={(text) => setPassword(text)}
           secureTextEntry
