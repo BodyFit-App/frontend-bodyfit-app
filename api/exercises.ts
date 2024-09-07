@@ -9,7 +9,7 @@ export const fetchExerciseById = async (
 ) => {
   const { data, error } = await client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar)")
+    .select("*,categories(*),profiles(id,pseudo,avatar_url)")
     .eq("id", id)
     .single();
 
@@ -26,7 +26,7 @@ export const fetchExercises = async (
 
   let query = client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar)")
+    .select("*,categories(*),profiles(id,pseudo,avatar_url)")
     .range(start, end);
 
   if (filter?.category) {
