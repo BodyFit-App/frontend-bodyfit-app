@@ -1,27 +1,30 @@
 import React from "react";
-import { View , StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
-import { useNavigate } from "react-router-native";
+import { useNavigation } from "@react-navigation/native";
+
+export const HomeScreen = () => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      <Button
+        style={styles.button}
+        // onPress={() => navigation.navigate("Login")}
+      >
+        LoginScreen
+      </Button>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
-    marginTop: 20,
+    marginBottom: 10,
   },
 });
-
-export const HomeScreen = () => {
-  const navigate = useNavigate();
-
-  return (
-    <View>
-
-      <Button style={styles.button} onPress={() => navigate("/login")}>LoginScreen</Button>
-      <Button onPress={() => navigate("/exercises")}>ExercisesScreen</Button>
-    </View>
-  );
-};

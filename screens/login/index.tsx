@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { client } from "../../lib/supabase";
-import { useNavigate } from "react-router-native";
-import CustomTextField from "../../components/CustomTextField/CustomTextField";
 
 const LoginScreen = () => {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,7 +19,6 @@ const LoginScreen = () => {
 
     setEmail("");
     setPassword("");
-    navigate("/home");
   };
 
   return (
