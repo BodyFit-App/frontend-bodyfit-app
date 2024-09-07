@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#161626", // Fond sombre
+    backgroundColor: "#161626",
   },
   text: {
-    color: "#2F80ED", // Couleur bleue
+    color: "#2F80ED",
     fontSize: 24,
   },
   button: {

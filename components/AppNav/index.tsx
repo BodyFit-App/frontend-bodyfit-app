@@ -38,7 +38,7 @@ function AppNav() {
     <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
-          name="BottomTabs"
+          name="Home"
           component={BottomTabs}
           options={{ headerShown: false }}
         />
