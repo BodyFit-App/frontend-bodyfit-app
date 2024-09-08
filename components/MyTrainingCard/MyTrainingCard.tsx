@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, IconButton, Chip } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; // Assurez-vous d'avoir ce package installé
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface MyTrainingCardProps {
   username: string;
@@ -13,6 +13,40 @@ interface MyTrainingCardProps {
   onExercisePress?: () => void;
 }
 
+/**
+ * MyTrainingCard Component
+ * 
+ * Ce composant représente une carte d'entraînement qui affiche le nom d'utilisateur, 
+ * le titre de l'exercice, la durée de l'exercice, ainsi que des étiquettes (tags) associées.
+ * Il offre également une fonctionnalité pour ajouter ou retirer l'exercice des favoris 
+ * via une étoile cliquable.
+ * 
+ * @component
+ * @example
+ * const tags = ['Cardio', 'Fessier', 'Quadriceps'];
+ * return (
+ *   <MyTrainingCard
+ *     username="janedoe"
+ *     exerciseTitle="Course à pied"
+ *     tags={tags}
+ *     duration="40 min"
+ *     isFavorite={true}
+ *     onToggleFavorite={() => console.log('Toggle Favorite')}
+ *     onExercisePress={() => console.log('Go to exercise')}
+ *   />
+ * );
+ * 
+ * @param {Object} props - Props du composant.
+ * @param {string} props.username - Le nom d'utilisateur de la personne ayant créé l'exercice.
+ * @param {string} props.exerciseTitle - Le titre de l'exercice.
+ * @param {string[]} props.tags - Un tableau contenant les tags associés à l'exercice.
+ * @param {string} props.duration - La durée de l'exercice.
+ * @param {boolean} props.isFavorite - Indique si l'exercice est dans les favoris.
+ * @param {function} props.onToggleFavorite - Fonction appelée lorsqu'on clique sur l'icône étoile pour ajouter/retirer des favoris.
+ * @param {function} [props.onExercisePress] - Fonction appelée lorsqu'on clique sur le titre de l'exercice pour accéder aux détails.
+ * 
+ * @returns {JSX.Element} Un élément React représentant une carte d'entraînement.
+ */
 const MyTrainingCard: React.FC<MyTrainingCardProps> = ({
   username,
   exerciseTitle,
@@ -27,47 +61,47 @@ const MyTrainingCard: React.FC<MyTrainingCardProps> = ({
 
   return (
     <Card style={styles.card} onPress={() => console.log('Go to training program')}>
-        <View style={styles.headerContainer}>
-          <IconButton
-            icon={isFavorite ? 'star' : 'star-outline'}
-            iconColor={isFavorite ? '#2F80ED' : '#A0A0A0'}
-            size={30}
-            onPress={onToggleFavorite}
-            style={styles.iconButton}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.username}>@{username}</Text>
-            <Text style={styles.exerciseTitle} onPress={onExercisePress}>{exerciseTitle}</Text>
-          </View>
-          <View style={styles.rightSection}>
-            <View style={styles.durationContainer}>
-              <MaterialCommunityIcons
-                name="clock-outline"
-                color="#2F80ED"
-                size={18}
-              />
-              <Text style={styles.duration}>{duration}</Text>
-            </View>
+      <View style={styles.headerContainer}>
+        <IconButton
+          icon={isFavorite ? 'star' : 'star-outline'}
+          iconColor={isFavorite ? '#2F80ED' : '#A0A0A0'}
+          size={30}
+          onPress={onToggleFavorite}
+          style={styles.iconButton}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.username}>@{username}</Text>
+          <Text style={styles.exerciseTitle} onPress={onExercisePress}>{exerciseTitle}</Text>
+        </View>
+        <View style={styles.rightSection}>
+          <View style={styles.durationContainer}>
+            <MaterialCommunityIcons
+              name="clock-outline"
+              color="#2F80ED"
+              size={18}
+            />
+            <Text style={styles.duration}>{duration}</Text>
           </View>
         </View>
-        <View style={styles.tagContainer}>
-          {visibleTags.map((tag, index) => (
-            <Chip
-              mode="outlined"
-              compact
-              key={index}
-              style={styles.chip}
-              textStyle={styles.chipText}
-            >
-              {tag}
-            </Chip>
-          ))}
-          {remainingTagsCount > 0 && (
-            <Chip mode="outlined" compact style={styles.chip} textStyle={styles.chipText}>
-              + {remainingTagsCount} autres
-            </Chip>
-          )}
-        </View>
+      </View>
+      <View style={styles.tagContainer}>
+        {visibleTags.map((tag, index) => (
+          <Chip
+            mode="outlined"
+            compact
+            key={index}
+            style={styles.chip}
+            textStyle={styles.chipText}
+          >
+            {tag}
+          </Chip>
+        ))}
+        {remainingTagsCount > 0 && (
+          <Chip mode="outlined" compact style={styles.chip} textStyle={styles.chipText}>
+            + {remainingTagsCount} autres
+          </Chip>
+        )}
+      </View>
     </Card>
   );
 };
