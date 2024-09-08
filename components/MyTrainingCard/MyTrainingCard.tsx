@@ -1,0 +1,132 @@
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Card, Text, IconButton, Chip } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; // Assurez-vous d'avoir ce package installé
+
+interface MyTrainingCardProps {
+  username: string;
+  exerciseTitle: string;
+  tags: string[];
+  duration: string;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  onExercisePress?: () => void;
+}
+
+const MyTrainingCard: React.FC<MyTrainingCardProps> = ({
+  username,
+  exerciseTitle,
+  tags,
+  duration,
+  isFavorite,
+  onToggleFavorite,
+  onExercisePress,
+}) => {
+  const visibleTags = tags.slice(0, 3);
+  const remainingTagsCount = tags.length - visibleTags.length;
+
+  return (
+    <Card style={styles.card} onPress={() => console.log('Go to training program')}>
+        <View style={styles.headerContainer}>
+          <IconButton
+            icon={isFavorite ? 'star' : 'star-outline'}
+            iconColor={isFavorite ? '#2F80ED' : '#A0A0A0'}
+            size={30}
+            onPress={onToggleFavorite}
+            style={styles.iconButton}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.username}>@{username}</Text>
+            <Text style={styles.exerciseTitle} onPress={onExercisePress}>{exerciseTitle}</Text>
+          </View>
+          <View style={styles.rightSection}>
+            <View style={styles.durationContainer}>
+              <MaterialCommunityIcons
+                name="clock-outline"
+                color="#2F80ED"
+                size={18}
+              />
+              <Text style={styles.duration}>{duration}</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.tagContainer}>
+          {visibleTags.map((tag, index) => (
+            <Chip
+              mode="outlined"
+              compact
+              key={index}
+              style={styles.chip}
+              textStyle={styles.chipText}
+            >
+              {tag}
+            </Chip>
+          ))}
+          {remainingTagsCount > 0 && (
+            <Chip mode="outlined" compact style={styles.chip} textStyle={styles.chipText}>
+              + {remainingTagsCount} autres
+            </Chip>
+          )}
+        </View>
+    </Card>
+  );
+};
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: '#161626',
+    marginBottom: 10,
+    padding: 5,
+    borderRadius: 10,
+    borderColor: '#2F80ED',
+    borderWidth: 2,
+    width: '95%',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  iconButton: {
+    marginLeft: -10,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  username: {
+    color: '#2F80ED',
+    fontWeight: 'bold',
+  },
+  exerciseTitle: {
+    color: '#ffffff',
+  },
+  rightSection: {
+    justifyContent: 'center',
+  },
+  durationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  duration: {
+    color: '#2F80ED',
+    fontWeight: 'bold',
+    marginLeft: 2,
+  },
+  tagContainer: {
+    flexDirection: 'row',
+  },
+  chip: {
+    backgroundColor: '#0b0b12',
+    borderRadius: 16,
+    borderColor: '#2F80ED',
+    marginRight: 5,
+  },
+  chipText: {
+    lineHeight: 9,
+    fontSize: 9,
+    color: '#ffffff',
+  },
+});
+
+export default MyTrainingCard;
