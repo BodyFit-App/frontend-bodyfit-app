@@ -7,6 +7,7 @@ import { ExercisesScreen } from "../../screens/exercises/index";
 import ProfilScreen from "../../screens/Profil/index";
 import LoginScreen from "../../screens/login";
 import theme from "../../theme";
+import { useAuth } from "../../hooks/useAuth";
 
 const Stack = createStackNavigator();
 
@@ -34,9 +35,22 @@ function BottomTabs() {
 }
 
 function AppNav() {
+  const { session } = useAuth();
+
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator>
+        {/* TODO: Uncomment later to protect routes 
+         {session ? (
+          <Stack.Screen
+            name="Home"
+            component={BottomTabs}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen name="Login" component={LoginScreen} />
+        )} */}
+
         <Stack.Screen
           name="Home"
           component={BottomTabs}
