@@ -1,32 +1,27 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { client } from "../../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginScreen = () => {
+  const { signIn } = useAuth();
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const { error } = await client.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await signIn(email, password);
 
-    if (error) {
-      console.log(error);
-      return;
+    if (!error) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Home" as never }],
+      });
+    } else {
+      console.log("Erreur de connexion", error.message);
     }
-
-    setEmail("");
-    setPassword("");
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" as never }],
-    });
   };
 
   return (

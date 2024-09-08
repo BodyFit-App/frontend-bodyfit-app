@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/useAuth";
 
 const ActualiteScreen = () => {
+  const { signOut } = useAuth();
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -13,6 +15,9 @@ const ActualiteScreen = () => {
         onPress={() => navigation.navigate("Login" as never)}
       >
         LoginScreen
+      </Button>
+      <Button style={styles.button} onPress={() => signOut()}>
+        sign out
       </Button>
     </View>
   );

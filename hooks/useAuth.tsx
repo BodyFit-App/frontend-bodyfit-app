@@ -1,0 +1,48 @@
+import { useState, useEffect } from "react";
+import { client } from "../lib/supabase";
+import { Session } from "@supabase/supabase-js";
+
+export const useAuth = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getSession = async () => {
+      const {
+        data: { session },
+      } = await client.auth.getSession();
+      setSession(session);
+      setLoading(false);
+    };
+
+    getSession();
+
+    const { data: listener } = client.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    return await client.auth.signInWithPassword({ email, password });
+  };
+
+  const signOut = async () => {
+    setLoading(true);
+    await client.auth.signOut();
+    setSession(null);
+    setLoading(false);
+  };
+
+  return {
+    session,
+    signIn,
+    signOut,
+    loading,
+  };
+};
