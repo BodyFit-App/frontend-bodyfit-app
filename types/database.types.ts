@@ -423,7 +423,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_content: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          pseudo: string | null
+          title: string | null
+          type: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
