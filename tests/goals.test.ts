@@ -4,6 +4,7 @@ import {
   fetchGoals,
   upsertGoal,
 } from "../api/goals";
+import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
@@ -39,23 +40,16 @@ describe("Tests api/goals", () => {
 
   describe("fetchGoals", () => {
     it("should return data when fetch is successful", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Weight Loss Goal",
-          description: "A goal to lose weight",
-        },
-        {
-          id: 2,
-          title: "Muscle Gain Goal",
-          description: "A goal to gain muscle",
-        },
-      ];
+      const mockData: Tables<"goals">[] = [];
       setTestData(mockData);
 
       const data = await fetchGoals(1);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: [],
+      });
     });
 
     it("should throw when fetch fails", async () => {

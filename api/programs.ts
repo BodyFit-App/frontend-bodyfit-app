@@ -30,6 +30,7 @@ export const fetchPrograms = async (
     .from("programs")
     .select(
       "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar))),profiles(*)",
+      { count: "exact" },
     )
     .range(start, end);
 
@@ -47,11 +48,26 @@ export const fetchPrograms = async (
     query = query.ilike("title", `%${filter.title}%`);
   }
 
-  const { data, error } = await query;
+  const { data, count, error } = await query;
 
   if (error) throw new Error(error.message);
 
-  return data;
+  const totalPages = count ? Math.ceil(count! / NB_ELTS_PER_PAGE) : 0;
+  const nextPage = page + 1;
+  const nextCursor = nextPage > totalPages ? null : nextPage;
+
+  return { data, nextCursor, count };
+};
+
+export const getFavoriteStatusForPrograms = async (programIds: number[]) => {
+  const { data, error } = await client
+    .from("favorite_programs")
+    .select("program_id")
+    .in("program_id", programIds);
+
+  if (error) throw new Error(error.message);
+
+  return data.map(({ program_id }) => program_id);
 };
 
 export const deleteProgram = async (
