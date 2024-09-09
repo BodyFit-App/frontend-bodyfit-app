@@ -21,9 +21,9 @@ export const ExercisesScreen = () => {
 
   return (
     <View>
-      {data?.map(({ id, title }) => (
+      {data?.map(({ id, title, isFav }) => (
         <Text key={id} style={{ color: "white" }}>
-          {title}
+          {title} {isFav ? "*" : ""}
         </Text>
       ))}
     </View>

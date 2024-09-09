@@ -45,7 +45,19 @@ export const fetchExercises = async (
 
   if (error) throw new Error(error.message);
 
-  return data;
+  let queryFav = client.from("favorite_exercises").select("exercise_id").in(
+    "exercise_id",
+    data.map(({ id }) => id),
+  );
+
+  const { data: dataFav, error: errorFav } = await queryFav;
+
+  if (errorFav) throw new Error(errorFav.message);
+
+  return data.map((row) => ({
+    ...row,
+    isFav: dataFav.some((fav) => fav.exercise_id === row.id),
+  }));
 };
 
 export const deleteExercise = async (
