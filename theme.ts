@@ -11,7 +11,8 @@ const theme = {
 		border: "#42424D",
 		primary: "#2F80ED",
 		backgroundButton: "#161626",
-		text: '#2F80ED'
+		text: '#2F80ED',
+		textFollow: '#ffffff',
 	},
 };
 
