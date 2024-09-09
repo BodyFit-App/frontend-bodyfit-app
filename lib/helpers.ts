@@ -22,3 +22,17 @@ export const formatExercisesWithFavorites = (
     })),
   };
 };
+
+export const formatProgramsWithFavorites = (
+  programs: Tables<"programs">[],
+  favorites: number[],
+  nextCursor: number | null,
+) => {
+  return {
+    nextCursor,
+    programs: programs.map((program) => ({
+      ...program,
+      isFav: favorites.includes(program.id),
+    })),
+  };
+};
