@@ -8,7 +8,10 @@ const theme = {
 		...DefaultTheme.colors,
 		...DarkTheme.colors,
 		background: "#0b0b12",
-		text: "#ffffff",
+		border: "#42424D",
+		primary: "#2F80ED",
+		backgroundButton: "#161626",
+		text: '#2F80ED'
 	},
 };
 
