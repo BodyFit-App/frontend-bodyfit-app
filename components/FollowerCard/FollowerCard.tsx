@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Text, Avatar, Button } from "react-native-paper";
+import CustomButton from "../CustomButton/CustomButton";
+import theme from "../../theme";
 
 /**
  * Props pour le composant FollowerCard.
@@ -61,14 +63,13 @@ const FollowerCard: React.FC<FollowerCardProps> = ({
           <Text style={styles.username}>@{username}</Text>
           <Text style={styles.fullName}>{fullName}</Text>
         </View>
-        <Button
-          buttonColor={followed ? "#161626" : "#2F80ED"}
-          textColor={followed ? "#2F80ED" : "#ffffff"}
+        <CustomButton
+          {...(followed ? { style: { backgroundColor: theme.colors.primary, borderWidth: 0} } : "")}
+          {...(followed ? { textColor: theme.colors.textFollow  } : "")}
           onPress={onFollowToggle}
-          style={followed ? styles.followButton : styles.unFollowButton}
         >
           {followed ? "Suivi(e)" : "Suivre"}
-        </Button>
+        </CustomButton>
       </Card.Content>
       <View style={styles.statsContainer}>
         <Text variant="labelSmall" style={styles.statTextCount}>
@@ -128,17 +129,6 @@ const styles = StyleSheet.create({
   statTextCount: {
     color: "#2F80ED",
     marginRight: 10,
-  },
-  followButton: {
-    minWidth: 90,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#2F80ED",
-  },
-  unFollowButton: {
-    minWidth: 90,
-    borderRadius: 6,
-    borderWidth: 1,
   },
 });
 
