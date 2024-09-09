@@ -5,6 +5,7 @@ import {
   fetchExercises,
   upsertExercise,
 } from "../api/exercises";
+import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
@@ -40,20 +41,7 @@ describe("Tests api/exercices", () => {
 
   describe("fetchExercises", () => {
     it("should return data when fetch is successful", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Push-up",
-          categories: [{ id: 1, name: "Strength" }],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-        {
-          id: 2,
-          title: "Squat",
-          categories: [{ id: 2, name: "Legs" }],
-          profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
-        },
-      ];
+      const mockData: Tables<"exercises">[] = [];
       setTestData(mockData);
 
       const data = await fetchExercises(1);
@@ -62,14 +50,7 @@ describe("Tests api/exercices", () => {
     });
 
     it("should apply filters correctly", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Push-up",
-          categories: [{ id: 1, name: "Strength" }],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-      ];
+      const mockData: Tables<"exercises">[] = [];
       setTestData(mockData);
 
       const filter = { category: "Strength", author: "User1", title: "Push" };

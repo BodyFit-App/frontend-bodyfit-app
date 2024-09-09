@@ -45,19 +45,18 @@ export const fetchExercises = async (
 
   if (error) throw new Error(error.message);
 
-  let queryFav = client.from("favorite_exercises").select("exercise_id").in(
-    "exercise_id",
-    data.map(({ id }) => id),
-  );
+  return data;
+};
 
-  const { data: dataFav, error: errorFav } = await queryFav;
+export const getFavoriteStatusForExercises = async (exerciseIds: number[]) => {
+  const { data, error } = await client
+    .from("favorite_exercises")
+    .select("exercise_id")
+    .in("exercise_id", exerciseIds);
 
-  if (errorFav) throw new Error(errorFav.message);
+  if (error) throw new Error(error.message);
 
-  return data.map((row) => ({
-    ...row,
-    isFav: dataFav.some((fav) => fav.exercise_id === row.id),
-  }));
+  return data.map(({ exercise_id }) => exercise_id);
 };
 
 export const deleteExercise = async (
