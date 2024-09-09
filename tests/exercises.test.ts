@@ -5,6 +5,7 @@ import {
   fetchExercises,
   upsertExercise,
 } from "../api/exercises";
+import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
@@ -40,42 +41,30 @@ describe("Tests api/exercices", () => {
 
   describe("fetchExercises", () => {
     it("should return data when fetch is successful", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Push-up",
-          categories: [{ id: 1, name: "Strength" }],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-        {
-          id: 2,
-          title: "Squat",
-          categories: [{ id: 2, name: "Legs" }],
-          profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
-        },
-      ];
+      const mockData: Tables<"exercises">[] = [];
       setTestData(mockData);
 
       const data = await fetchExercises(1);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should apply filters correctly", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Push-up",
-          categories: [{ id: 1, name: "Strength" }],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-      ];
+      const mockData: Tables<"exercises">[] = [];
       setTestData(mockData);
 
       const filter = { category: "Strength", author: "User1", title: "Push" };
       const data = await fetchExercises(1, filter);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should return empty array if no data matches filters", async () => {
@@ -84,7 +73,11 @@ describe("Tests api/exercices", () => {
       const filter = { category: "Cardio", author: "User3", title: "Run" };
       const data = await fetchExercises(1, filter);
 
-      expect(data).toEqual([]);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: [],
+      });
     });
 
     it("should throw when fetch fails", async () => {

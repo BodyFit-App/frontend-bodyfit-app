@@ -4,6 +4,7 @@ import {
   fetchPrograms,
   upsertProgram,
 } from "../api/programs";
+import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
@@ -38,69 +39,20 @@ describe("Tests api/programs", () => {
   });
   describe("fetchPrograms", () => {
     it("should return data when fetch is successful", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Fitness Program",
-          description: "A program for general fitness",
-          sessions: [
-            {
-              exercises: [
-                {
-                  title: "Push-up",
-                  categories: [{ id: 1, name: "Strength" }],
-                  profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-                },
-              ],
-            },
-          ],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-        {
-          id: 2,
-          title: "Strength Program",
-          description: "A program to build strength",
-          sessions: [
-            {
-              exercises: [
-                {
-                  title: "Squat",
-                  categories: [{ id: 2, name: "Legs" }],
-                  profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
-                },
-              ],
-            },
-          ],
-          profiles: { id: 2, pseudo: "User2", avatar: "avatar2.png" },
-        },
-      ];
+      const mockData: Tables<"programs">[] = [];
       setTestData(mockData);
 
       const data = await fetchPrograms(1);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should apply filters correctly", async () => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Fitness Program",
-          description: "A program for general fitness",
-          sessions: [
-            {
-              exercises: [
-                {
-                  title: "Push-up",
-                  categories: [{ id: 1, name: "Strength" }],
-                  profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-                },
-              ],
-            },
-          ],
-          profiles: { id: 1, pseudo: "User1", avatar: "avatar1.png" },
-        },
-      ];
+      const mockData: Tables<"programs">[] = [];
       setTestData(mockData);
 
       const filter = {
@@ -110,7 +62,11 @@ describe("Tests api/programs", () => {
       };
       const data = await fetchPrograms(1, filter);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should return empty array if no data matches filters", async () => {
@@ -123,7 +79,11 @@ describe("Tests api/programs", () => {
       };
       const data = await fetchPrograms(1, filter);
 
-      expect(data).toEqual([]);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: [],
+      });
     });
 
     it("should throw when fetch fails", async () => {

@@ -17,7 +17,6 @@ export const fetchExerciseById = async (
 
   return data;
 };
-
 export const fetchExercises = async (
   page: number = 1,
   filter?: ExerciseFilter,
@@ -26,7 +25,9 @@ export const fetchExercises = async (
 
   let query = client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar_url)")
+    .select("*,categories(*),profiles(id,pseudo,avatar_url)", {
+      count: "exact",
+    })
     .range(start, end);
 
   if (filter?.category) {
@@ -41,11 +42,26 @@ export const fetchExercises = async (
     query = query.ilike("title", `%${filter.title}%`);
   }
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) throw new Error(error.message);
 
-  return data;
+  const totalPages = count ? Math.ceil(count! / NB_ELTS_PER_PAGE) : 0;
+  const nextPage = page + 1;
+  const nextCursor = nextPage > totalPages ? null : nextPage;
+
+  return { data, nextCursor, count };
+};
+
+export const getFavoriteStatusForExercises = async (exerciseIds: number[]) => {
+  const { data, error } = await client
+    .from("favorite_exercises")
+    .select("exercise_id")
+    .in("exercise_id", exerciseIds);
+
+  if (error) throw new Error(error.message);
+
+  return data.map(({ exercise_id }) => exercise_id);
 };
 
 export const deleteExercise = async (
