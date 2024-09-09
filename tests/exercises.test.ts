@@ -46,7 +46,11 @@ describe("Tests api/exercices", () => {
 
       const data = await fetchExercises(1);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should apply filters correctly", async () => {
@@ -56,7 +60,11 @@ describe("Tests api/exercices", () => {
       const filter = { category: "Strength", author: "User1", title: "Push" };
       const data = await fetchExercises(1, filter);
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: mockData,
+      });
     });
 
     it("should return empty array if no data matches filters", async () => {
@@ -65,7 +73,11 @@ describe("Tests api/exercices", () => {
       const filter = { category: "Cardio", author: "User3", title: "Run" };
       const data = await fetchExercises(1, filter);
 
-      expect(data).toEqual([]);
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: [],
+      });
     });
 
     it("should throw when fetch fails", async () => {

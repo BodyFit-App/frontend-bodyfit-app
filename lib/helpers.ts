@@ -12,9 +12,13 @@ export const getRange = (page: number, perPage: number): [number, number] => {
 export const formatExercisesWithFavorites = (
   exercises: Tables<"exercises">[],
   favorites: number[],
+  nextCursor: number | null,
 ) => {
-  return exercises.map((exercise) => ({
-    ...exercise,
-    isFav: favorites.includes(exercise.id),
-  }));
+  return {
+    nextCursor,
+    exercises: exercises.map((exercise) => ({
+      ...exercise,
+      isFav: favorites.includes(exercise.id),
+    })),
+  };
 };
