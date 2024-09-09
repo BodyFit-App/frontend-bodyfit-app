@@ -53,7 +53,7 @@ const ObjectifCard: React.FC<ObjectifCardProps> = ({
     <Card style={styles.card} onPress={onPress}>
       <Card.Content>
         <View style={styles.headerContainer}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
           <View style={styles.progressContainer}>
             <View style={styles.progressView}>
               <ProgressBar
@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#161626",
     marginBottom: 10,
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(47, 128, 237, 0.3)",
   },
   headerContainer: {
     flexDirection: "row",
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#2F80ED",
     flex: 1,
+    marginRight: 5,
   },
   progressContainer: {
     flexDirection: "row",
