@@ -13,6 +13,7 @@ const theme = {
 		backgroundButton: "#161626",
 		text: '#2F80ED',
 		textFollow: '#ffffff',
+		textPlaceholder: '#79797F',
 	},
 };
 
