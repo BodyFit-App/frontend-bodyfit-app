@@ -50,7 +50,7 @@ const ObjectifListScreen = () => {
         value={searchQuery}
         style={styles.searchBar}
         iconColor="#2F80ED"
-        inputStyle={{ color: "#ffffff" }}
+        inputStyle={styles.input}
       />
       <View style={styles.filterContainer}>
         <Text style={styles.filterText}>{resultsCount} résultats</Text>
@@ -59,7 +59,7 @@ const ObjectifListScreen = () => {
           onDismiss={closeMenu}
           anchor={
             <TouchableOpacity style={styles.filterButton} onPress={openMenu}>
-              <Text style={styles.filterButtonText}>{filter}</Text>
+              <Text>{filter}</Text>
               <IconButton icon="chevron-down" size={18} iconColor="#A0A0A0" />
             </TouchableOpacity>
           }
@@ -101,14 +101,20 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 20,
+    paddingBottom: 20,
     textAlign: "center",
+    borderBottomColor: "#42424D",
+    borderBottomWidth: 1,
   },
   searchBar: {
     marginBottom: 20,
-    borderRadius: 25,
+    borderRadius: 15,
     backgroundColor: "#161626",
-    borderWidth: 2,
-    borderColor: "#22283e",
+    borderWidth: 1,
+    borderColor: "#2F80ED",
+  },
+  input: {
+    color: "#ffffff",
   },
   filterContainer: {
     borderColor: "#22283e",
@@ -116,25 +122,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingLeft: 10,
     marginBottom: 20,
     borderRadius: 10,
   },
   filterText: {
-    color: "#A0A0A0",
+    color: "#ffffff",
   },
   filterButton: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "#2F80ED",
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  filterButtonText: {
-    color: "#2F80ED",
-    marginRight: 5,
   },
   scrollView: {
     flex: 1,
