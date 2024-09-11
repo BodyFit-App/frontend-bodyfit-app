@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import ObjectifCard from "./ObjectifCard"; // Ajustez selon votre chemin d'importation
+import ObjectifCard from "./ObjectifCard";
 
 describe("ObjectifCard", () => {
   const mockProps = {

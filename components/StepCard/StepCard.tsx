@@ -77,6 +77,7 @@ const StepCard: React.FC<StepCardProps> = ({
               size={20}
               onPress={onDelete}
               style={styles.iconButton}
+              testID="delete-button"
             />
           </>
         ) : (
@@ -90,6 +91,7 @@ const StepCard: React.FC<StepCardProps> = ({
               size={20}
               onPress={onValidate}
               style={styles.iconButton}
+              testID={isValidated ? 'check' : 'check-outline'}
             />
           </>
         )}
