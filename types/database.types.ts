@@ -238,6 +238,7 @@ export type Database = {
       }
       goals: {
         Row: {
+          achieved: boolean
           created_at: string
           date_end: string | null
           date_start: string | null
@@ -249,6 +250,7 @@ export type Database = {
           visible: boolean
         }
         Insert: {
+          achieved?: boolean
           created_at?: string
           date_end?: string | null
           date_start?: string | null
@@ -260,6 +262,7 @@ export type Database = {
           visible?: boolean
         }
         Update: {
+          achieved?: boolean
           created_at?: string
           date_end?: string | null
           date_start?: string | null
@@ -294,7 +297,7 @@ export type Database = {
           full_name: string | null
           id: number
           pseudo: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -302,7 +305,7 @@ export type Database = {
           full_name?: string | null
           id?: number
           pseudo?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -310,7 +313,7 @@ export type Database = {
           full_name?: string | null
           id?: number
           pseudo?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -436,7 +439,10 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      get_profile_id: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

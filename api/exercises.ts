@@ -3,6 +3,7 @@ import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 import { ExerciseFilter } from "../types/filters.types";
+import { ExerciseOrder } from "../types/orders.types";
 
 export const fetchExerciseById = async (
   id: number,
@@ -17,9 +18,11 @@ export const fetchExerciseById = async (
 
   return data;
 };
+
 export const fetchExercises = async (
   page: number = 1,
   filter?: ExerciseFilter,
+  order: ExerciseOrder = { field: "created_at", asc: false },
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
@@ -34,13 +37,19 @@ export const fetchExercises = async (
     query = query.eq("categories.name", filter.category);
   }
 
-  if (filter?.author) {
-    query = query.eq("profiles.pseudo", filter.author);
+  if (filter?.profile_id) {
+    query = query.eq("profiles.id", filter.profile_id);
+  }
+
+  if (filter?.profile_pseudo) {
+    query = query.ilike("profiles.pseudo", `%${filter.profile_pseudo}%`);
   }
 
   if (filter?.title) {
     query = query.ilike("title", `%${filter.title}%`);
   }
+
+  query = query.order(order.field, { ascending: order.asc });
 
   const { data, error, count } = await query;
 
