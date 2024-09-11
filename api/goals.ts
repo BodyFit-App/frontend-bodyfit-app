@@ -69,10 +69,10 @@ export const deleteGoal = async (
 };
 
 export const upsertStep = async (
-  body: TablesInsert<"goals">,
+  body: TablesInsert<"steps">,
 ) => {
   const { data, error } = await client
-    .from("goals")
+    .from("steps")
     .upsert(body).select();
 
   if (error) throw new Error(error.message);
