@@ -41,7 +41,7 @@ describe("Tests api/goals", () => {
   });
 
   describe("fetchGoals", () => {
-    it("should return data when fetch is successful", async () => {
+    it("should return data when fetch is successful without filters or order", async () => {
       const mockData: Tables<"goals">[] = [];
       setTestData(mockData);
 
@@ -54,13 +54,14 @@ describe("Tests api/goals", () => {
       });
     });
 
-    it("should return achieved goals when filter.achieved is true", async () => {
+    it("should return data with multiple filters applied", async () => {
       const mockData = [
         { id: 1, title: "Goal 1", achieved: true, steps: [] },
+        { id: 2, title: "Goal 2", achieved: true, steps: [] },
       ];
       setTestData(mockData);
 
-      const data = await fetchGoals(1, { achieved: true });
+      const data = await fetchGoals(1, { achieved: true, title: "Goal 1" });
 
       expect(data).toEqual({
         count: undefined,
@@ -69,29 +70,14 @@ describe("Tests api/goals", () => {
       });
     });
 
-    it("should return non-achieved goals when filter.achieved is false", async () => {
+    it("should return data with filter and order applied", async () => {
       const mockData = [
-        { id: 2, title: "Goal 2", achieved: false, steps: [] },
+        { id: 1, title: "Goal A", achieved: true, steps: [] },
+        { id: 2, title: "Goal B", achieved: true, steps: [] },
       ];
       setTestData(mockData);
 
-      const data = await fetchGoals(1, { achieved: false });
-
-      expect(data).toEqual({
-        count: undefined,
-        nextCursor: null,
-        data: mockData,
-      });
-    });
-
-    it("should return goals ordered by title", async () => {
-      const mockData = [
-        { id: 2, title: "B Goal", achieved: false, steps: [] },
-        { id: 1, title: "A Goal", achieved: true, steps: [] },
-      ];
-      setTestData(mockData);
-
-      const data = await fetchGoals(1, undefined, {
+      const data = await fetchGoals(1, { achieved: true }, {
         field: "title",
         asc: true,
       });
@@ -103,12 +89,32 @@ describe("Tests api/goals", () => {
       });
     });
 
+    it("should return data with only order applied", async () => {
+      const mockData = [
+        { id: 2, title: "Goal B", achieved: false, steps: [] },
+        { id: 1, title: "Goal A", achieved: true, steps: [] },
+      ];
+      setTestData(mockData);
+
+      const data = await fetchGoals(1, undefined, {
+        field: "title",
+        asc: false,
+      });
+
+      expect(data).toEqual({
+        count: undefined,
+        nextCursor: null,
+        data: [
+          { id: 2, title: "Goal B", achieved: false, steps: [] },
+          { id: 1, title: "Goal A", achieved: true, steps: [] },
+        ],
+      });
+    });
+
     it("should throw when fetch fails", async () => {
       setTestError(new Error("Failed to fetch goals"));
 
-      await expect(fetchGoals(1)).rejects.toThrow(
-        "Failed to fetch goals",
-      );
+      await expect(fetchGoals(1)).rejects.toThrow("Failed to fetch goals");
     });
   });
 
