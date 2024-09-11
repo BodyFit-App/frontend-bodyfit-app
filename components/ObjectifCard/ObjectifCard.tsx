@@ -50,16 +50,19 @@ const ObjectifCard: React.FC<ObjectifCardProps> = ({
   onPress,
 }) => {
   return (
-    <Card style={styles.card} onPress={onPress}>
+    <Card style={styles.card} onPress={onPress} testID="objectif-card">
       <Card.Content>
         <View style={styles.headerContainer}>
-          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            {title}
+          </Text>
           <View style={styles.progressContainer}>
             <View style={styles.progressView}>
               <ProgressBar
                 progress={progress}
                 color="#32e230"
                 style={styles.progressBar}
+                testID="progress-bar"
               />
             </View>
             <Text style={styles.progressText}>
