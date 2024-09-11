@@ -56,6 +56,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
               ? { uri: profileImageUrl }
               : require("../../assets/default-avatar.png")
           }
+          testID={profileImageUrl ? 'profile-image' : 'default-avatar'} 
         />
         <View style={styles.infoContainer}>
           <Text style={styles.fullName}>
