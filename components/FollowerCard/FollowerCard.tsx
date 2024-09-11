@@ -56,8 +56,9 @@ const FollowerCard: React.FC<FollowerCardProps> = ({
           source={
             profileImageUrl
               ? { uri: profileImageUrl }
-              : require("../../assets/default-avatar.png") // Assurez-vous d'avoir une image par défaut
+              : require("../../assets/default-avatar.png")
           }
+          testID={profileImageUrl ? 'profile-image' : 'default-avatar'}
         />
         <View style={styles.infoContainer}>
           <Text style={styles.username}>@{username}</Text>
