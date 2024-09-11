@@ -1,13 +1,14 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import {
   fetchExercises,
   getFavoriteStatusForExercises,
 } from "../../api/exercises";
 import { ExerciseFilter } from "../../types/filters.types";
-import { Button, MD2Colors, Text } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { formatExercisesWithFavorites } from "../../lib/helpers";
+import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
 
 export const ExercisesScreen = () => {
   const [filter, setFilter] = useState<ExerciseFilter>({});
@@ -54,15 +55,25 @@ export const ExercisesScreen = () => {
     <Text>Error: {error.message}</Text>
   ) : (
     <View>
-      {data!.pages.map((group, i) => (
-        <React.Fragment key={i}>
-          {group.exercises.map(({ id, title, isFav }) => (
-            <Text key={id} style={{ color: "white" }}>
-              {title} {isFav ? "*" : ""}
-            </Text>
-          ))}
-        </React.Fragment>
-      ))}
+      <ScrollView>
+        {data!.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            {group.exercises.map(({ id, title, description, isFav }) => (
+              <ObjectifCard
+                key={id}
+                title={title}
+                startDate={""}
+                endDate={""}
+                description={""}
+                progress={0.2}
+                onPress={() => console.log("coucou")}
+              />
+            ))}
+          </React.Fragment>
+        ))}
+        <Text>{count}</Text>
+        <Text>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</Text>
+      </ScrollView>
     </View>
   );
 };
