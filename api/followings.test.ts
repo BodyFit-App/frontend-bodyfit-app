@@ -2,7 +2,7 @@ import {
   addFollowing,
   deleteFolowing,
   fetchFollowingsByProfileId,
-} from "../api/followings";
+} from "./followings";
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
 describe("Tests api/favorites", () => {

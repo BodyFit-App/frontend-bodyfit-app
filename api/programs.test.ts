@@ -4,7 +4,7 @@ import {
   fetchPrograms,
   getFavoriteStatusForPrograms,
   upsertProgram,
-} from "../api/programs";
+} from "./programs";
 import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");

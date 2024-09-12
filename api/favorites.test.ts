@@ -5,7 +5,7 @@ import {
   deleteFavProgram,
   fetchFavExercises,
   fetchFavPrograms,
-} from "../api/favorites";
+} from "./favorites";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
