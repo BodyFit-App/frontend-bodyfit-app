@@ -93,6 +93,8 @@ export const upsertExercise = async (
     .upsert(body)
     .select();
 
+  console.log(data, error);
+
   if (error) throw new Error(error.message);
 
   const exerciceCategories = categories.map(
