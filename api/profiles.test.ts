@@ -3,7 +3,7 @@ import {
   fetchProfileById,
   fetchProfiles,
   upsertProfile,
-} from "../api/profiles";
+} from "./profiles";
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
 describe("Tests api/goals", () => {

@@ -2,7 +2,7 @@ import {
   formatExercisesWithFavorites,
   formatProgramsWithFavorites,
   getRange,
-} from "../lib/helpers";
+} from "./helpers";
 import { Tables } from "../types/database.types";
 
 describe("Test helpers", () => {

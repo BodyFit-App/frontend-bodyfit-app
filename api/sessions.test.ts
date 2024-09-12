@@ -3,7 +3,7 @@ import {
   deleteExerciseSession,
   deleteSession,
   upsertSession,
-} from "../api/sessions";
+} from "./sessions";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
@@ -22,7 +22,7 @@ describe("Tests api/sessions", () => {
         const mockData = [{ id: 1, ...body }];
         setTestData(mockData);
 
-        await expect(upsertSession(body)).resolves.not.toThrow();
+        await expect(upsertSession(1, body)).resolves.not.toThrow();
       },
     );
 
@@ -31,7 +31,7 @@ describe("Tests api/sessions", () => {
 
       const body = { title: "New Session", description: "A new session" };
 
-      await expect(upsertSession(body)).rejects.toThrow(
+      await expect(upsertSession(1, body)).rejects.toThrow(
         "Failed to upsert session",
       );
     });
@@ -69,13 +69,13 @@ describe("Tests api/sessions", () => {
 
   describe("deleteExerciseSession", () => {
     it("should not throw when delete is successful", async () => {
-      await expect(deleteExerciseSession(1)).resolves.not.toThrow();
+      await expect(deleteExerciseSession(1, 1)).resolves.not.toThrow();
     });
 
     it("should throw when delete fails", async () => {
       setTestError(new Error("Failed to delete exercise from session"));
 
-      await expect(deleteExerciseSession(1)).rejects.toThrow(
+      await expect(deleteExerciseSession(1, 1)).rejects.toThrow(
         "Failed to delete exercise from session",
       );
     });

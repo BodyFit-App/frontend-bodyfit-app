@@ -5,7 +5,7 @@ import {
   fetchGoals,
   upsertGoal,
   upsertStep,
-} from "../api/goals";
+} from "./goals";
 import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");

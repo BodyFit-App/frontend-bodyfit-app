@@ -5,7 +5,7 @@ import {
   fetchExercises,
   getFavoriteStatusForExercises,
   upsertExercise,
-} from "../api/exercises";
+} from "./exercises";
 import { Tables } from "../types/database.types";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
