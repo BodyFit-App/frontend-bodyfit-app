@@ -15,6 +15,7 @@ const theme = {
 		textFollow: '#ffffff',
 		textPlaceholder: '#79797F',
 		textFilter: '#ffffff',
+		backgroundNav: "#161626",
 	},
 };
 
