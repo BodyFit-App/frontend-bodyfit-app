@@ -7,6 +7,9 @@ jest.mock("@supabase/supabase-js", () => {
       return {
         auth: {
           signInWithPassword: jest.fn(),
+          getSession: jest.fn(),
+          onAuthStateChange: jest.fn(),
+          signOut: jest.fn(),
         },
         from: jest.fn().mockReturnThis(),
         select: jest.fn().mockImplementation(() => ({
@@ -66,7 +69,7 @@ jest.mock("@supabase/supabase-js", () => {
     },
   };
 });
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
   setItem: jest.fn(() => Promise.resolve()),
