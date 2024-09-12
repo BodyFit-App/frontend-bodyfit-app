@@ -1,3 +1,4 @@
+// Mock pour Supabase
 jest.mock("@supabase/supabase-js", () => {
   let testData = null;
   let testError = null;
@@ -69,7 +70,11 @@ jest.mock("@supabase/supabase-js", () => {
     },
   };
 });
+
+// Mock pour React Native Animated
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+
+// Mock pour AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
   setItem: jest.fn(() => Promise.resolve()),
