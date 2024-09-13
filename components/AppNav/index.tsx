@@ -26,16 +26,16 @@ function AppNav() {
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
         <Stack.Screen
+          name="ExerciseCreation"
+          options={{ title: "Créer mon exercice" }}
+          component={ExerciseFormScreen}
+        />
+        <Stack.Screen
           name="Home"
           component={BottomTabs}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen
-          name="ExerciseCreation"
-          options={{ title: "Créer mon exercice" }}
-          component={ExerciseFormScreen}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
@@ -11,6 +11,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchExerciseById, upsertExercise } from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
+import { client, getPublicUrl } from "../../lib/supabase";
 
 type ParamListBase = {
   ExerciseFormScreen: {
@@ -22,7 +23,7 @@ export default function ExerciseFormScreen() {
   const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const exerciseId = route.params?.exerciseId;
+  const exerciseId = 46;
   const isEditMode = !!exerciseId;
 
   const { data: exercise, isSuccess } = useQuery({
@@ -83,7 +84,7 @@ export default function ExerciseFormScreen() {
     if (isSuccess && exercise) {
       reset({
         title: exercise.title || "",
-        banner_image: exercise.banner_image || "",
+        banner_image: getPublicUrl("images", exercise.banner_image!) || "",
         description: exercise.description?.toString() || "",
         estimated_time_seconds:
           exercise.estimated_time_seconds?.toString() || "1",
