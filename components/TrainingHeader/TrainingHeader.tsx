@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Image, Dimensions } from "react-native";
 import { Card, Text, Chip, IconButton } from "react-native-paper";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import InputChip from "../InputChip/InputChip";
 
 /**
- * Propriétés pour le composant TrainingCard
- * @typedef {Object} TrainingCardProps
+ * Propriétés pour le composant TrainingHeader
+ * @typedef {Object} TrainingHeaderProps
  * @property {string} title - Le titre de l'entraînement.
  * @property {string} imageUrl - URL de l'image représentant l'entraînement.
  * @property {string} duration - Durée de l'entraînement (ex. : "40 min").
@@ -16,11 +16,11 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 /**
  * Composant affichant les informations d'un entraînement sous forme de carte.
- * @param {TrainingCardProps} props - Les propriétés pour le composant.
+ * @param {TrainingHeaderProps} props - Les propriétés pour le composant.
  * @returns {JSX.Element} Le composant carte affiché.
  */
 
-interface TrainingCardProps {
+interface TrainingHeaderProps {
   title: string;
   imageUrl: string;
   duration: string;
@@ -31,7 +31,7 @@ interface TrainingCardProps {
 
 const { width } = Dimensions.get("window");
 
-const TrainingCard: React.FC<TrainingCardProps> = ({
+const TrainingHeader: React.FC<TrainingHeaderProps> = ({
   title,
   imageUrl,
   duration,
@@ -43,29 +43,18 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
     <Card style={styles.card}>
       <View style={styles.line} />
       <Text style={styles.title}>{title}</Text>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Image source={{ uri: imageUrl }} style={styles.image} testID="training-image"/>
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Catégorie</Text>
         <View style={styles.rightSection}>
-          <MaterialCommunityIcons
-            name="clock-outline"
-            color="#2F80ED"
-            size={18}
-          />
+          <IconButton icon="clock-outline" iconColor="#2F80ED" size={18} />
           <Text style={styles.duration}>{duration}</Text>
         </View>
       </View>
       <View style={styles.tagsAndFavoriteContainer}>
         <View style={styles.tagContainer}>
           {categories.map((tag, index) => (
-            <Chip
-              key={index}
-              mode="outlined"
-              style={styles.chip}
-              textStyle={styles.chipText}
-            >
-              {tag}
-            </Chip>
+            <InputChip key={index} children={tag} style={styles.chip} textStyle={styles.chipText}/>
           ))}
         </View>
         <View style={styles.favoriteContainer}>
@@ -75,6 +64,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
             size={35}
             onPress={onToggleFavorite}
             style={styles.iconButton}
+            testID="favorite-button"
           />
         </View>
       </View>
@@ -158,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainingCard;
+export default TrainingHeader;
