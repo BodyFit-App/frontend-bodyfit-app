@@ -5,7 +5,7 @@ import theme from "./theme";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AppNav from "./components/AppNav";
+import AppNav from "./components/AppNav/AppNav";
 
 const queryClient = new QueryClient();
 

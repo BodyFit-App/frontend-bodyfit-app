@@ -99,7 +99,11 @@ export const upsertExercise = async (
     (catId) => ({ exercise_id: data[0].id, category_id: catId }),
   );
 
-  addExerciseCategories(exerciceCategories);
+  try {
+    addExerciseCategories(exerciceCategories);
+  } catch (err) {
+    console.error(err);
+  }
 
   return data;
 };

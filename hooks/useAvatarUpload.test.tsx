@@ -26,6 +26,7 @@ jest.mock("expo-image-manipulator", () => ({
     PNG: "PNG",
   },
 }));
+
 describe("useAvatarUpload hook", () => {
   it("should pick and upload image", async () => {
     const { result } = renderHook(() => useAvatarUpload());
