@@ -3,16 +3,20 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Text,
   Alert,
   StyleSheet,
   ViewProps,
 } from "react-native";
 import * as ExpoImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
 import theme from "../../theme";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 interface ImagePickerProps {
   value: string | null;
   onChange: (uri: string) => void;
+  width?: number;
   aspect?: [number, number];
   rest?: ViewProps;
 }
@@ -20,8 +24,9 @@ interface ImagePickerProps {
 const ImagePicker: React.FC<ImagePickerProps> = ({
   value,
   onChange,
+  width = 300,
   aspect = [4, 3],
-  rest,
+  ...rest
 }) => {
   const pickImage = async () => {
     const { status } =
@@ -38,11 +43,15 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect,
-      quality: 1,
     });
 
     if (!result.canceled) {
-      onChange(result.assets[0].uri);
+      const resizedImage = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width, height: width * (aspect[1] / aspect[0]) } }],
+        { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+      );
+      onChange(resizedImage.uri);
     }
   };
 
@@ -55,10 +64,35 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
       {...rest}
     >
       <TouchableOpacity onPress={pickImage}>
-        <Image
-          source={{ uri: value || "https://via.placeholder.com/200" }}
-          style={styles.image}
-        />
+        {value ? (
+          <Image source={{ uri: value! }} style={styles.image} />
+        ) : (
+          <View
+            style={{
+              ...styles.image,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                name="image"
+                size={50}
+                color={theme.colors.textPlaceholder}
+                style={{ marginBottom: 16 }}
+              />
+              <Text style={{ color: theme.colors.textPlaceholder }}>
+                Uploader une image
+              </Text>
+            </View>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );

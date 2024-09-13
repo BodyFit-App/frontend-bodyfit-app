@@ -6,16 +6,23 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { Switch } from "react-native-paper";
 import ImagePicker from "../../components/ImagePicker";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchExerciseById, upsertExercise } from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
+import { uploadImage } from "../../buckets/images";
+
+type ParamListBase = {
+  ExerciseFormScreen: {
+    exerciseId?: number;
+  };
+};
 
 export default function ExerciseFormScreen() {
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const exerciseId = null;
+  const exerciseId = route.params?.exerciseId;
   const isEditMode = !!exerciseId;
 
   const { data: exercise, isSuccess } = useQuery({
@@ -39,12 +46,32 @@ export default function ExerciseFormScreen() {
     },
   });
 
+  const handleUpsert = async (body: TablesInsert<"exercises">) => {
+    try {
+      let banner_image;
+      if (body?.banner_image) {
+        const { path } = await uploadImage(body.banner_image, body.title);
+        banner_image = path;
+      }
+      const newBody = {
+        ...(isEditMode ? { id: exerciseId } : {}),
+        ...body,
+        banner_image: banner_image,
+      };
+
+      console.log(newBody);
+
+      upsertExercise(newBody);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const upsertMutation = useMutation({
-    mutationFn: (body: TablesInsert<"exercises">) =>
-      upsertExercise({ ...(isEditMode ? { id: exerciseId } : {}), ...body }),
+    mutationFn: handleUpsert,
     onSuccess: () => {
-      // queryClient.invalidateQueries(["exercise", exerciseId]);
-      navigation.goBack();
+      queryClient.invalidateQueries({ queryKey: ["exercise", exerciseId] });
+      // navigation.goBack();
     },
   });
 
