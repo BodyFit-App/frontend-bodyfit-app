@@ -82,7 +82,39 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   clear: jest.fn(() => Promise.resolve()),
   getAllKeys: jest.fn(() => Promise.resolve([])),
   multiGet: jest.fn(() => Promise.resolve([])),
-  multiSet: jest.fn(() => Promise.resolve()),
+  multiSet: jest.fn(() => Promise.resolve([])),
   multiRemove: jest.fn(() => Promise.resolve()),
   mergeItem: jest.fn(() => Promise.resolve()),
 }));
+
+// Mock pour react-native-vector-icons
+jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");
+
+// Mock pour Alert
+const Alert = require("react-native").Alert;
+Alert.alert = jest.fn();
+
+jest.mock("expo-image-picker", () => ({
+  launchImageLibraryAsync: jest.fn().mockResolvedValue({
+    canceled: false,
+    assets: [{ uri: "mock-uri" }],
+  }),
+  MediaTypeOptions: {
+    Images: "Images",
+  },
+  requestMediaLibraryPermissionsAsync: jest.fn(),
+}));
+
+jest.mock("expo-file-system", () => ({
+  readAsStringAsync: jest.fn().mockResolvedValue("base64-string"),
+}));
+
+jest.mock("expo-image-manipulator", () => ({
+  manipulateAsync: jest.fn().mockResolvedValue({ uri: "resized-uri" }),
+  SaveFormat: {
+    JPEG: "JPEG",
+    PNG: "PNG",
+  },
+}));
+
+jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");
