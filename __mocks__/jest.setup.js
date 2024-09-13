@@ -82,7 +82,14 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   clear: jest.fn(() => Promise.resolve()),
   getAllKeys: jest.fn(() => Promise.resolve([])),
   multiGet: jest.fn(() => Promise.resolve([])),
-  multiSet: jest.fn(() => Promise.resolve()),
+  multiSet: jest.fn(() => Promise.resolve([])),
   multiRemove: jest.fn(() => Promise.resolve()),
   mergeItem: jest.fn(() => Promise.resolve()),
 }));
+
+// Mock pour react-native-vector-icons
+jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");
+
+// Mock pour Alert
+const Alert = require("react-native").Alert;
+Alert.alert = jest.fn();

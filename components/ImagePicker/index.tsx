@@ -13,21 +13,21 @@ import * as ImageManipulator from "expo-image-manipulator";
 import theme from "../../theme";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-interface ImagePickerProps {
+type ImagePickerProps = {
   value: string | null;
   onChange: (uri: string) => void;
   width?: number;
   aspect?: [number, number];
   rest?: ViewProps;
-}
+};
 
-const ImagePicker: React.FC<ImagePickerProps> = ({
+function ImagePicker({
   value,
   onChange,
   width = 300,
   aspect = [4, 3],
   ...rest
-}) => {
+}: ImagePickerProps) {
   const pickImage = async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -63,7 +63,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
       }}
       {...rest}
     >
-      <TouchableOpacity onPress={pickImage}>
+      <TouchableOpacity testID="image-picker" onPress={pickImage}>
         {value ? (
           <Image source={{ uri: value! }} style={styles.image} />
         ) : (
@@ -96,7 +96,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   image: {

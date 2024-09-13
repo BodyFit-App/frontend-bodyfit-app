@@ -11,7 +11,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchExerciseById, upsertExercise } from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
-import { client, getPublicUrl } from "../../lib/supabase";
+import { getPublicUrl } from "../../lib/supabase";
+import CategoryDropdown from "../../components/CategoryDropdown";
 
 type ParamListBase = {
   ExerciseFormScreen: {
@@ -23,7 +24,7 @@ export default function ExerciseFormScreen() {
   const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const exerciseId = 46;
+  const exerciseId = route.params?.exerciseId;
   const isEditMode = !!exerciseId;
 
   const { data: exercise, isSuccess } = useQuery({
@@ -44,25 +45,32 @@ export default function ExerciseFormScreen() {
       description: "",
       estimated_time_seconds: "1",
       visible: false,
+      categories: [] as string[],
     },
   });
 
-  const handleUpsert = async (body: TablesInsert<"exercises">) => {
+  const handleUpsert = async (
+    body: TablesInsert<"exercises"> & { categories: [] }
+  ) => {
     try {
       let banner_image;
       if (body?.banner_image) {
         const { path } = await uploadImage(body.banner_image, body.title);
         banner_image = path;
       }
+
+      const { categories, ...data } = body;
+
       const newBody = {
         ...(isEditMode ? { id: exerciseId } : {}),
-        ...body,
+        ...data,
         banner_image: banner_image,
       };
 
-      console.log(newBody);
-
-      upsertExercise(newBody);
+      upsertExercise(
+        newBody,
+        categories.map((n) => +n)
+      );
     } catch (error) {
       console.error(error);
     }
@@ -89,6 +97,7 @@ export default function ExerciseFormScreen() {
         estimated_time_seconds:
           exercise.estimated_time_seconds?.toString() || "1",
         visible: exercise.visible || false,
+        categories: exercise.categories.map(({ id }) => id.toString()) || [],
       });
     }
   }, [isSuccess, exercise, reset]);
@@ -176,6 +185,14 @@ export default function ExerciseFormScreen() {
               </View>
             )}
             name="visible"
+          />
+
+          <Controller
+            control={control}
+            render={({ field: { value, onChange } }) => (
+              <CategoryDropdown onChange={onChange} value={value || []} />
+            )}
+            name="categories"
           />
 
           <CustomButton onPress={handleSubmit(onSubmit)}>
