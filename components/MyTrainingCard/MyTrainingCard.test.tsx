@@ -1,6 +1,10 @@
 import React from 'react';
+import fs from 'fs';
+import path from 'path';
 import { render, fireEvent } from '@testing-library/react-native';
 import MyTrainingCard from './MyTrainingCard';
+
+const snapshotFile = path.join(__dirname, '__snapshots__', 'MyTrainingCard.test.tsx.snap');
 
 describe('MyTrainingCard Component', () => {
   const mockToggleFavorite = jest.fn();
@@ -16,6 +20,12 @@ describe('MyTrainingCard Component', () => {
     onExercisePress: mockExercisePress,
   };
   
+  afterEach(() => {
+    if (fs.existsSync(snapshotFile)) {
+      fs.unlinkSync(snapshotFile);
+    }
+  });
+
   it('renders user information and exercise details correctly', () => {
     const { getByText } = render(<MyTrainingCard {...defaultProps} />);
 
