@@ -8,6 +8,7 @@ import ProfilScreen from '../../screens/Profil/index';
 import LoginScreen from '../../screens/login';
 import theme from '../../theme';
 import { useAuth } from '../../hooks/useAuth';
+import HomeScreen from '../../screens/home';
 
 const Stack = createStackNavigator();
 
@@ -59,9 +60,13 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
-
 				<Stack.Screen
 					name='Home'
+					component={HomeScreen}
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='BottomBar'
 					component={BottomTabs}
 					options={{ headerShown: false }}
 				/>
