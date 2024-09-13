@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Text, View, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
 import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { Switch } from "react-native-paper";
-import ImagePicker from "../../components/ImagePicker";
+import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchExerciseById, upsertExercise } from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { getPublicUrl } from "../../lib/supabase";
-import CategoryDropdown from "../../components/CategoryDropdown";
+import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
 
 type ParamListBase = {
   ExerciseFormScreen: {

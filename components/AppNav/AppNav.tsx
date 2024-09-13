@@ -5,7 +5,7 @@ import LoginScreen from "../../screens/login";
 import theme from "../../theme";
 import { useAuth } from "../../hooks/useAuth";
 import ExerciseFormScreen from "../../screens/ExerciseFormScreen";
-import { BottomTabs } from "../BottomTabs";
+import { BottomTabs } from "../BottomTabs/BottomTabs";
 
 const Stack = createStackNavigator();
 

@@ -1,34 +1,9 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import ImagePicker from "./";
+import ImagePicker from "./ImagePicker";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ExpoImagePicker from "expo-image-picker";
 import { Alert } from "react-native";
-
-jest.mock("expo-image-picker", () => ({
-  launchImageLibraryAsync: jest.fn().mockResolvedValue({
-    canceled: false,
-    assets: [{ uri: "mock-uri" }],
-  }),
-  MediaTypeOptions: {
-    Images: "Images",
-  },
-  requestMediaLibraryPermissionsAsync: jest.fn(),
-}));
-
-jest.mock("expo-file-system", () => ({
-  readAsStringAsync: jest.fn().mockResolvedValue("base64-string"),
-}));
-
-jest.mock("expo-image-manipulator", () => ({
-  manipulateAsync: jest.fn().mockResolvedValue({ uri: "resized-uri" }),
-  SaveFormat: {
-    JPEG: "JPEG",
-    PNG: "PNG",
-  },
-}));
-
-jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");
 
 describe("ImagePicker", () => {
   it("should call Alert.alert if permissions are not granted", async () => {

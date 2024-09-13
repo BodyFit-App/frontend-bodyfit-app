@@ -2,7 +2,7 @@ module.exports = {
   preset: "react-native",
   testPathIgnorePatterns: ["/node_modules/", "/.expo/"],
   transformIgnorePatterns: [
-    "node_modules/(?!(react-native|@react-native|@react-navigation|react-native-paper)/)",
+    "node_modules/(?!(react-native|@react-native|@react-navigation|react-native-paper|react-native-vector-icons|react-navigation)/)",
   ],
   collectCoverageFrom: [
     "**/*.{ts,tsx,js,jsx}",
