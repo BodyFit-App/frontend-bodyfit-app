@@ -57,6 +57,8 @@ const MyTrainingCard: React.FC<MyTrainingCardProps> = ({
 }) => {
   const visibleTags = tags.slice(0, 3);
   const remainingTagsCount = tags.length - visibleTags.length;
+  const favorite = isFavorite? "star" : "star-outline";
+  const colorFavorite = isFavorite? "#2F80ED" : "#A0A0A0";
 
   return (
     <Card
@@ -64,8 +66,8 @@ const MyTrainingCard: React.FC<MyTrainingCardProps> = ({
     >
       <View style={styles.headerContainer}>
         <IconButton
-          icon={isFavorite ? "star" : "star-outline"}
-          iconColor={isFavorite ? "#2F80ED" : "#A0A0A0"}
+          icon={favorite}
+          iconColor={colorFavorite}
           size={30}
           onPress={onToggleFavorite}
           style={styles.iconButton}
