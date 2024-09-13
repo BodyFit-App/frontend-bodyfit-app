@@ -12,7 +12,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../../assets/bodybody2.png')} style={styles.img} />
+            <Image source={require('../../assets/logo-app.png')} style={styles.img} />
             <CustomButton style={styles.button} children='Connexion'  onPress={() => navigation.navigate("Login" as never)} />
             <CustomButton style={styles.button} children='Inscription' onPress={() => navigation.navigate("Register" as never)} />
         </View>
