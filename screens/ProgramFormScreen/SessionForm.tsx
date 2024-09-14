@@ -7,12 +7,14 @@ import theme from "../../theme";
 
 type SessionFormProps = {
   value: Array<{
+    id?: number;
     title: string;
     description: string;
     exerciseIds: number[];
   }>;
   onChange: (
     value: Array<{
+      id?: number;
       title: string;
       description: string;
       exerciseIds: number[];
@@ -23,7 +25,6 @@ type SessionFormProps = {
 };
 
 const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
-  console.log(index);
   const isEditMode = index !== undefined && value[index];
 
   const [title, setTitle] = useState(isEditMode ? value[index].title : "");

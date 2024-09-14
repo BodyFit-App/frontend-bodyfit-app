@@ -46,6 +46,7 @@ jest.mock("@supabase/supabase-js", () => {
           gte: jest.fn().mockReturnThis(),
           lte: jest.fn().mockReturnThis(),
           select: jest.fn().mockReturnThis(),
+          single: jest.fn().mockReturnThis(),
           data: testData,
           error: testError,
         })),

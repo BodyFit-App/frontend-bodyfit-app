@@ -4,6 +4,7 @@ import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 import { ProgramFilter } from "../types/filters.types";
 import { ProgramOrder } from "../types/orders.types";
+import { addExerciseSession } from "./sessions";
 
 export const fetchProgramById = async (
   id: number,
@@ -11,7 +12,7 @@ export const fetchProgramById = async (
   const { data, error } = await client
     .from("programs")
     .select(
-      "*,sessions(*,exercises(*,categories(*),profiles(id,pseudo,avatar))),profiles(*)",
+      "*,sessions(*,exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*)",
     )
     .eq("id", id)
     .single();
@@ -91,10 +92,38 @@ export const deleteProgram = async (
 
 export const upsertProgram = async (
   body: TablesInsert<"programs">,
+  sessions: {
+    id?: number;
+    title: string;
+    description: string;
+    exerciseIds: number[];
+  }[] = [],
 ) => {
-  const { error } = await client
+  const { data, error } = await client
     .from("programs")
-    .upsert(body);
+    .upsert(body).select().single();
 
   if (error) throw new Error(error.message);
+
+  sessions.forEach(async ({ id, title, description, exerciseIds }) => {
+    const { id: sessionId } = await addProgramSession(data.id, {
+      id,
+      title,
+      description,
+    });
+    addExerciseSession(sessionId, exerciseIds);
+  });
+};
+
+export const addProgramSession = async (
+  programId: number,
+  session: { id?: number; title: string; description: string },
+) => {
+  const { data, error } = await client
+    .from("sessions")
+    .upsert({ ...session, program_id: programId }).select().single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
 };

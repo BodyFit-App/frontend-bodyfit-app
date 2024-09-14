@@ -17,12 +17,14 @@ type ProgramPanelProps = {
   onAddSession: (index?: number) => void;
   onSubmit: (data: FormData) => void;
   formContext: UseFormReturn<FormData>;
+  isEditMode: boolean;
 };
 
 const ProgramPanel = ({
   onAddSession,
   onSubmit,
   formContext,
+  isEditMode,
 }: ProgramPanelProps) => {
   const { control, handleSubmit, getValues, setValue } = formContext;
   const sessions = getValues().sessions || [];
@@ -33,7 +35,6 @@ const ProgramPanel = ({
   const openModal = (index: number) => {
     setSelectedIndex(index);
     setModalVisible(true);
-    console.log(modalVisible, selectedIndex);
   };
 
   const closeModal = () => {
@@ -136,7 +137,9 @@ const ProgramPanel = ({
         name="visible"
       />
 
-      <CustomButton onPress={handleSubmit(onSubmit)}>Confirmer</CustomButton>
+      <CustomButton onPress={handleSubmit(onSubmit)}>
+        {isEditMode ? "Modifier" : "Confirmer"}
+      </CustomButton>
 
       <DeleteModal
         visible={modalVisible}

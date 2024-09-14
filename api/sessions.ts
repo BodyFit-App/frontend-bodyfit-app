@@ -1,20 +1,20 @@
 import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 
-export const upsertSession = async (
-  exercise_id: number,
-  body: TablesInsert<"sessions">,
-) => {
-  const { data, error } = await client
-    .from("sessions")
-    .upsert(body).select();
+// export const upsertSession = async (
+//   exercise_id: number,
+//   body: TablesInsert<"sessions">,
+// ) => {
+//   const { data, error } = await client
+//     .from("sessions")
+//     .upsert(body).select();
 
-  if (error) throw new Error(error.message);
+//   if (error) throw new Error(error.message);
 
-  addExerciseSession({ exercise_id, session_id: data[0].id });
+//   addExerciseSession({ exercise_id, session_id: data[0].id });
 
-  return data;
-};
+//   return data;
+// };
 
 export const deleteSession = async (
   id: number,
@@ -28,11 +28,17 @@ export const deleteSession = async (
 };
 
 export const addExerciseSession = async (
-  body: TablesInsert<"exercises_sessions">,
+  sessionId: number,
+  exerciseIds: number[],
 ) => {
   const { error } = await client
     .from("exercises_sessions")
-    .insert(body);
+    .upsert(
+      exerciseIds.map((exercise_id) => ({
+        exercise_id,
+        session_id: sessionId,
+      })),
+    );
 
   if (error) throw new Error(error.message);
 };
