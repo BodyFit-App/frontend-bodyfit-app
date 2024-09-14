@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import ExerciseDropdown from "../../components/ExerciseDropdown/ExerciseDropdown";
+import theme from "../../theme";
 
 type SessionFormProps = {
   value: Array<{
@@ -29,19 +30,33 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
   const [description, setDescription] = useState(
     isEditMode ? value[index].description : ""
   );
+  const [error, setError] = useState(false);
+
   const [exerciseIds, setExerciseIds] = useState<number[]>(
     isEditMode ? value[index].exerciseIds : []
   );
 
   return (
     <View style={{ gap: 16 }}>
-      <TextField
-        mode="outlined"
-        label="Titre"
-        placeholder="Ex: Course à pied"
-        onChangeText={setTitle}
-        value={title}
-      />
+      <View>
+        <TextField
+          mode="outlined"
+          label="Titre*"
+          placeholder="Ex: Course à pied"
+          onChangeText={setTitle}
+          value={title}
+        />
+        {error && (
+          <Text
+            style={{
+              color: theme.colors.primary,
+              fontSize: 12,
+            }}
+          >
+            Ce champs est requis.
+          </Text>
+        )}
+      </View>
 
       <TextField
         mode="outlined"
@@ -57,6 +72,11 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
 
       <CustomButton
         onPress={() => {
+          if (title === "" || title === undefined) {
+            setError(true);
+            return;
+          }
+          setError(false);
           const newValue = isEditMode
             ? value.map((item, idx) =>
                 idx === index
