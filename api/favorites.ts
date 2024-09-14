@@ -13,6 +13,15 @@ export const fetchFavExercises = async (page: number) => {
   return data;
 };
 
+export const fetchDropdownExercises = async () => {
+  const { data, error } = await client.from("favorite_exercises").select(
+    "exercises(id, title)",
+  );
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 export const addFavExercise = async (exerciseId: number) => {
   const { error } = await client.from("favorite_exercises").insert({
     exercise_id: exerciseId,

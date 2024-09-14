@@ -1,23 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { MultiSelectDropdown } from "react-native-paper-dropdown";
-import { fetchCategories } from "../../api/categories";
+import { fetchDropdownExercises } from "../../api/favorites";
+import theme from "../../theme";
+import { Icon, TextInput } from "react-native-paper";
 import DropdownInput from "../DropdownInput/DropdownInput";
 
-export default function CategoryDropdown({ value, onChange }: any) {
+export default function ExerciseDropdown({ value, onChange }: any) {
   const { data } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories,
+    queryKey: ["dropdown-exercises"],
+    queryFn: fetchDropdownExercises,
   });
 
   const options = data
-    ? data.map(({ id, name }) => ({ label: name, value: id.toString() }))
+    ? data.map(({ exercises }) => ({
+        label: exercises!.title,
+        value: exercises!.id.toString(),
+      }))
     : [];
 
   return (
     <MultiSelectDropdown
       CustomMultiSelectDropdownInput={DropdownInput}
-      label="Catégories"
+      label="Exercices"
       placeholder="Sélectionner vos catégories"
       disabled={!data}
       options={options}
