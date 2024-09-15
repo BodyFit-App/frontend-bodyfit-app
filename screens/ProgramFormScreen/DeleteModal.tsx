@@ -13,7 +13,7 @@ type DeleteModalProps = {
 const DeleteModal = ({ visible, onClose, onConfirm }: DeleteModalProps) => {
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onClose}>
+      <Modal testID="modal" visible={visible} onDismiss={onClose}>
         <View
           style={{
             backgroundColor: theme.colors.background,
@@ -41,8 +41,12 @@ const DeleteModal = ({ visible, onClose, onConfirm }: DeleteModalProps) => {
               marginTop: 16,
             }}
           >
-            <CustomButton onPress={onClose}>Annuler</CustomButton>
-            <CustomButton onPress={onConfirm}>Supprimer</CustomButton>
+            <CustomButton testID="button-close" onPress={onClose}>
+              Annuler
+            </CustomButton>
+            <CustomButton testID="button-confirm" onPress={onConfirm}>
+              Supprimer
+            </CustomButton>
           </View>
         </View>
       </Modal>

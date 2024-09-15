@@ -37,8 +37,6 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
     isEditMode ? value[index].exerciseIds : []
   );
 
-  console.log(exerciseIds);
-
   return (
     <View style={{ gap: 16 }}>
       <View>

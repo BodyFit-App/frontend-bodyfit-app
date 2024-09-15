@@ -15,18 +15,7 @@ import {
   deleteSession,
   resetExerciseSession,
 } from "../../api/sessions";
-
-export type FormData = {
-  title: string;
-  description?: string;
-  visible: boolean;
-  sessions?: Array<{
-    id?: number;
-    title: string;
-    description: string;
-    exerciseIds: number[];
-  }>;
-};
+import { FormData } from "./types";
 
 type ParamListBase = {
   ProgramFormScreen: {
@@ -37,7 +26,7 @@ type ParamListBase = {
 const ProgramFormScreen = () => {
   const route = useRoute<RouteProp<ParamListBase>>();
   const queryClient = useQueryClient();
-  const programId = route.params?.programId || 4;
+  const programId = route.params?.programId;
   const isEditMode = !!programId;
 
   const [sessionToDelete, setSessionToDelete] = useState<number[]>([]);
