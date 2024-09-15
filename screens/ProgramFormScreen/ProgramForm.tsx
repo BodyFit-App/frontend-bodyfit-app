@@ -12,6 +12,7 @@ const ProgramForm = ({ control }: ProgramFormProps) => {
         rules={{ required: true }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
+            testID="title"
             mode="outlined"
             label="Titre"
             placeholder="Ex: Course à pied"
@@ -26,7 +27,7 @@ const ProgramForm = ({ control }: ProgramFormProps) => {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
-            testID="button-id"
+            testID="description"
             mode="outlined"
             label="Description"
             placeholder="Ex: Pensez à bien vous équiper"
