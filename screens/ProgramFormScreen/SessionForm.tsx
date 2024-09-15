@@ -41,6 +41,7 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
     <View style={{ gap: 16 }}>
       <View>
         <TextField
+          testID="title"
           mode="outlined"
           label="Titre*"
           placeholder="Ex: Course à pied"
@@ -60,6 +61,7 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
       </View>
 
       <TextField
+        testID="description"
         mode="outlined"
         label="Description"
         placeholder="Ex: Pensez à bien vous équiper"
@@ -72,6 +74,7 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
       <ExerciseDropdown value={exerciseIds} onChange={setExerciseIds} />
 
       <CustomButton
+        testID="confirm"
         onPress={() => {
           if (title === "" || title === undefined) {
             setError(true);
@@ -92,7 +95,9 @@ const SessionForm = ({ value, onChange, onBack, index }: SessionFormProps) => {
         {isEditMode ? "Modifier" : "Ajouter"}
       </CustomButton>
 
-      <CustomButton onPress={onBack}>Annuler</CustomButton>
+      <CustomButton testID="cancel" onPress={onBack}>
+        Annuler
+      </CustomButton>
     </View>
   );
 };
