@@ -53,7 +53,7 @@ const ProgramPanel = ({
         onDelete={openModal}
       />
       <VisibilityToggle control={control} />
-      <CustomButton testID="confirm-button" onPress={handleSubmit(onSubmit)}>
+      <CustomButton testID="confirm" onPress={handleSubmit(onSubmit)}>
         {isEditMode ? "Modifier" : "Confirmer"}
       </CustomButton>
       <DeleteModal
