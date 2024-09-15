@@ -27,12 +27,17 @@ const SessionList = ({
           key={i}
         >
           <TouchableRipple
+            testID={`add-session-${i}`}
             style={{ flex: 1, padding: 16 }}
             onPress={() => onAddSession(i)}
           >
             <Text style={{ color: theme.colors.text }}>{title}</Text>
           </TouchableRipple>
-          <IconButton onPress={() => onDelete(i)} icon="delete" />
+          <IconButton
+            testID={`delete-session-${i}`}
+            onPress={() => onDelete(i)}
+            icon="delete"
+          />
         </View>
       ))}
       <Divider bold />
