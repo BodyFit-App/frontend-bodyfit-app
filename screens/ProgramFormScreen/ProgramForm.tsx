@@ -4,7 +4,7 @@ import { View } from "react-native";
 import TextField from "../../components/TextField/TextField";
 import { ProgramFormProps } from "./types";
 
-const ProgramForm: React.FC<ProgramFormProps> = ({ control }) => {
+const ProgramForm = ({ control }: ProgramFormProps) => {
   return (
     <View style={{ gap: 16 }}>
       <Controller
@@ -26,6 +26,7 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ control }) => {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
+            testID="button-id"
             mode="outlined"
             label="Description"
             placeholder="Ex: Pensez à bien vous équiper"

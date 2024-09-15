@@ -1,8 +1,8 @@
 import React from "react";
 import { Controller, Control } from "react-hook-form";
 import { View, Text } from "react-native";
-import { FormData } from ".";
 import SessionForm from "./SessionForm";
+import { FormData } from "./types";
 
 type SessionPanelProps = {
   control: Control<FormData>;

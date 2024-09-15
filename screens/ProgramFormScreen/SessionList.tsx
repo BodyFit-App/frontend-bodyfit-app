@@ -5,11 +5,11 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { SessionListProps } from "./types";
 import theme from "../../theme";
 
-const SessionList: React.FC<SessionListProps> = ({
+const SessionList = ({
   sessions,
   onAddSession,
   onDelete,
-}) => {
+}: SessionListProps) => {
   return (
     <View style={{ gap: 16 }}>
       <Divider bold />

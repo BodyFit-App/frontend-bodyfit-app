@@ -7,13 +7,13 @@ import VisibilityToggle from "./VisibilityToggle";
 import DeleteModal from "./DeleteModal";
 import { ProgramPanelProps } from "./types";
 
-const ProgramPanel: React.FC<ProgramPanelProps> = ({
+const ProgramPanel = ({
   onAddSession,
   onSubmit,
   formContext,
   isEditMode,
   setSessionToDelete,
-}) => {
+}: ProgramPanelProps) => {
   const { control, handleSubmit, getValues, setValue } = formContext;
   const sessions = getValues().sessions || [];
 
