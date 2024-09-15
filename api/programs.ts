@@ -92,12 +92,6 @@ export const deleteProgram = async (
 
 export const upsertProgram = async (
   body: TablesInsert<"programs">,
-  sessions: {
-    id?: number;
-    title: string;
-    description: string;
-    exerciseIds: number[];
-  }[] = [],
 ) => {
   const { data, error } = await client
     .from("programs")
@@ -105,14 +99,7 @@ export const upsertProgram = async (
 
   if (error) throw new Error(error.message);
 
-  sessions.forEach(async ({ id, title, description, exerciseIds }) => {
-    const { id: sessionId } = await addProgramSession(data.id, {
-      id,
-      title,
-      description,
-    });
-    addExerciseSession(sessionId, exerciseIds);
-  });
+  return data;
 };
 
 export const addProgramSession = async (

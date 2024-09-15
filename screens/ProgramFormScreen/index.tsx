@@ -2,10 +2,19 @@ import { useRoute, RouteProp } from "@react-navigation/native";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { fetchProgramById, upsertProgram } from "../../api/programs";
+import {
+  addProgramSession,
+  fetchProgramById,
+  upsertProgram,
+} from "../../api/programs";
 import { View, ScrollView } from "react-native";
 import ProgramPanel from "./ProgramPanel";
 import SessionPanel from "./SessionPanel";
+import {
+  addExerciseSession,
+  deleteSession,
+  resetExerciseSession,
+} from "../../api/sessions";
 
 export type FormData = {
   title: string;
@@ -31,6 +40,8 @@ const ProgramFormScreen = () => {
   const programId = route.params?.programId || 4;
   const isEditMode = !!programId;
 
+  const [sessionToDelete, setSessionToDelete] = useState<number[]>([]);
+
   const { data: program, isSuccess } = useQuery({
     queryKey: ["program", programId],
     queryFn: () => fetchProgramById(programId!),
@@ -47,10 +58,24 @@ const ProgramFormScreen = () => {
   const handleUpsert = async (body: FormData) => {
     try {
       const { sessions, ...rest } = body;
-      upsertProgram(
-        { ...(isEditMode && { id: programId }), ...rest },
-        sessions
-      );
+
+      const program = await upsertProgram({
+        ...(isEditMode && { id: programId }),
+        ...rest,
+      });
+
+      sessions?.forEach(async ({ id, title, description, exerciseIds }) => {
+        if (id) await resetExerciseSession(id);
+
+        const { id: sessionId } = await addProgramSession(program.id, {
+          id,
+          title,
+          description,
+        });
+        await addExerciseSession(sessionId, exerciseIds);
+      });
+
+      sessionToDelete.forEach((idToDelete) => deleteSession(idToDelete));
     } catch (error) {
       console.error(error);
     }
@@ -60,7 +85,7 @@ const ProgramFormScreen = () => {
     mutationFn: handleUpsert,
     onSuccess: () => {
       /*
-       * WARNING !! It does not mutate sessions ids so you may need to force a complete refetch
+       * WARNING !! It does not "reset" sessions ids so you may need to force a complete refetch
        * if you try to modify a session and re-upsert, it might create a new session instead of updating it
        */
       queryClient.invalidateQueries({ queryKey: ["program", programId] });
@@ -114,6 +139,7 @@ const ProgramFormScreen = () => {
               onAddSession={onAddSession}
               onSubmit={onSubmit}
               formContext={formMethods}
+              setSessionToDelete={setSessionToDelete}
             />
           ) : (
             <SessionPanel

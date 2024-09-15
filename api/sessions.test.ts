@@ -1,7 +1,7 @@
 import {
   addExerciseSession,
-  deleteExerciseSession,
   deleteSession,
+  resetExerciseSession,
 } from "./sessions";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
@@ -45,13 +45,13 @@ describe("Tests api/sessions", () => {
 
   describe("deleteExerciseSession", () => {
     it("should not throw when delete is successful", async () => {
-      await expect(deleteExerciseSession(1, 1)).resolves.not.toThrow();
+      await expect(resetExerciseSession(1)).resolves.not.toThrow();
     });
 
     it("should throw when delete fails", async () => {
       setTestError(new Error("Failed to delete exercise from session"));
 
-      await expect(deleteExerciseSession(1, 1)).rejects.toThrow(
+      await expect(resetExerciseSession(1)).rejects.toThrow(
         "Failed to delete exercise from session",
       );
     });

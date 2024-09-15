@@ -18,6 +18,7 @@ type ProgramPanelProps = {
   onSubmit: (data: FormData) => void;
   formContext: UseFormReturn<FormData>;
   isEditMode: boolean;
+  setSessionToDelete: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 const ProgramPanel = ({
@@ -25,6 +26,7 @@ const ProgramPanel = ({
   onSubmit,
   formContext,
   isEditMode,
+  setSessionToDelete,
 }: ProgramPanelProps) => {
   const { control, handleSubmit, getValues, setValue } = formContext;
   const sessions = getValues().sessions || [];
@@ -43,10 +45,16 @@ const ProgramPanel = ({
   };
 
   const confirmDelete = () => {
-    if (selectedIndex !== null) {
-      const updatedSessions = sessions.filter((_, i) => i !== selectedIndex);
-      setValue("sessions", updatedSessions);
-    }
+    if (selectedIndex === null) return closeModal();
+
+    if (sessions[selectedIndex!].id)
+      setSessionToDelete((current) => [
+        ...current,
+        sessions[selectedIndex!].id!,
+      ]);
+
+    const updatedSessions = sessions.filter((_, i) => i !== selectedIndex);
+    setValue("sessions", updatedSessions);
     closeModal();
   };
 

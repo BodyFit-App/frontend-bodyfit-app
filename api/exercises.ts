@@ -62,6 +62,28 @@ export const fetchExercises = async (
   return { data, nextCursor, count };
 };
 
+export const fetchDropdownExercises = async () => {
+  const { data: session, error: sessionError } = await client.auth.getSession();
+
+  if (sessionError) throw new Error(sessionError.message);
+  const user = session?.session?.user;
+  const profile_id = user?.user_metadata.profile_id;
+
+  const { data, error } = await client.from("exercises")
+    .select("id, title, profile_id, favorite_exercises(*)")
+    .eq("visible", true);
+
+  if (error) throw new Error(error.message);
+
+  const filteredExercises = data.filter((exercise) =>
+    exercise.profile_id === profile_id ||
+    (exercise.favorite_exercises &&
+      exercise.favorite_exercises.some((fav) => fav.profile_id === profile_id))
+  );
+
+  return filteredExercises;
+};
+
 export const getFavoriteStatusForExercises = async (exerciseIds: number[]) => {
   const { data, error } = await client
     .from("favorite_exercises")
@@ -86,24 +108,13 @@ export const deleteExercise = async (
 
 export const upsertExercise = async (
   body: TablesInsert<"exercises">,
-  categories: number[] = [],
 ) => {
   const { data, error } = await client
     .from("exercises")
     .upsert(body)
-    .select();
+    .select().single();
 
   if (error) throw new Error(error.message);
-
-  const exerciceCategories = categories.map(
-    (catId) => ({ exercise_id: data[0].id, category_id: catId }),
-  );
-
-  try {
-    addExerciseCategories(exerciceCategories);
-  } catch (err) {
-    console.error(err);
-  }
 
   return data;
 };
@@ -118,14 +129,13 @@ export const addExerciseCategories = async (
   if (error) throw new Error(error.message);
 };
 
-export const deleteExerciseCategories = async (
+export const resetExerciseCategories = async (
   exerciseId: number,
-  catId: number,
 ) => {
   const { error } = await client
     .from("categories_exercises")
     .delete()
-    .eq("category_id", catId).eq("exercise_id", exerciseId);
+    .eq("exercise_id", exerciseId);
 
   if (error) throw new Error(error.message);
 };

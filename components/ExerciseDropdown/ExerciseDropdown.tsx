@@ -1,19 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { MultiSelectDropdown } from "react-native-paper-dropdown";
-import { fetchDropdownExercises } from "../../api/favorites";
-import theme from "../../theme";
-import { Icon, TextInput } from "react-native-paper";
+import { fetchDropdownExercises } from "../../api/exercises";
 import DropdownInput from "../DropdownInput/DropdownInput";
 
-export default function ExerciseDropdown({ value, onChange }: any) {
+type Props = {
+  value: number[];
+  onChange: React.Dispatch<React.SetStateAction<number[]>>;
+};
+
+export default function ExerciseDropdown({ value, onChange }: Props) {
   const { data } = useQuery({
     queryKey: ["dropdown-exercises"],
     queryFn: fetchDropdownExercises,
   });
 
   const options = data
-    ? data.map(({ exercises }) => ({
+    ? data.map((exercises) => ({
         label: exercises!.title,
         value: exercises!.id.toString(),
       }))
@@ -26,8 +29,8 @@ export default function ExerciseDropdown({ value, onChange }: any) {
       placeholder="Sélectionner vos catégories"
       disabled={!data}
       options={options}
-      value={value}
-      onSelect={onChange}
+      value={value.map((numbers) => numbers.toString())}
+      onSelect={(strings) => onChange(strings.map((s) => Number(s)))}
       mode="outlined"
     />
   );
