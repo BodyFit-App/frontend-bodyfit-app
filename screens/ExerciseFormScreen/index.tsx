@@ -18,6 +18,8 @@ import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { getPublicUrl } from "../../lib/supabase";
 import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
+import { useAuth } from "../../hooks/useAuth";
+import { slugify } from "../../lib/helpers";
 
 type ParamListBase = {
   ExerciseFormScreen: {
@@ -26,6 +28,7 @@ type ParamListBase = {
 };
 
 export default function ExerciseFormScreen() {
+  const { session } = useAuth();
   const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -62,8 +65,7 @@ export default function ExerciseFormScreen() {
       if (banner_image && banner_image.startsWith("file://")) {
         const { path } = await uploadImage(
           banner_image,
-          body.title,
-          "exercises"
+          `${session!.user.id}/exercises/${slugify(body.title)}.png`
         );
         banner_image = path;
       }

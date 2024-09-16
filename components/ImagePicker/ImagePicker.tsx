@@ -19,7 +19,7 @@ type ImagePickerProps = {
   onChange: (uri: string) => void;
   width?: number;
   aspect?: [number, number];
-  rest?: ViewProps;
+  imageStyle?: {};
 };
 
 function ImagePicker({
@@ -27,8 +27,9 @@ function ImagePicker({
   onChange,
   width = 300,
   aspect = [4, 3],
+  imageStyle,
   ...rest
-}: ImagePickerProps) {
+}: ImagePickerProps & ViewProps) {
   const pickImage = async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -64,7 +65,11 @@ function ImagePicker({
       }}
       {...rest}
     >
-      <TouchableOpacity testID="image-picker" onPress={pickImage}>
+      <TouchableOpacity
+        testID="image-picker"
+        style={{ width: "100%" }}
+        onPress={pickImage}
+      >
         {value ? (
           <Image
             source={{
@@ -72,7 +77,7 @@ function ImagePicker({
                 ? value
                 : getPublicUrl("images", value),
             }}
-            style={styles.image}
+            style={{ ...styles.image, ...(imageStyle ? imageStyle : "") }}
           />
         ) : (
           <View

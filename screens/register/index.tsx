@@ -1,217 +1,222 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image, ScrollView } from 'react-native';
-import { Checkbox, Text } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { useForm, Controller } from 'react-hook-form';
-import TextField from '../../components/TextField/TextField';
-import CustomButton from '../../components/CustomButton/CustomButton';
-import theme from '../../theme';
+import React, { useState } from "react";
+import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { Checkbox, Text } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { useForm, Controller } from "react-hook-form";
+import TextField from "../../components/TextField/TextField";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import theme from "../../theme";
+import { client } from "../../lib/supabase";
 
 const RegisterScreen = () => {
-	const navigation = useNavigation();
-	const [checked, setChecked] = useState(false);
+  const navigation = useNavigation();
+  const [checked, setChecked] = useState(false);
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			email: '',
-			password: '',
-			confirmPassword: '',
-		},
-	});
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-	const onSubmit = (data: any) => {
-		if (checked) {
-			console.log('Données soumises:', data);
-		} else {
-			console.log('Veuillez accepter les termes et conditions.');
-		}
-	};
+  const onSubmit = async (data: { email: string; password: string }) => {
+    if (!checked) {
+      console.log("Veuillez accepter les termes et conditions.");
+    }
 
-	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<Image
-				source={require('../../assets/logo-app.png')}
-				style={styles.img}
-			/>
+    const { error } = await client.auth.signUp(data);
+    if (error) {
+      console.log("Erreur de connexion", error.message);
+    }
 
-			<Text style={styles.title}>Créer votre compte</Text>
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Home" as never }], // TODO : Mettre l'ecran création de profil plutot
+    });
+  };
 
-			<Controller
-				control={control}
-				rules={{
-					required: 'Adresse email requise',
-					pattern: {
-						value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-						message: 'Adresse email invalide',
-					},
-				}}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						style={styles.textinput}
-						label='Adresse email'
-						placeholder='Email'
-						value={value}
-						onChangeText={onChange}
-						onBlur={onBlur}
-						error={!!errors.email}
-						mode='outlined'
-					/>
-				)}
-				name='email'
-			/>
-			{errors.email && (
-				<Text style={styles.errorText}>{errors.email.message}</Text>
-			)}
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image source={require("../../assets/logo-app.png")} style={styles.img} />
 
-			<Controller
-				control={control}
-				rules={{
-					required: 'Mot de passe requis',
-					minLength: {
-						value: 6,
-						message: 'Le mot de passe doit contenir au moins 6 caractères',
-					},
-				}}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						style={styles.textinput}
-						label='Mot de passe'
-						placeholder='Mot de passe'
-						value={value}
-						onChangeText={onChange}
-						onBlur={onBlur}
-						secureTextEntry
-						error={!!errors.password}
-						mode='outlined'
-					/>
-				)}
-				name='password'
-			/>
-			{errors.password && (
-				<Text style={styles.errorText}>{errors.password.message}</Text>
-			)}
+      <Text style={styles.title}>Créer votre compte</Text>
 
-			<Controller
-				control={control}
-				rules={{
-					required: 'Confirmation du mot de passe requise',
-					validate: (value) =>
-						value === control.getValues('password') ||
-						'Les mots de passe ne correspondent pas',
-				}}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						style={styles.textinput}
-						label='Confirmer mot de passe'
-						placeholder='Confirmation mot de passe'
-						value={value}
-						onChangeText={onChange}
-						onBlur={onBlur}
-						secureTextEntry
-						error={!!errors.confirmPassword}
-						mode='outlined'
-					/>
-				)}
-				name='confirmPassword'
-			/>
-			{errors.confirmPassword && (
-				<Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
-			)}
+      <Controller
+        control={control}
+        rules={{
+          required: "Adresse email requise",
+          pattern: {
+            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+            message: "Adresse email invalide",
+          },
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            style={styles.textinput}
+            label="Adresse email"
+            placeholder="Email"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={!!errors.email}
+            mode="outlined"
+          />
+        )}
+        name="email"
+      />
+      {errors.email && (
+        <Text style={styles.errorText}>{errors.email.message}</Text>
+      )}
 
-			<View style={styles.checkboxContainer}>
-				<Checkbox.Item
-					status={checked ? 'checked' : 'unchecked'}
-					onPress={() => setChecked(!checked)}
-					label='J’ai lu et accepté les termes et les conditions'
-					color={theme.colors.primary}
-					labelStyle={styles.textcondition}
-					mode='android'
-					position='leading'
-				/>
-			</View>
+      <Controller
+        control={control}
+        rules={{
+          required: "Mot de passe requis",
+          minLength: {
+            value: 6,
+            message: "Le mot de passe doit contenir au moins 6 caractères",
+          },
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            style={styles.textinput}
+            label="Mot de passe"
+            placeholder="Mot de passe"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            secureTextEntry
+            error={!!errors.password}
+            mode="outlined"
+          />
+        )}
+        name="password"
+      />
+      {errors.password && (
+        <Text style={styles.errorText}>{errors.password.message}</Text>
+      )}
 
-			<CustomButton
-				style={styles.button}
-				onPress={handleSubmit(onSubmit)}>
-				Créer un compte
-			</CustomButton>
+      <Controller
+        control={control}
+        rules={{
+          required: "Confirmation du mot de passe requise",
+          validate: (value) =>
+            value === getValues("password") ||
+            "Les mots de passe ne correspondent pas",
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            style={styles.textinput}
+            label="Confirmer mot de passe"
+            placeholder="Confirmation mot de passe"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            secureTextEntry
+            error={!!errors.confirmPassword}
+            mode="outlined"
+          />
+        )}
+        name="confirmPassword"
+      />
+      {errors.confirmPassword && (
+        <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
+      )}
 
-			<Text style={styles.textregister}>
-				Vous avez déjà un compte ?{' '}
-				<Text
-					style={{
-						textDecorationLine: 'underline',
-						color: theme.colors.primary,
-						fontWeight: '600',
-					}}
-					onPress={() => navigation.navigate('Login' as never)}>
-					Connectez-vous
-				</Text>
-			</Text>
-		</ScrollView>
-	);
+      <View style={styles.checkboxContainer}>
+        <Checkbox.Item
+          status={checked ? "checked" : "unchecked"}
+          onPress={() => setChecked(!checked)}
+          label="J’ai lu et accepté les termes et les conditions"
+          color={theme.colors.primary}
+          labelStyle={styles.textcondition}
+          mode="android"
+          position="leading"
+        />
+      </View>
+
+      <CustomButton style={styles.button} onPress={handleSubmit(onSubmit)}>
+        Créer un compte
+      </CustomButton>
+
+      <Text style={styles.textregister}>
+        Vous avez déjà un compte ?{" "}
+        <Text
+          style={{
+            textDecorationLine: "underline",
+            color: theme.colors.primary,
+            fontWeight: "600",
+          }}
+          onPress={() => navigation.navigate("Login" as never)}
+        >
+          Connectez-vous
+        </Text>
+      </Text>
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'column',
-		backgroundColor: 'transparent',
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingHorizontal: 16,
-	},
-	title: {
-		textAlign: 'center',
-		marginBottom: 25,
-		fontSize: 32,
-		fontWeight: '700',
-	},
-	textcondition: {
-		textAlign: 'right',
-		color: '#79797F',
-		fontStyle: 'italic',
-		fontWeight: '600',
-		fontSize: 12,
-	},
-	textregister: {
-		textAlign: 'center',
-		marginBottom: 50,
-		fontWeight: '600',
-		color: '#79797F',
-		fontStyle: 'italic',
-		fontSize: 16,
-	},
-	img: {
-		width: 300,
-		height: 200,
-		marginBottom: 25,
-	},
-	textinput: {
-		marginBottom: 25,
-		alignSelf: 'center',
-	},
-	button: {
-		width: '100%',
-		marginBottom: 25,
-		padding: 16,
-		alignSelf: 'center',
-	},
-	checkboxContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginBottom: 25,
-	},
-	errorText: {
-		color: 'red',
-		fontSize: 12,
-		textAlign: 'center',
-		marginBottom: 10,
-	},
+  container: {
+    flexDirection: "column",
+    backgroundColor: "transparent",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: 25,
+    fontSize: 32,
+    fontWeight: "700",
+  },
+  textcondition: {
+    textAlign: "right",
+    color: "#79797F",
+    fontStyle: "italic",
+    fontWeight: "600",
+    fontSize: 12,
+  },
+  textregister: {
+    textAlign: "center",
+    marginBottom: 50,
+    fontWeight: "600",
+    color: "#79797F",
+    fontStyle: "italic",
+    fontSize: 16,
+  },
+  img: {
+    width: "80%",
+    height: 200,
+    marginBottom: 25,
+  },
+  textinput: {
+    marginBottom: 25,
+    width: "80%",
+    alignSelf: "center",
+  },
+  button: {
+    marginBottom: 25,
+    width: "80%",
+    alignSelf: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 25,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    textAlign: "center",
+    marginBottom: 10,
+  },
 });
 
 export default RegisterScreen;
