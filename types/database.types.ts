@@ -315,26 +315,26 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
           created_at: string
-          full_name: string | null
+          firstname: string | null
           id: number
+          lastname: string | null
           pseudo: string | null
           user_id: string | null
         }
         Insert: {
-          avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
+          firstname?: string | null
           id?: number
+          lastname?: string | null
           pseudo?: string | null
           user_id?: string | null
         }
         Update: {
-          avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
+          firstname?: string | null
           id?: number
+          lastname?: string | null
           pseudo?: string | null
           user_id?: string | null
         }
@@ -472,17 +472,7 @@ export type Database = {
       }
     }
     Views: {
-      user_content: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          full_name: string | null
-          pseudo: string | null
-          title: string | null
-          type: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_profile_id: {
