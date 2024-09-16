@@ -1,10 +1,10 @@
 import {
+  addSteps,
   deleteGoal,
-  deleteStep,
   fetchGoalById,
   fetchGoals,
+  resetSteps,
   upsertGoal,
-  upsertStep,
 } from "./goals";
 import { Tables } from "../types/database.types";
 
@@ -152,35 +152,35 @@ describe("Tests api/goals", () => {
     });
   });
 
-  describe("upsertStep", () => {
+  describe("addSteps", () => {
     it("should return data when upsert is successful", async () => {
-      const body = { description: "New Step", achieved: false, goal_id: 1 };
+      const body = [{ description: "New Step", achieved: false, goal_id: 1 }];
       const mockData = [{ id: 1, ...body }];
       setTestData(mockData);
 
-      await expect(upsertStep(body)).resolves.not.toThrow();
+      await expect(addSteps(body)).resolves.not.toThrow();
     });
 
     it("should throw when upsert fails", async () => {
       setTestError(new Error("Failed to upsert step"));
 
-      const body = { description: "New Step", achieved: false, goal_id: 1 };
+      const body = [{ description: "New Step", achieved: false, goal_id: 1 }];
 
-      await expect(upsertStep(body)).rejects.toThrow(
+      await expect(addSteps(body)).rejects.toThrow(
         "Failed to upsert step",
       );
     });
   });
 
-  describe("deleteStep", () => {
+  describe("resetSteps", () => {
     it("should not throw when delete is successful", async () => {
-      await expect(deleteStep(1)).resolves.not.toThrow();
+      await expect(resetSteps(1)).resolves.not.toThrow();
     });
 
     it("should throw when delete fails", async () => {
       setTestError(new Error("Failed to delete step"));
 
-      await expect(deleteStep(1)).rejects.toThrow(
+      await expect(resetSteps(1)).rejects.toThrow(
         "Failed to delete step",
       );
     });

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import CustomButton from "../../components/CustomButton/CustomButton";
-import { Modal, Portal, Provider } from "react-native-paper";
+import { Modal, Portal } from "react-native-paper";
 import theme from "../../theme";
 
 type DeleteModalProps = {
@@ -32,7 +32,7 @@ const DeleteModal = ({ visible, onClose, onConfirm }: DeleteModalProps) => {
             Confirmer la suppression
           </Text>
           <Text style={{ color: theme.colors.secondary }}>
-            Es-tu sûr de vouloir supprimer cette session ?
+            Es-tu sûr de vouloir supprimer ?
           </Text>
           <View
             style={{
