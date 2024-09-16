@@ -6,12 +6,7 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { Divider, Switch } from "react-native-paper";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
-import {
-  useRoute,
-  useNavigation,
-  RouteProp,
-  NavigationProp,
-} from "@react-navigation/native";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
@@ -32,9 +27,6 @@ type ParamListBase = {
   GoalFormScreen: {
     goalId?: number;
   };
-  ExerciseFormScreen: {
-    goalId?: number;
-  };
 };
 
 export type GoalData = any;
@@ -44,7 +36,8 @@ registerTranslation("fr", fr);
 export default function GoalFormScreen({
   navigation,
   route,
-}: StackScreenProps<ParamListBase>) {
+  ...props
+}: StackScreenProps<ParamListBase, "GoalFormScreen">) {
   const queryClient = useQueryClient();
   const { goalId } = route.params || {};
   const isEditMode = !!goalId;
