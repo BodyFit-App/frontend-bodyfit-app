@@ -14,12 +14,12 @@ import RegisterScreen from "../../screens/register";
 const Stack = createStackNavigator<any>();
 
 function AppNav() {
-  const { session } = useAuth();
+	const { session } = useAuth();
 
-  return (
-    <NavigationContainer theme={theme}>
-      <Stack.Navigator>
-        {/* TODO: Uncomment later to protect routes 
+	return (
+		<NavigationContainer theme={theme}>
+			<Stack.Navigator>
+				{/* TODO: Uncomment later to protect routes 
          {session ? (
           <Stack.Screen
             name="Home"
