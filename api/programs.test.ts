@@ -1,4 +1,5 @@
 import {
+  addProgramSession,
   deleteProgram,
   fetchProgramById,
   fetchPrograms,
@@ -160,16 +161,29 @@ describe("Tests api/programs", () => {
   });
 
   describe("upsertProgram", () => {
-    it(
-      "should return data when upsert is successful",
-      async () => {
-        const body = { title: "New Program", description: "A new program" };
-        const mockData = [{ id: 1, ...body }];
-        setTestData(mockData);
+    it("should return data with id when upsert is successful without id", async () => {
+      const body = { title: "New Program", description: "A new program" };
+      const mockData = { id: 1, ...body };
+      setTestData(mockData);
 
-        await expect(upsertProgram(body)).resolves.not.toThrow();
-      },
-    );
+      const result = await upsertProgram(body);
+
+      expect(result).toEqual({ id: 1, ...body });
+    });
+
+    it("should return the same body if id is provided", async () => {
+      const body = {
+        id: 1,
+        title: "Updated Program",
+        description: "An updated program",
+      };
+      const mockData = body;
+      setTestData(mockData);
+
+      const result = await upsertProgram(body);
+
+      expect(result).toEqual(body);
+    });
 
     it("should throw when upsert fails", async () => {
       setTestError(new Error("Failed to upsert program"));
@@ -192,6 +206,47 @@ describe("Tests api/programs", () => {
 
       await expect(deleteProgram(1)).rejects.toThrow(
         "Failed to delete program",
+      );
+    });
+  });
+
+  describe("addProgramSession", () => {
+    it("should return session with id when adding a session without id", async () => {
+      const programId = 1;
+      const session = { title: "New Session", description: "A new session" };
+      const mockData = { id: 100, ...session, program_id: programId };
+
+      setTestData(mockData);
+
+      const result = await addProgramSession(programId, session);
+
+      expect(result).toEqual(mockData);
+    });
+
+    it("should return the same session when adding a session with an existing id", async () => {
+      const programId = 1;
+      const session = {
+        id: 100,
+        title: "Updated Session",
+        description: "An updated session",
+      };
+      const mockData = { ...session, program_id: programId };
+
+      setTestData(mockData);
+
+      const result = await addProgramSession(programId, session);
+
+      expect(result).toEqual(mockData);
+    });
+
+    it("should throw an error if adding session fails", async () => {
+      const programId = 1;
+      const session = { title: "New Session", description: "A new session" };
+
+      setTestError(new Error("Failed to add session"));
+
+      await expect(addProgramSession(programId, session)).rejects.toThrow(
+        "Failed to add session",
       );
     });
   });

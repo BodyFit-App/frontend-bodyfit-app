@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import ExerciseFormScreen from "../../screens/ExerciseFormScreen";
 import { BottomTabs } from "../BottomTabs/BottomTabs";
 import HomeScreen from "../../screens/home";
+import ProgramFormScreen from "../../screens/ProgramFormScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,11 @@ function AppNav() {
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
         <Stack.Screen
+          name="ProgramFormScreen"
+          options={{ title: "Créer mon exercice" }}
+          component={ProgramFormScreen}
+        />
+        <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{ headerShown: false }}
@@ -41,7 +47,11 @@ function AppNav() {
           component={BottomTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown:false}} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

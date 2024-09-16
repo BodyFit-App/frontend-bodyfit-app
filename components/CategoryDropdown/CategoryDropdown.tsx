@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { MultiSelectDropdown } from "react-native-paper-dropdown";
 import { fetchCategories } from "../../api/categories";
+import DropdownInput from "../DropdownInput/DropdownInput";
 
 export default function CategoryDropdown({ value, onChange }: any) {
   const { data } = useQuery({
@@ -15,6 +16,7 @@ export default function CategoryDropdown({ value, onChange }: any) {
 
   return (
     <MultiSelectDropdown
+      CustomMultiSelectDropdownInput={DropdownInput}
       label="Catégories"
       placeholder="Sélectionner vos catégories"
       disabled={!data}

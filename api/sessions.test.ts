@@ -1,8 +1,7 @@
 import {
   addExerciseSession,
-  deleteExerciseSession,
   deleteSession,
-  upsertSession,
+  resetExerciseSession,
 } from "./sessions";
 
 const { setTestData, setTestError } = require("@supabase/supabase-js");
@@ -12,29 +11,6 @@ describe("Tests api/sessions", () => {
     jest.clearAllMocks();
     setTestData(null);
     setTestError(null);
-  });
-
-  describe("upsertSession", () => {
-    it(
-      "should return data when upsert is successful",
-      async () => {
-        const body = { title: "New Session", description: "A new session" };
-        const mockData = [{ id: 1, ...body }];
-        setTestData(mockData);
-
-        await expect(upsertSession(1, body)).resolves.not.toThrow();
-      },
-    );
-
-    it("should throw when upsert fails", async () => {
-      setTestError(new Error("Failed to upsert session"));
-
-      const body = { title: "New Session", description: "A new session" };
-
-      await expect(upsertSession(1, body)).rejects.toThrow(
-        "Failed to upsert session",
-      );
-    });
   });
 
   describe("deleteSession", () => {
@@ -53,14 +29,14 @@ describe("Tests api/sessions", () => {
 
   describe("addExerciseSession", () => {
     it("should not throw when adding exercise is successful", async () => {
-      await expect(addExerciseSession({ exercise_id: 1, session_id: 1 }))
+      await expect(addExerciseSession(1, [1]))
         .resolves.not.toThrow();
     });
 
     it("should throw when adding exercise fails", async () => {
       setTestError(new Error("Failed to add exercise to session"));
 
-      await expect(addExerciseSession({ exercise_id: 1, session_id: 1 }))
+      await expect(addExerciseSession(1, [1]))
         .rejects.toThrow(
           "Failed to add exercise to session",
         );
@@ -69,13 +45,13 @@ describe("Tests api/sessions", () => {
 
   describe("deleteExerciseSession", () => {
     it("should not throw when delete is successful", async () => {
-      await expect(deleteExerciseSession(1, 1)).resolves.not.toThrow();
+      await expect(resetExerciseSession(1)).resolves.not.toThrow();
     });
 
     it("should throw when delete fails", async () => {
       setTestError(new Error("Failed to delete exercise from session"));
 
-      await expect(deleteExerciseSession(1, 1)).rejects.toThrow(
+      await expect(resetExerciseSession(1)).rejects.toThrow(
         "Failed to delete exercise from session",
       );
     });

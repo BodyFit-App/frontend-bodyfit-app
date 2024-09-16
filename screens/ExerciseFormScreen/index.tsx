@@ -8,7 +8,12 @@ import { Switch } from "react-native-paper";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchExerciseById, upsertExercise } from "../../api/exercises";
+import {
+  addExerciseCategories,
+  fetchExerciseById,
+  resetExerciseCategories,
+  upsertExercise,
+} from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { getPublicUrl } from "../../lib/supabase";
@@ -67,10 +72,19 @@ export default function ExerciseFormScreen() {
         banner_image: banner_image,
       };
 
-      upsertExercise(
-        newBody,
-        categories.map((n) => +n)
-      );
+      const exercice = await upsertExercise(newBody);
+
+      const exerciceCategories = categories.map((catId: number) => ({
+        exercise_id: exercice.id,
+        category_id: catId,
+      }));
+
+      try {
+        if (data.id) await resetExerciseCategories(data.id);
+        addExerciseCategories(exerciceCategories);
+      } catch (err) {
+        console.error(err);
+      }
     } catch (error) {
       console.error(error);
     }

@@ -5,12 +5,10 @@ import CategoryDropdown from "./CategoryDropdown";
 import { fetchCategories } from "../../api/categories";
 import { MultiSelectDropdown } from "react-native-paper-dropdown";
 
-// Mock de fetchCategories
 jest.mock("../../api/categories", () => ({
   fetchCategories: jest.fn(),
 }));
 
-// Mock pour MultiSelectDropdown
 jest.mock("react-native-paper-dropdown", () => ({
   MultiSelectDropdown: jest.fn(() => null),
 }));
