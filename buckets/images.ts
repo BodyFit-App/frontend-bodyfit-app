@@ -5,13 +5,9 @@ import { slugify } from "../lib/helpers";
 import { User } from "@supabase/supabase-js";
 
 export const uploadImage = async (
-  userId: string,
   uri: string,
-  title: string,
-  type: "exercises" | "goals" | "avatar",
+  path: string,
 ) => {
-  const path = `${userId}/${type}/${slugify(title)}.png`;
-
   const file = await FileSystem.readAsStringAsync(uri, {
     encoding: "base64",
   });

@@ -23,6 +23,7 @@ import StepForm from "./StepForm";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
+import { slugify } from "../../lib/helpers";
 
 type ParamListBase = {
   GoalFormScreen: {
@@ -72,10 +73,8 @@ export default function GoalFormScreen({
       let banner_image = body.banner_image;
       if (banner_image && banner_image.startsWith("file://")) {
         const { path } = await uploadImage(
-          session!.user.id,
           banner_image,
-          body.title,
-          "goals"
+          `${session!.user.id}/goals/${slugify(body.title)}.png`
         );
         banner_image = path;
       }
