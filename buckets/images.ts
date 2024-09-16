@@ -6,13 +6,14 @@ import { slugify } from "../lib/helpers";
 export const uploadImage = async (
   uri: string,
   title: string,
+  type: "exercises" | "goals" | "avatar",
 ) => {
   const { data: session, error: sessionError } = await client.auth.getSession();
 
   if (sessionError) throw new Error(sessionError.message);
   const user = session?.session?.user;
 
-  const path = `${user!.id}/exercises/${slugify(title)}.png`;
+  const path = `${user!.id}/${type}/${slugify(title)}.png`;
 
   const file = await FileSystem.readAsStringAsync(uri, {
     encoding: "base64",

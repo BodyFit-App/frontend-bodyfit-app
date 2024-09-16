@@ -8,6 +8,7 @@ import ExerciseFormScreen from "../../screens/ExerciseFormScreen";
 import { BottomTabs } from "../BottomTabs/BottomTabs";
 import HomeScreen from "../../screens/home";
 import ProgramFormScreen from "../../screens/ProgramFormScreen";
+import GoalFormScreen from "../../screens/GoalFormScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,11 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
+        <Stack.Screen
+          name="GoalFormScreen"
+          options={{ title: "Créer mon exercice" }}
+          component={GoalFormScreen}
+        />
         <Stack.Screen
           name="ProgramFormScreen"
           options={{ title: "Créer mon exercice" }}

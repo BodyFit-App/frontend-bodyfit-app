@@ -1,91 +1,93 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
 import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
-import { Switch } from "react-native-paper";
+import { Divider, Switch } from "react-native-paper";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  addExerciseCategories,
-  fetchExerciseById,
-  resetExerciseCategories,
-  upsertExercise,
-} from "../../api/exercises";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
-import { getPublicUrl } from "../../lib/supabase";
-import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
+import {
+  addSteps,
+  fetchGoalById,
+  resetSteps,
+  upsertGoal,
+} from "../../api/goals";
+import CustomDatePicker from "../../components/CustomDatePicker/CustomDatePicker";
+import { fr, registerTranslation } from "react-native-paper-dates";
+import StepList from "./StepList";
+import StepForm from "./StepForm";
+import React from "react";
 
 type ParamListBase = {
-  ExerciseFormScreen: {
-    exerciseId?: number;
+  GoalFormScreen: {
+    goalId?: number;
   };
 };
 
-export default function ExerciseFormScreen() {
+export type GoalData = any;
+
+registerTranslation("fr", fr);
+
+export default function GoalFormScreen() {
   const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const exerciseId = route.params?.exerciseId;
-  const isEditMode = !!exerciseId;
-
-  const { data: exercise, isSuccess } = useQuery({
-    queryKey: ["exercise", exerciseId],
-    queryFn: () => fetchExerciseById(exerciseId!),
-    enabled: isEditMode,
-  });
+  const goalId = route.params?.goalId || 7;
+  const isEditMode = !!goalId;
 
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<TablesInsert<"goals"> & { steps: TablesInsert<"steps">[] }>({
     defaultValues: {
       title: "",
       banner_image: "",
+      date_start: "",
+      date_end: "",
       description: "",
-      estimated_time_seconds: "1",
       visible: false,
-      categories: [] as string[],
+      steps: [],
     },
   });
 
-  const handleUpsert = async (
-    body: TablesInsert<"exercises"> & { categories: [] }
-  ) => {
+  const { data: goal, isSuccess } = useQuery({
+    queryKey: ["goal", goalId],
+    queryFn: () => fetchGoalById(goalId!),
+    enabled: isEditMode,
+  });
+
+  const handleUpsert = async (body: TablesInsert<"goals"> & { steps: [] }) => {
     try {
       let banner_image = body.banner_image;
       if (banner_image && banner_image.startsWith("file://")) {
-        const { path } = await uploadImage(
-          banner_image,
-          body.title,
-          "exercises"
-        );
+        const { path } = await uploadImage(banner_image, body.title, "goals");
         banner_image = path;
       }
 
-      const { categories, ...data } = body;
+      const { steps, ...data } = body;
 
       const newBody = {
-        ...(isEditMode ? { id: exerciseId } : {}),
+        ...(isEditMode ? { id: goalId } : {}),
         ...data,
         banner_image: banner_image,
       };
 
-      const exercice = await upsertExercise(newBody);
-
-      const exerciceCategories = categories.map((catId: number) => ({
-        exercise_id: exercice.id,
-        category_id: catId,
-      }));
+      const goal = await upsertGoal(newBody);
 
       try {
-        if (data.id) await resetExerciseCategories(data.id);
-        addExerciseCategories(exerciceCategories);
+        if (isEditMode) await resetSteps(goal.id);
+        addSteps(
+          steps.map((step: TablesInsert<"steps">) => ({
+            ...step,
+            goal_id: goal.id,
+          }))
+        );
       } catch (err) {
         console.error(err);
       }
@@ -97,7 +99,7 @@ export default function ExerciseFormScreen() {
   const upsertMutation = useMutation({
     mutationFn: handleUpsert,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["exercise", exerciseId] });
+      queryClient.invalidateQueries({ queryKey: ["goal", goalId] });
       // navigation.goBack();
     },
   });
@@ -107,18 +109,23 @@ export default function ExerciseFormScreen() {
   };
 
   useEffect(() => {
-    if (isSuccess && exercise) {
+    if (isSuccess && goal) {
       reset({
-        title: exercise.title || "",
-        banner_image: getPublicUrl("images", exercise.banner_image!) || "",
-        description: exercise.description || "",
-        estimated_time_seconds:
-          exercise.estimated_time_seconds?.toString() || "1",
-        visible: exercise.visible || false,
-        categories: exercise.categories.map(({ id }) => id.toString()) || [],
+        title: goal.title || "",
+        banner_image: goal.banner_image || undefined,
+        date_start: goal.date_start || "",
+        date_end: goal.date_end || "",
+        description: goal.description || "",
+        visible: goal.visible || false,
+        steps:
+          goal.steps.map(({ id, title, description }) => ({
+            id,
+            title,
+            description,
+          })) || [],
       });
     }
-  }, [isSuccess, exercise, reset]);
+  }, [isSuccess, goal, reset]);
 
   return (
     <View style={{ padding: 16 }}>
@@ -143,7 +150,7 @@ export default function ExerciseFormScreen() {
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => (
-              <ImagePicker onChange={onChange} value={value} />
+              <ImagePicker onChange={onChange} value={value || null} />
             )}
             name="banner_image"
           />
@@ -157,7 +164,7 @@ export default function ExerciseFormScreen() {
                 placeholder="Ex: Pensez à bien vous équiper"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value || ""}
                 multiline
                 numberOfLines={10}
               />
@@ -167,20 +174,65 @@ export default function ExerciseFormScreen() {
 
           <Controller
             control={control}
-            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDatePicker
+                onChange={(date) => onChange(date?.toDateString())}
+                onBlur={onBlur}
+                value={value ? new Date(value) : undefined}
+                inputMode={"start"}
+                locale="fr"
+                label="Date de début"
+              />
+            )}
+            name="date_start"
+          />
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDatePicker
+                onChange={(date) => onChange(date?.toDateString())}
+                onBlur={onBlur}
+                value={value ? new Date(value) : undefined}
+                inputMode={"start"}
+                locale="fr"
+                label="Date de fin"
+              />
+            )}
+            name="date_end"
+          />
+
+          <Controller
+            control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextField
                 mode="outlined"
-                label="Temps estimé en minutes"
-                placeholder="Ex: Temps estimé en minutes"
+                label="Description"
+                placeholder="Ex: Pensez à bien vous équiper"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
-                keyboardType="numeric"
+                value={value || ""}
+                multiline
+                numberOfLines={10}
               />
             )}
-            name="estimated_time_seconds"
+            name="description"
           />
+
+          <Divider bold />
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <StepForm value={value || []} onChange={onChange} />
+                <StepList steps={value} onChange={onChange} />
+              </>
+            )}
+            name="steps"
+          />
+
+          <Divider bold />
 
           <Controller
             control={control}
@@ -193,7 +245,7 @@ export default function ExerciseFormScreen() {
                 }}
               >
                 <Text style={{ color: theme.colors.secondary, fontSize: 16 }}>
-                  Je souhaite partager cet exercice
+                  Je souhaite partager cet objectif
                 </Text>
                 <Switch
                   style={{ marginLeft: 16 }}
@@ -203,14 +255,6 @@ export default function ExerciseFormScreen() {
               </View>
             )}
             name="visible"
-          />
-
-          <Controller
-            control={control}
-            render={({ field: { value, onChange } }) => (
-              <CategoryDropdown onChange={onChange} value={value || []} />
-            )}
-            name="categories"
           />
 
           <CustomButton onPress={handleSubmit(onSubmit)}>

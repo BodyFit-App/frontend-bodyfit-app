@@ -12,6 +12,7 @@ import * as ExpoImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import theme from "../../theme";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { getPublicUrl } from "../../lib/supabase";
 
 type ImagePickerProps = {
   value: string | null;
@@ -28,6 +29,8 @@ function ImagePicker({
   aspect = [4, 3],
   ...rest
 }: ImagePickerProps) {
+  console.log(value);
+
   const pickImage = async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -65,7 +68,14 @@ function ImagePicker({
     >
       <TouchableOpacity testID="image-picker" onPress={pickImage}>
         {value ? (
-          <Image source={{ uri: value! }} style={styles.image} />
+          <Image
+            source={{
+              uri: value!.startsWith("file://")
+                ? value
+                : getPublicUrl("images", value),
+            }}
+            style={styles.image}
+          />
         ) : (
           <View
             style={{
