@@ -61,4 +61,27 @@ describe('ActuCard', () => {
 
     expect(getByTestId('profile-image')).toBeTruthy();
   });
+  
+  it('truncates the text when its length exceeds the max length', () => {
+    const longTextProps = {
+      ...mockProps,
+      exerciseLinkText: 'This is a very long text that should be truncated',
+    };
+  
+    const { getByText } = render(<ActuCard {...longTextProps} />);
+  
+    expect(getByText('This is a very ...')).toBeTruthy();
+  });
+  
+  it('does not truncate the text when its length is less than or equal to the max length', () => {
+    const shortTextProps = {
+      ...mockProps,
+      exerciseLinkText: 'Short text',
+    };
+  
+    const { getByText } = render(<ActuCard {...shortTextProps} />);
+  
+    expect(getByText('Short text')).toBeTruthy();
+  });
+  
 });
