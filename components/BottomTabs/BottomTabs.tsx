@@ -33,6 +33,7 @@ export function BottomTabs() {
       }}
       activeColor="#2F80ED"
       inactiveColor="#2F80ED"
+      testID="bottom-navigation"
     />
   );
 }
