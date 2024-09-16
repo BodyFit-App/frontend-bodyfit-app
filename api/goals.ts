@@ -51,7 +51,7 @@ export const upsertGoal = async (
 ) => {
   const { data, error } = await client
     .from("goals")
-    .upsert(body).select();
+    .upsert(body).select().single();
 
   if (error) throw new Error(error.message);
   return data;
@@ -68,8 +68,8 @@ export const deleteGoal = async (
   if (error) throw new Error(error.message);
 };
 
-export const upsertStep = async (
-  body: TablesInsert<"steps">,
+export const addSteps = async (
+  body: TablesInsert<"steps">[],
 ) => {
   const { data, error } = await client
     .from("steps")
@@ -79,13 +79,13 @@ export const upsertStep = async (
   return data;
 };
 
-export const deleteStep = async (
-  id: number,
+export const resetSteps = async (
+  goal_id: number,
 ) => {
   const { error } = await client
     .from("steps")
     .delete()
-    .eq("id", id);
+    .eq("goal_id", goal_id);
 
   if (error) throw new Error(error.message);
 };

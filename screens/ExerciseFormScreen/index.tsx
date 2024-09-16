@@ -58,9 +58,13 @@ export default function ExerciseFormScreen() {
     body: TablesInsert<"exercises"> & { categories: [] }
   ) => {
     try {
-      let banner_image;
-      if (body?.banner_image) {
-        const { path } = await uploadImage(body.banner_image, body.title);
+      let banner_image = body.banner_image;
+      if (banner_image && banner_image.startsWith("file://")) {
+        const { path } = await uploadImage(
+          banner_image,
+          body.title,
+          "exercises"
+        );
         banner_image = path;
       }
 
@@ -107,7 +111,7 @@ export default function ExerciseFormScreen() {
       reset({
         title: exercise.title || "",
         banner_image: getPublicUrl("images", exercise.banner_image!) || "",
-        description: exercise.description?.toString() || "",
+        description: exercise.description || "",
         estimated_time_seconds:
           exercise.estimated_time_seconds?.toString() || "1",
         visible: exercise.visible || false,
