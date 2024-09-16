@@ -1,163 +1,222 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Text, Image } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import TextField from '../../components/TextField/TextField';
-import CustomButton from '../../components/CustomButton/CustomButton';
-import ImagePicker from '../../components/ImagePicker/ImagePicker';
-import theme from '../../theme';
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView, Text, Image } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import TextField from "../../components/TextField/TextField";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import ImagePicker from "../../components/ImagePicker/ImagePicker";
+import theme from "../../theme";
+import { getPublicUrl } from "../../lib/supabase";
+import { fetchProfileById, updateProfile } from "../../api/profiles";
+import { StackScreenProps } from "@react-navigation/stack";
+import { useAuth } from "../../hooks/useAuth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { TablesInsert } from "../../types/database.types";
+import { uploadImage } from "../../buckets/images";
 
-export default function ProfileCreationScreen() {
-	const {
-		control,
-		handleSubmit,
-		watch,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			pseudo: '',
-			firstName: '',
-			lastName: '',
-			profileImage: '',
-		},
-	});
+type ParamListBase = {
+  ProfileFormScreen: undefined;
+};
 
-	const pseudoValue = watch('pseudo');
+export default function ProfileCreationScreen({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<ParamListBase, "ProfileFormScreen">) {
+  const { session } = useAuth();
+  const profileId = session?.user.user_metadata.profile_id;
+  const queryClient = useQueryClient();
 
-	const onSubmit = (data: any) => {
-		console.log('Profile Data:', data);
-	};
+  const { data: profile, isSuccess } = useQuery({
+    queryKey: ["profile", profileId],
+    queryFn: () => fetchProfileById(profileId),
+    enabled: !!profileId,
+  });
 
-	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<View style={styles.imagePseudoContainer}>
-				<Controller
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<View style={styles.imagePickerContainer}>
-							<ImagePicker
-								onChange={onChange}
-								value={value}
-								style={styles.imagePicker}
-							/>
-						</View>
-					)}
-					name='profileImage'
-				/>
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<TablesInsert<"profiles"> & { profileImage: string }>({
+    defaultValues: {
+      pseudo: "",
+      firstname: "",
+      lastname: "",
+      profileImage: "",
+    },
+  });
 
-				<View style={styles.pseudoDisplayContainer}>
-					<Text style={styles.pseudoText}>@{pseudoValue || 'pseudo'}</Text>
-				</View>
-			</View>
+  const pseudoValue = watch("pseudo");
 
-			<Controller
-				control={control}
-				rules={{ required: 'Le pseudo est requis' }}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						label='Pseudo'
-						placeholder='Entrez votre pseudo'
-						onBlur={onBlur}
-						onChangeText={onChange}
-						value={value}
-						error={!!errors.pseudo}
-						style={styles.textInput}
-						mode='outlined'
-					/>
-				)}
-				name='pseudo'
-			/>
-			{errors.pseudo && (
-				<Text style={styles.errorText}>{errors.pseudo.message}</Text>
-			)}
+  const handleUpdate = async (
+    body: TablesInsert<"profiles"> & { profileImage: string }
+  ) => {
+    if (body.profileImage && body.profileImage.startsWith("file://")) {
+      await uploadImage(body.profileImage, `${session?.user.id}/avatar.png`);
+    }
 
-			<Controller
-				control={control}
-				rules={{ required: 'Le prénom est requis' }}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						label='Prénom'
-						placeholder='Entrez votre prénom'
-						onBlur={onBlur}
-						onChangeText={onChange}
-						value={value}
-						error={!!errors.firstName}
-						style={styles.textInput}
-						mode='outlined'
-					/>
-				)}
-				name='firstName'
-			/>
-			{errors.firstName && (
-				<Text style={styles.errorText}>{errors.firstName.message}</Text>
-			)}
+    const { profileImage, ...newBody } = {
+      id: profileId,
+      ...body,
+    };
+    updateProfile(newBody);
+  };
 
-			<Controller
-				control={control}
-				rules={{ required: 'Le nom est requis' }}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextField
-						label='Nom'
-						placeholder='Entrez votre nom'
-						onBlur={onBlur}
-						onChangeText={onChange}
-						value={value}
-						error={!!errors.lastName}
-						style={styles.textInput}
-						mode='outlined'
-					/>
-				)}
-				name='lastName'
-			/>
-			{errors.lastName && (
-				<Text style={styles.errorText}>{errors.lastName.message}</Text>
-			)}
+  const updateMutation = useMutation({
+    mutationFn: handleUpdate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile", profileId] });
+      // navigation.goBack();
+    },
+  });
 
-			<CustomButton onPress={handleSubmit(onSubmit)}>
-				Créer le profil
-			</CustomButton>
-		</ScrollView>
-	);
+  const onSubmit = (data: any) => {
+    updateMutation.mutate(data);
+  };
+
+  useEffect(() => {
+    if (isSuccess && profile) {
+      reset({
+        pseudo: profile.pseudo,
+        lastname: profile.lastname,
+        firstname: profile.firstname,
+        profileImage: `${session?.user.id}/avatar.png`,
+      });
+    }
+  }, [isSuccess, profile, reset]);
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.imagePseudoContainer}>
+        <Controller
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <View style={styles.imagePickerContainer}>
+              <ImagePicker
+                onChange={onChange}
+                value={value}
+                imageStyle={styles.imagePicker}
+                style={{ borderWidth: 0 }}
+                aspect={[1, 1]}
+                width={150}
+              />
+            </View>
+          )}
+          name="profileImage"
+        />
+
+        <View style={styles.pseudoDisplayContainer}>
+          <Text style={styles.pseudoText}>@{pseudoValue || "pseudo"}</Text>
+        </View>
+      </View>
+
+      <Controller
+        control={control}
+        rules={{ required: "Le pseudo est requis" }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            label="Pseudo"
+            placeholder="Entrez votre pseudo"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value || ""}
+            error={!!errors.pseudo}
+            style={styles.textInput}
+            mode="outlined"
+          />
+        )}
+        name="pseudo"
+      />
+      {errors.pseudo && (
+        <Text style={styles.errorText}>{errors.pseudo.message}</Text>
+      )}
+
+      <Controller
+        control={control}
+        rules={{ required: "Le prénom est requis" }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            label="Prénom"
+            placeholder="Entrez votre prénom"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value || ""}
+            error={!!errors.firstname}
+            style={styles.textInput}
+            mode="outlined"
+          />
+        )}
+        name="firstname"
+      />
+      {errors.firstname && (
+        <Text style={styles.errorText}>{errors.firstname.message}</Text>
+      )}
+
+      <Controller
+        control={control}
+        rules={{ required: "Le nom est requis" }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextField
+            label="Nom"
+            placeholder="Entrez votre nom"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value || ""}
+            error={!!errors.lastname}
+            style={styles.textInput}
+            mode="outlined"
+          />
+        )}
+        name="lastname"
+      />
+      {errors.lastname && (
+        <Text style={styles.errorText}>{errors.lastname.message}</Text>
+      )}
+
+      <CustomButton onPress={handleSubmit(onSubmit)}>
+        Créer le profil
+      </CustomButton>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		padding: 30,
-		flexGrow: 1,
-		justifyContent: 'center',
-	},
-	imagePseudoContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 32,
-	},
-	imagePickerContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginRight: 26,
-	},
-	imagePicker: {
-		width: 150,
-		height: 150,
-		borderRadius: 100,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-
-	pseudoDisplayContainer: {
-		marginLeft: 16,
-	},
-	pseudoText: {
-		fontSize: 24,
-		fontWeight: '600',
-		color: theme.colors.textFollow,
-	},
-	textInput: {
-		marginBottom: 20,
-	},
-	errorText: {
-		color: 'red',
-		fontSize: 12,
-		marginBottom: 10,
-		textAlign: 'left',
-	},
+  container: {
+    padding: 30,
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  imagePseudoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  imagePickerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 26,
+  },
+  imagePicker: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+  },
+  pseudoDisplayContainer: {
+    marginLeft: 16,
+  },
+  pseudoText: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: theme.colors.textFollow,
+  },
+  textInput: {
+    marginBottom: 20,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginBottom: 10,
+    textAlign: "left",
+  },
 });

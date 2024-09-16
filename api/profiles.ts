@@ -1,14 +1,14 @@
 import { NB_ELTS_PER_PAGE } from "../lib/constants";
 import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
-import { TablesInsert } from "../types/database.types";
+import { TablesInsert, TablesUpdate } from "../types/database.types";
 import { ProfileFilter } from "../types/filters.types";
 
 export const fetchProfileById = async (id: number) => {
   const { data, error } = await client.from("profiles").select("*").eq(
     "id",
     id,
-  );
+  ).single();
   if (error) throw new Error(error.message);
   return data;
 };
@@ -46,12 +46,12 @@ export const deleteProfile = async (
   if (error) throw new Error(error.message);
 };
 
-export const upsertProfile = async (
-  body: TablesInsert<"profiles">,
+export const updateProfile = async (
+  body: TablesUpdate<"profiles">,
 ) => {
   const { data, error } = await client
     .from("profiles")
-    .upsert(body)
+    .update(body).eq("id", body.id!)
     .select();
 
   if (error) throw new Error(error.message);
