@@ -22,6 +22,7 @@ import StepList from "./StepList";
 import StepForm from "./StepForm";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
+import { useAuth } from "../../hooks/useAuth";
 
 type ParamListBase = {
   GoalFormScreen: {
@@ -38,6 +39,7 @@ export default function GoalFormScreen({
   route,
   ...props
 }: StackScreenProps<ParamListBase, "GoalFormScreen">) {
+  const { session } = useAuth();
   const queryClient = useQueryClient();
   const { goalId } = route.params || {};
   const isEditMode = !!goalId;
@@ -69,7 +71,12 @@ export default function GoalFormScreen({
     try {
       let banner_image = body.banner_image;
       if (banner_image && banner_image.startsWith("file://")) {
-        const { path } = await uploadImage(banner_image, body.title, "goals");
+        const { path } = await uploadImage(
+          session!.user.id,
+          banner_image,
+          body.title,
+          "goals"
+        );
         banner_image = path;
       }
 
