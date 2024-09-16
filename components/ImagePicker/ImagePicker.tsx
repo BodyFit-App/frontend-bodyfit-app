@@ -29,8 +29,6 @@ function ImagePicker({
   aspect = [4, 3],
   ...rest
 }: ImagePickerProps) {
-  console.log(value);
-
   const pickImage = async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
