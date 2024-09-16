@@ -31,16 +31,26 @@ export type Database = {
         Row: {
           category_id: number
           exercise_id: number
+          profile_id: number | null
         }
         Insert: {
           category_id: number
           exercise_id: number
+          profile_id?: number | null
         }
         Update: {
           category_id?: number
           exercise_id?: number
+          profile_id?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "categories_exercises_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "category_exercise_category_id_fkey"
             columns: ["category_id"]
@@ -61,7 +71,7 @@ export type Database = {
         Row: {
           banner_image: string | null
           created_at: string
-          description: Json | null
+          description: string | null
           estimated_time_seconds: number | null
           id: number
           profile_id: number | null
@@ -71,7 +81,7 @@ export type Database = {
         Insert: {
           banner_image?: string | null
           created_at?: string
-          description?: Json | null
+          description?: string | null
           estimated_time_seconds?: number | null
           id?: number
           profile_id?: number | null
@@ -81,7 +91,7 @@ export type Database = {
         Update: {
           banner_image?: string | null
           created_at?: string
-          description?: Json | null
+          description?: string | null
           estimated_time_seconds?: number | null
           id?: number
           profile_id?: number | null
@@ -101,14 +111,17 @@ export type Database = {
       exercises_sessions: {
         Row: {
           exercise_id: number
+          profile_id: number | null
           session_id: number
         }
         Insert: {
           exercise_id: number
+          profile_id?: number | null
           session_id: number
         }
         Update: {
           exercise_id?: number
+          profile_id?: number | null
           session_id?: number
         }
         Relationships: [
@@ -117,6 +130,13 @@ export type Database = {
             columns: ["exercise_id"]
             isOneToOne: false
             referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercises_sessions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -238,10 +258,12 @@ export type Database = {
       }
       goals: {
         Row: {
+          achieved: boolean
+          banner_image: string | null
           created_at: string
           date_end: string | null
           date_start: string | null
-          description: Json | null
+          description: string | null
           id: number
           profile_id: number | null
           program_id: number | null
@@ -249,10 +271,12 @@ export type Database = {
           visible: boolean
         }
         Insert: {
+          achieved?: boolean
+          banner_image?: string | null
           created_at?: string
           date_end?: string | null
           date_start?: string | null
-          description?: Json | null
+          description?: string | null
           id?: number
           profile_id?: number | null
           program_id?: number | null
@@ -260,10 +284,12 @@ export type Database = {
           visible?: boolean
         }
         Update: {
+          achieved?: boolean
+          banner_image?: string | null
           created_at?: string
           date_end?: string | null
           date_start?: string | null
-          description?: Json | null
+          description?: string | null
           id?: number
           profile_id?: number | null
           program_id?: number | null
@@ -294,7 +320,7 @@ export type Database = {
           full_name: string | null
           id: number
           pseudo: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -302,7 +328,7 @@ export type Database = {
           full_name?: string | null
           id?: number
           pseudo?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -310,7 +336,7 @@ export type Database = {
           full_name?: string | null
           id?: number
           pseudo?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -325,7 +351,7 @@ export type Database = {
       programs: {
         Row: {
           created_at: string
-          description: Json | null
+          description: string | null
           id: number
           profile_id: number | null
           title: string
@@ -333,7 +359,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          description?: Json | null
+          description?: string | null
           id?: number
           profile_id?: number | null
           title: string
@@ -341,7 +367,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          description?: Json | null
+          description?: string | null
           id?: number
           profile_id?: number | null
           title?: string
@@ -360,26 +386,36 @@ export type Database = {
       sessions: {
         Row: {
           created_at: string
-          description: Json | null
+          description: string | null
           id: number
+          profile_id: number | null
           program_id: number | null
           title: string
         }
         Insert: {
           created_at?: string
-          description?: Json | null
+          description?: string | null
           id?: number
+          profile_id?: number | null
           program_id?: number | null
           title: string
         }
         Update: {
           created_at?: string
-          description?: Json | null
+          description?: string | null
           id?: number
+          profile_id?: number | null
           program_id?: number | null
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "sessions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "sessions_program_id_fkey"
             columns: ["program_id"]
@@ -393,23 +429,29 @@ export type Database = {
         Row: {
           achieved: boolean
           created_at: string
-          description: Json | null
+          description: string | null
           goal_id: number | null
           id: number
+          profile_id: number | null
+          title: string
         }
         Insert: {
           achieved?: boolean
           created_at?: string
-          description?: Json | null
+          description?: string | null
           goal_id?: number | null
           id?: number
+          profile_id?: number | null
+          title: string
         }
         Update: {
           achieved?: boolean
           created_at?: string
-          description?: Json | null
+          description?: string | null
           goal_id?: number | null
           id?: number
+          profile_id?: number | null
+          title?: string
         }
         Relationships: [
           {
@@ -417,6 +459,13 @@ export type Database = {
             columns: ["goal_id"]
             isOneToOne: false
             referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "steps_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -436,7 +485,10 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      get_profile_id: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

@@ -2,6 +2,8 @@ import { NB_ELTS_PER_PAGE } from "../lib/constants";
 import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
+import { GoalFilter } from "../types/filters.types";
+import { GoalOrder } from "../types/orders.types";
 
 export const fetchGoalById = async (id: number) => {
   const { data, error } = await client.from("goals")
@@ -15,12 +17,25 @@ export const fetchGoalById = async (id: number) => {
 
 export const fetchGoals = async (
   page: number = 1,
+  filter?: GoalFilter,
+  order: GoalOrder = { field: "created_at", asc: false },
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
-  const { data, count, error } = await client
+
+  let query = client
     .from("goals")
-    .select("*", { count: "exact" })
-    .range(start, end);
+    .select("*, steps(*)", { count: "exact" })
+    .range(start, end).order(order.field, { ascending: order.asc });
+
+  if (filter?.achieved) {
+    query = query.eq("achieved", filter.achieved);
+  }
+
+  if (filter?.title) {
+    query = query.ilike("title", `%${filter.title}%`);
+  }
+
+  const { data, count, error } = await query;
 
   if (error) throw new Error(error.message);
 
@@ -36,7 +51,7 @@ export const upsertGoal = async (
 ) => {
   const { data, error } = await client
     .from("goals")
-    .upsert(body).select();
+    .upsert(body).select().single();
 
   if (error) throw new Error(error.message);
   return data;
@@ -53,24 +68,24 @@ export const deleteGoal = async (
   if (error) throw new Error(error.message);
 };
 
-export const upsertStep = async (
-  body: TablesInsert<"goals">,
+export const addSteps = async (
+  body: TablesInsert<"steps">[],
 ) => {
   const { data, error } = await client
-    .from("goals")
+    .from("steps")
     .upsert(body).select();
 
   if (error) throw new Error(error.message);
   return data;
 };
 
-export const deleteStep = async (
-  id: number,
+export const resetSteps = async (
+  goal_id: number,
 ) => {
   const { error } = await client
     .from("steps")
     .delete()
-    .eq("id", id);
+    .eq("goal_id", goal_id);
 
   if (error) throw new Error(error.message);
 };

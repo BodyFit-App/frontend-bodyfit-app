@@ -1,1 +1,1 @@
-export const NB_ELTS_PER_PAGE = 1;
+export const NB_ELTS_PER_PAGE = 20;

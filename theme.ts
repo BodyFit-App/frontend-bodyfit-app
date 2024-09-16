@@ -11,8 +11,11 @@ const theme = {
 		border: "#42424D",
 		primary: "#2F80ED",
 		backgroundButton: "#161626",
-		text: '#2F80ED',
-		textFollow: '#ffffff',
+		text: "#2F80ED",
+		textFollow: "#ffffff",
+		textPlaceholder: "#79797F",
+		textFilter: "#ffffff",
+		backgroundNav: "#161626",
 	},
 };
 

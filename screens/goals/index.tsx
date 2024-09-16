@@ -1,28 +1,41 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { ActivityIndicator, View } from "react-native";
-import { MD2Colors, Text } from "react-native-paper";
+import { View } from "react-native";
+import { Text } from "react-native-paper";
 import { fetchGoals } from "../../api/goals";
 
 export const GoalsScreen = () => {
-  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState({});
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["goals", page],
-    queryFn: () => fetchGoals(page),
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    status,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["goals", filter],
+    queryFn: ({ pageParam }) => fetchGoals(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
   });
 
-  if (isLoading)
-    return <ActivityIndicator animating={true} color={MD2Colors.red800} />;
-
-  if (error) return <Text>{error.message}</Text>;
-
-  return (
+  return status === "pending" ? (
+    <Text>Loading...</Text>
+  ) : status === "error" ? (
+    <Text>Error: {error.message}</Text>
+  ) : (
     <View>
-      {data?.map(({ id, title }) => (
-        <Text key={id} style={{ color: "white" }}>
-          {title}
-        </Text>
+      {data?.pages.map((group, i) => (
+        <React.Fragment>
+          {group.data.map(({ id, title }) => (
+            <Text key={id} style={{ color: "white" }}>
+              {title}
+            </Text>
+          ))}
+        </React.Fragment>
       ))}
     </View>
   );

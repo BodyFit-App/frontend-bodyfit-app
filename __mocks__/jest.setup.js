@@ -1,3 +1,4 @@
+// Mock pour Supabase
 jest.mock("@supabase/supabase-js", () => {
   let testData = null;
   let testError = null;
@@ -7,6 +8,9 @@ jest.mock("@supabase/supabase-js", () => {
       return {
         auth: {
           signInWithPassword: jest.fn(),
+          getSession: jest.fn(),
+          onAuthStateChange: jest.fn(),
+          signOut: jest.fn(),
         },
         from: jest.fn().mockReturnThis(),
         select: jest.fn().mockImplementation(() => ({
@@ -42,6 +46,7 @@ jest.mock("@supabase/supabase-js", () => {
           gte: jest.fn().mockReturnThis(),
           lte: jest.fn().mockReturnThis(),
           select: jest.fn().mockReturnThis(),
+          single: jest.fn().mockReturnThis(),
           data: testData,
           error: testError,
         })),
@@ -66,7 +71,11 @@ jest.mock("@supabase/supabase-js", () => {
     },
   };
 });
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+// Mock pour React Native Animated
+// jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+
+// Mock pour AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
   setItem: jest.fn(() => Promise.resolve()),
@@ -74,7 +83,39 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   clear: jest.fn(() => Promise.resolve()),
   getAllKeys: jest.fn(() => Promise.resolve([])),
   multiGet: jest.fn(() => Promise.resolve([])),
-  multiSet: jest.fn(() => Promise.resolve()),
+  multiSet: jest.fn(() => Promise.resolve([])),
   multiRemove: jest.fn(() => Promise.resolve()),
   mergeItem: jest.fn(() => Promise.resolve()),
 }));
+
+// Mock pour react-native-vector-icons
+jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");
+
+// Mock pour Alert
+const Alert = require("react-native").Alert;
+Alert.alert = jest.fn();
+
+jest.mock("expo-image-picker", () => ({
+  launchImageLibraryAsync: jest.fn().mockResolvedValue({
+    canceled: false,
+    assets: [{ uri: "mock-uri" }],
+  }),
+  MediaTypeOptions: {
+    Images: "Images",
+  },
+  requestMediaLibraryPermissionsAsync: jest.fn(),
+}));
+
+jest.mock("expo-file-system", () => ({
+  readAsStringAsync: jest.fn().mockResolvedValue("base64-string"),
+}));
+
+jest.mock("expo-image-manipulator", () => ({
+  manipulateAsync: jest.fn().mockResolvedValue({ uri: "resized-uri" }),
+  SaveFormat: {
+    JPEG: "JPEG",
+    PNG: "PNG",
+  },
+}));
+
+jest.mock("react-native-vector-icons/MaterialIcons", () => "Icon");

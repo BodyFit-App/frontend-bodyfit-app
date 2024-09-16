@@ -74,7 +74,7 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Avatar.Image size={100} source={imageSource} />
+        <Avatar.Image  testID="profile-image"  size={100} source={imageSource} />
         <View style={styles.userInfo}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.username}>@{username}</Text>

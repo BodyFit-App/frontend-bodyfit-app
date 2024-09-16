@@ -13,3 +13,8 @@ export const client = createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
     detectSessionInUrl: false,
   },
 });
+
+export const getPublicUrl = (from: string, file: string) => {
+  const { data } = client.storage.from(from).getPublicUrl(file);
+  return data.publicUrl;
+};
