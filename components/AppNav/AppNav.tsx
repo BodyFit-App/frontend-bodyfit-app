@@ -8,18 +8,18 @@ import ExerciseFormScreen from "../../screens/ExerciseFormScreen";
 import { BottomTabs } from "../BottomTabs/BottomTabs";
 import HomeScreen from "../../screens/home";
 import ProgramFormScreen from "../../screens/ProgramFormScreen";
-import GoalFormScreen from "../../screens/GoalFormScreen";
 import RegisterScreen from "../../screens/register";
+import ProfileCreationScreen from "../../screens/ProfileCreation";
 
 const Stack = createStackNavigator<any>();
 
 function AppNav() {
-	const { session } = useAuth();
+  const { session } = useAuth();
 
-	return (
-		<NavigationContainer theme={theme}>
-			<Stack.Navigator>
-				{/* TODO: Uncomment later to protect routes 
+  return (
+    <NavigationContainer theme={theme}>
+      <Stack.Navigator>
+        {/* TODO: Uncomment later to protect routes 
          {session ? (
           <Stack.Screen
             name="Home"
@@ -32,7 +32,7 @@ function AppNav() {
         <Stack.Screen
           name="GoalFormScreen"
           options={{ title: "Créer mon exercice" }}
-          component={GoalFormScreen as any}
+          component={ProfileCreationScreen as any}
         />
         <Stack.Screen
           name="Home"
