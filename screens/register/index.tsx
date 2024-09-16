@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'transparent',
 		alignItems: 'center',
 		justifyContent: 'center',
+		paddingHorizontal: 16,
 	},
 	title: {
 		textAlign: 'center',
@@ -185,18 +186,18 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	img: {
-		width: '80%',
+		width: 300,
 		height: 200,
 		marginBottom: 25,
 	},
 	textinput: {
 		marginBottom: 25,
-		width: '80%',
 		alignSelf: 'center',
 	},
 	button: {
+		width: '100%',
 		marginBottom: 25,
-		width: '80%',
+		padding: 16,
 		alignSelf: 'center',
 	},
 	checkboxContainer: {

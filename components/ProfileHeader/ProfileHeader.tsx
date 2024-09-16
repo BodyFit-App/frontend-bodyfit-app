@@ -127,9 +127,9 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: "#0b0b12",
+    backgroundColor: "transparent",
     padding: 20,
-    borderRadius: 10,
+ 
   },
   headerContainer: {
     flexDirection: "row",
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   userInfo: {
-    marginLeft: 15,
+    marginLeft: 50,
   },
   name: {
     color: "#FFFFFF",
