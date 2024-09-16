@@ -21,6 +21,7 @@ const VisibilityToggle: React.FC<VisibilityToggleProps> = ({ control }) => {
             Je souhaite partager ce programme
           </Text>
           <Switch
+            testID="visibility-toggle"
             style={{ marginLeft: 16 }}
             onValueChange={onChange}
             value={value}

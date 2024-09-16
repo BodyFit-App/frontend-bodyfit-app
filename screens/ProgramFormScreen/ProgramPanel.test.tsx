@@ -44,7 +44,7 @@ const FormWrapper = ({
 };
 
 describe("ProgramPanel Integration Test", () => {
-  it("should handle form submission and session deletion", async () => {
+  it("should handle form submission", async () => {
     const onAddSession = jest.fn();
     const onSubmit = jest.fn();
     const setSessionToDelete = jest.fn();
@@ -58,12 +58,37 @@ describe("ProgramPanel Integration Test", () => {
       />
     );
 
-    expect(getByTestId("confirm")).toBeTruthy();
-
     fireEvent.press(getByTestId("confirm"));
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalled();
     });
+  });
+
+  it("should render correct button text based on isEditMode", () => {
+    const onAddSession = jest.fn();
+    const onSubmit = jest.fn();
+    const setSessionToDelete = jest.fn();
+
+    const { getByTestId, rerender } = render(
+      <FormWrapper
+        onAddSession={onAddSession}
+        onSubmit={onSubmit}
+        setSessionToDelete={setSessionToDelete}
+        isEditMode={false}
+      />
+    );
+
+    expect(getByTestId("confirm").props.children).toBe("Confirmer");
+    rerender(
+      <FormWrapper
+        onAddSession={onAddSession}
+        onSubmit={onSubmit}
+        setSessionToDelete={setSessionToDelete}
+        isEditMode={true}
+      />
+    );
+
+    expect(getByTestId("confirm").props.children).toBe("Modifier");
   });
 });
