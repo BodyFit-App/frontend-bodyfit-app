@@ -8,6 +8,7 @@ import ExerciseFormScreen from "../../screens/ExerciseFormScreen";
 import { BottomTabs } from "../BottomTabs/BottomTabs";
 import HomeScreen from "../../screens/home";
 import ProgramFormScreen from "../../screens/ProgramFormScreen";
+import RegisterScreen from "../../screens/register";
 
 const Stack = createStackNavigator();
 
@@ -27,16 +28,17 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
+         <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="ProgramFormScreen"
           options={{ title: "Créer mon exercice" }}
           component={ProgramFormScreen}
         />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
+       
         <Stack.Screen
           name="ExerciseCreation"
           options={{ title: "Créer mon exercice" }}
@@ -50,6 +52,11 @@ function AppNav() {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
