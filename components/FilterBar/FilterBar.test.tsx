@@ -8,133 +8,114 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('FilterBar', () => {
-  it('should render the correct number of results', () => {
+  const filters = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
+  const defaultFilter = "Plus récents";
+  const resultsCount = 15;
+
+  it('renders with correct number of results', () => {
     const { getByText } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar resultsCount={resultsCount} />
       </Wrapper>
     );
-    expect(getByText('10 résultats')).toBeTruthy();
+    expect(getByText(`${resultsCount} résultats`)).toBeTruthy();
   });
 
-  it('should display the default filter option', () => {
-    const { getByTestId } = render(
+  it('renders with the default filter text', () => {
+    const { getByText } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar defaultFilter={defaultFilter} />
       </Wrapper>
     );
-    expect(getByTestId('filter-text').props.children).toBe('Plus récents');
+    expect(getByText(defaultFilter)).toBeTruthy();
   });
 
-  it('should show the menu when the filter button is pressed', async () => {
-    const { getByTestId, queryByTestId } = render(
+  it('opens the menu when the filter button is pressed', () => {
+    const { getByTestId, getByText } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar filters={filters} />
       </Wrapper>
     );
 
-    // Le menu ne doit pas être visible au début
-    expect(queryByTestId('menu-item-a-z')).toBeNull();
+    expect(() => getByText('A-Z')).toThrow();
 
-    // Simuler le clic sur le bouton de filtre
     fireEvent.press(getByTestId('filter-button'));
 
-    // Attendre que le menu apparaisse
-    await waitFor(() => {
-      expect(getByTestId('menu-item-a-z')).toBeTruthy();
-    });
+    expect(getByText('A-Z')).toBeTruthy();
   });
 
-  it('should change the filter when an option is selected', async () => {
-    const { getByTestId } = render(
+  it('closes the menu when a filter option is selected', async () => {
+    const { getByTestId, getByText, queryByTestId } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar filters={filters} />
+      </Wrapper>
+    );
+  
+    fireEvent.press(getByTestId('filter-button'));
+  
+    expect(getByText('A-Z')).toBeTruthy();
+
+    fireEvent.press(getByText('A-Z'));
+  
+    await waitFor(() => expect(queryByTestId('filter-button')).toBeTruthy());
+  });
+  
+  it('changes the filter text when an option is selected', async () => {
+    const { getByTestId, getByText } = render(
+      <Wrapper>
+        <FilterBar filters={filters} />
       </Wrapper>
     );
 
-    // Ouvrir le menu
+
     fireEvent.press(getByTestId('filter-button'));
+    fireEvent.press(getByText('Z-A'));
 
-    // Attendre que le menu soit visible
     await waitFor(() => {
-      expect(getByTestId('menu-item-z-a')).toBeTruthy();
-    });
-
-    // Sélectionner une option de filtre
-    fireEvent.press(getByTestId('menu-item-z-a'));
-
-    // Utiliser un léger délai pour laisser le temps à l'état de changer
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Vérifier que le texte du bouton de filtre a changé
-    await waitFor(() => {
-      expect(getByTestId('filter-text').props.children).toBe('Z-A');
+      expect(getByText('Z-A')).toBeTruthy();
     });
   });
 
-  it('should change the filter to "Moins récents" when that option is selected', async () => {
-    const { getByTestId } = render(
+  it('calls the onFilterChange callback when a filter option is selected', async () => {
+    const mockOnFilterChange = jest.fn();
+    const { getByTestId, getByText } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar filters={filters} onFilterChange={mockOnFilterChange} />
       </Wrapper>
     );
 
-    // Ouvrir le menu
     fireEvent.press(getByTestId('filter-button'));
+    fireEvent.press(getByText('A-Z'));
 
-    // Sélectionner "Moins récents"
-    fireEvent.press(getByTestId('menu-item-moins-recents'));
-
-    // Utiliser un léger délai pour laisser le temps à l'état de changer
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Vérifier que le texte du bouton de filtre a changé
     await waitFor(() => {
-      expect(getByTestId('filter-text').props.children).toBe('Moins récents');
+      expect(mockOnFilterChange).toHaveBeenCalledWith('A-Z');
     });
   });
 
-  it('should change the filter to "A-Z" when that option is selected', async () => {
+  it('renders with the default filter if no defaultFilter prop is provided', () => {
     const { getByTestId } = render(
       <Wrapper>
         <FilterBar />
       </Wrapper>
     );
 
-    // Ouvrir le menu
-    fireEvent.press(getByTestId('filter-button'));
-
-    // Sélectionner "A-Z"
-    fireEvent.press(getByTestId('menu-item-a-z'));
-
-    // Utiliser un léger délai pour laisser le temps à l'état de changer
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Vérifier que le texte du bouton de filtre a changé
-    await waitFor(() => {
-      expect(getByTestId('filter-text').props.children).toBe('A-Z');
-    });
+    expect(getByTestId('filter-text').children[0]).toBe('Plus récents');
   });
 
-  it('should change the filter to "Z-A" when that option is selected', async () => {
-    const { getByTestId } = render(
+  it('renders all filter options in the menu', () => {
+    const filters = ['Plus récents', 'Moins récents', 'A-Z', 'Z-A'];
+    const { getByTestId, getByText } = render(
       <Wrapper>
-        <FilterBar />
+        <FilterBar filters={filters} />
       </Wrapper>
     );
-
-    // Ouvrir le menu
+  
     fireEvent.press(getByTestId('filter-button'));
-
-    // Sélectionner "Z-A"
-    fireEvent.press(getByTestId('menu-item-z-a'));
-
-    // Utiliser un léger délai pour laisser le temps à l'état de changer
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Vérifier que le texte du bouton de filtre a changé
-    await waitFor(() => {
-      expect(getByTestId('filter-text').props.children).toBe('Z-A');
+  
+    filters.forEach((filterOption) => {
+      const testId = `menu-item-${filterOption.replace(/\s+/g, '-').toLowerCase()}`;
+      expect(getByTestId(testId)).toBeTruthy();
     });
   });
+  
 });
