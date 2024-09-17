@@ -10,11 +10,13 @@ import { fetchGoals } from "../../api/goals";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
+import { useDebounce } from "../../hooks/useDebounce"; 
 
 export const GoalsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [filter, setFilter] = useState<GoalFilter>({});
-  const [order, setOrder] = useState<GoalOrder>({field: "created_at", asc: false,});
+  const [order, setOrder] = useState<GoalOrder>({ field: "created_at", asc: false });
   const [count, setCount] = useState(0);
 
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
@@ -38,7 +40,7 @@ export const GoalsScreen = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", filter, order],
+    queryKey: ["goals", filter, order], 
     queryFn: handleFetchGoals,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -55,7 +57,6 @@ export const GoalsScreen = () => {
   const handleObjectifPress = (id: number) => {
     navigation.navigate("Goal", { id });
   };
-
 
   const applySearchFilter = (search: string) => {
     setFilter((prevFilter) => ({
@@ -83,6 +84,11 @@ export const GoalsScreen = () => {
     }
   };
 
+  
+  React.useEffect(() => {
+    applySearchFilter(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+
   return status === "pending" ? (
     <Text>Loading...</Text>
   ) : status === "error" ? (
@@ -92,10 +98,7 @@ export const GoalsScreen = () => {
       <View style={styles.searchBarContainer}>
         <CustomSearchBar
           placeholder={"Rechercher"}
-          onChangeText={(query) => {
-            setSearchQuery(query);
-            applySearchFilter(query);
-          }}
+          onChangeText={setSearchQuery}
           value={searchQuery}
         />
       </View>
