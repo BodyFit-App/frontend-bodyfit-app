@@ -43,22 +43,26 @@ export default function ProfileCreationScreen({
       pseudo: "",
       firstname: "",
       lastname: "",
-      profileImage: "",
+      avatar_url: "",
     },
   });
 
   const pseudoValue = watch("pseudo");
 
-  const handleUpdate = async (
-    body: TablesInsert<"profiles"> & { profileImage: string }
-  ) => {
-    if (body.profileImage && body.profileImage.startsWith("file://")) {
-      await uploadImage(body.profileImage, `${session?.user.id}/avatar.png`);
+  const handleUpdate = async (body: TablesInsert<"profiles">) => {
+    let avatar_url = body.avatar_url;
+    if (avatar_url && avatar_url.startsWith("file://")) {
+      const { path } = await uploadImage(
+        avatar_url,
+        `${session?.user.id}/avatar.png`
+      );
+      avatar_url = path;
     }
 
-    const { profileImage, ...newBody } = {
+    const newBody = {
       id: profileId,
       ...body,
+      avatar_url: avatar_url,
     };
     updateProfile(newBody);
   };
@@ -81,7 +85,7 @@ export default function ProfileCreationScreen({
         pseudo: profile.pseudo,
         lastname: profile.lastname,
         firstname: profile.firstname,
-        profileImage: `${session?.user.id}/avatar.png`,
+        avatar_url: profile.avatar_url,
       });
     }
   }, [isSuccess, profile, reset]);
@@ -95,7 +99,7 @@ export default function ProfileCreationScreen({
             <View style={styles.imagePickerContainer}>
               <ImagePicker
                 onChange={onChange}
-                value={value}
+                value={value || ""}
                 imageStyle={styles.imagePicker}
                 style={{ borderWidth: 0 }}
                 aspect={[1, 1]}
@@ -103,7 +107,7 @@ export default function ProfileCreationScreen({
               />
             </View>
           )}
-          name="profileImage"
+          name="avatar_url"
         />
 
         <View style={styles.pseudoDisplayContainer}>
@@ -175,7 +179,7 @@ export default function ProfileCreationScreen({
       )}
 
       <CustomButton onPress={handleSubmit(onSubmit)}>
-        Créer le profil
+        Modifier le profil
       </CustomButton>
     </ScrollView>
   );

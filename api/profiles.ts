@@ -5,7 +5,9 @@ import { TablesInsert, TablesUpdate } from "../types/database.types";
 import { ProfileFilter } from "../types/filters.types";
 
 export const fetchProfileById = async (id: number) => {
-  const { data, error } = await client.from("profiles").select("*").eq(
+  const { data, error } = await client.from("profiles").select(
+    "*,exercises(*,categories(name)),goals(*),programs(*)",
+  ).eq(
     "id",
     id,
   ).single();
@@ -20,8 +22,8 @@ export const fetchProfiles = async (
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
   let query = client
-    .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar)")
+    .from("profiles")
+    .select("*")
     .range(start, end);
 
   if (filter?.pseudo) {

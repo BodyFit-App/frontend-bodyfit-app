@@ -315,6 +315,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string
           firstname: string | null
           id: number
@@ -323,6 +324,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           firstname?: string | null
           id?: number
@@ -331,6 +333,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           firstname?: string | null
           id?: number
@@ -477,6 +480,18 @@ export type Database = {
           name: string | null
           repetition_count: number | null
           total_estimated_time: number | null
+        }
+        Relationships: []
+      }
+      user_content: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          firstname: string | null
+          lastname: string | null
+          pseudo: string | null
+          title: string | null
+          type: string | null
         }
         Relationships: []
       }

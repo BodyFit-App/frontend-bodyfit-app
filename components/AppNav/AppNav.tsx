@@ -57,11 +57,6 @@ function AppNav() {
           component={ExerciseFormScreen}
         />
         <Stack.Screen
-          name="BottomTabs"
-          component={BottomTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{ headerShown: false }}
