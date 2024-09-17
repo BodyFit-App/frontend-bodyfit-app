@@ -114,3 +114,25 @@ export const addProgramSession = async (
 
   return data;
 };
+
+export const fetchDropdownPrograms = async () => {
+  const { data: session, error: sessionError } = await client.auth.getSession();
+
+  if (sessionError) throw new Error(sessionError.message);
+  const user = session?.session?.user;
+  const profile_id = user?.user_metadata.profile_id;
+
+  const { data, error } = await client.from("programs")
+    .select("id, title, profile_id, favorite_programs(*)")
+    .eq("visible", true);
+
+  if (error) throw new Error(error.message);
+
+  const filteredPrograms = data.filter((program) =>
+    program.profile_id === profile_id ||
+    (program.favorite_programs &&
+      program.favorite_programs.some((fav) => fav.profile_id === profile_id))
+  );
+
+  return filteredPrograms;
+};
