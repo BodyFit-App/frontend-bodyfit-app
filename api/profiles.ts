@@ -57,3 +57,9 @@ export const updateProfile = async (
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const fetchProgress = async () => {
+  const { data, error } = await client.from("progress").select("*");
+  if (error) throw new Error(error.message);
+  return data;
+};

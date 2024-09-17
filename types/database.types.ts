@@ -472,7 +472,14 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      progress: {
+        Row: {
+          name: string | null
+          repetition_count: number | null
+          total_estimated_time: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_profile_id: {
