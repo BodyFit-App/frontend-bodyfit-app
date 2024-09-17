@@ -9,9 +9,8 @@ import { BottomTabs } from "../BottomTabs/BottomTabs";
 import HomeScreen from "../../screens/home";
 import ProgramFormScreen from "../../screens/ProgramFormScreen";
 import RegisterScreen from "../../screens/register";
-import ProfilScreen from "../../screens/Profil";
-import ProfileCreationScreen from "../../screens/ProfileCreation";
 import GoalFormScreen from "../../screens/GoalFormScreen";
+import DashboardScreen from "../../screens/Dashboard";
 
 const Stack = createStackNavigator<any>();
 
@@ -32,8 +31,8 @@ function AppNav() {
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
         <Stack.Screen
-        name="ProfilScreen"
-        component={ProfilScreen}
+        name="Dashboard"
+        component={DashboardScreen}
         options={{ headerShown: false }}
       />
         <Stack.Screen

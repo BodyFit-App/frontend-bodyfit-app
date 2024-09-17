@@ -2,7 +2,7 @@ import React from 'react';
 import fs from 'fs';
 import path from 'path';
 import { render, fireEvent } from '@testing-library/react-native';
-import MyTrainingCard from './MyTrainingCard';
+import MyTrainingCard from './ActivityCard';
 
 const snapshotFile = path.join(__dirname, '__snapshots__', 'MyTrainingCard.test.tsx.snap');
 
