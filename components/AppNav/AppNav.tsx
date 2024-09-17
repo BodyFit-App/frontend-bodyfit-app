@@ -31,6 +31,11 @@ function AppNav() {
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
         <Stack.Screen
+          name="BottomTabs"
+          component={BottomTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="GoalFormScreen"
           options={{ title: "Créer mon exercice" }}
           component={GoalFormScreen as any}
@@ -50,11 +55,6 @@ function AppNav() {
           name="ExerciseCreation"
           options={{ title: "Créer mon exercice" }}
           component={ExerciseFormScreen}
-        />
-        <Stack.Screen
-          name="BottomTabs"
-          component={BottomTabs}
-          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Login"
