@@ -317,24 +317,27 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
-          full_name: string | null
+          firstname: string | null
           id: number
+          lastname: string | null
           pseudo: string | null
           user_id: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
+          firstname?: string | null
           id?: number
+          lastname?: string | null
           pseudo?: string | null
           user_id?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
+          firstname?: string | null
           id?: number
+          lastname?: string | null
           pseudo?: string | null
           user_id?: string | null
         }
@@ -472,11 +475,20 @@ export type Database = {
       }
     }
     Views: {
+      progress: {
+        Row: {
+          name: string | null
+          repetition_count: number | null
+          total_estimated_time: number | null
+        }
+        Relationships: []
+      }
       user_content: {
         Row: {
           avatar_url: string | null
           created_at: string | null
-          full_name: string | null
+          firstname: string | null
+          lastname: string | null
           pseudo: string | null
           title: string | null
           type: string | null

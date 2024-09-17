@@ -22,6 +22,9 @@ import StepList from "./StepList";
 import StepForm from "./StepForm";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
+import { useAuth } from "../../hooks/useAuth";
+import { slugify } from "../../lib/helpers";
+import ProgramDropdown from "../../components/ProgramDropdown/ProgramDropdown";
 
 type ParamListBase = {
   GoalFormScreen: {
@@ -38,6 +41,7 @@ export default function GoalFormScreen({
   route,
   ...props
 }: StackScreenProps<ParamListBase, "GoalFormScreen">) {
+  const { session } = useAuth();
   const queryClient = useQueryClient();
   const { goalId } = route.params || {};
   const isEditMode = !!goalId;
@@ -51,8 +55,8 @@ export default function GoalFormScreen({
     defaultValues: {
       title: "",
       banner_image: "",
-      date_start: "",
-      date_end: "",
+      date_start: null,
+      date_end: null,
       description: "",
       visible: false,
       steps: [],
@@ -69,7 +73,10 @@ export default function GoalFormScreen({
     try {
       let banner_image = body.banner_image;
       if (banner_image && banner_image.startsWith("file://")) {
-        const { path } = await uploadImage(banner_image, body.title, "goals");
+        const { path } = await uploadImage(
+          banner_image,
+          `${session!.user.id}/goals/${slugify(body.title)}.png`
+        );
         banner_image = path;
       }
 
@@ -116,8 +123,8 @@ export default function GoalFormScreen({
       reset({
         title: goal.title || "",
         banner_image: goal.banner_image || undefined,
-        date_start: goal.date_start || "",
-        date_end: goal.date_end || "",
+        date_start: goal.date_start || null,
+        date_end: goal.date_end || null,
         description: goal.description || "",
         visible: goal.visible || false,
         steps:
@@ -236,6 +243,14 @@ export default function GoalFormScreen({
           />
 
           <Divider bold />
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ProgramDropdown onChange={onChange} value={value || null} />
+            )}
+            name="program_id"
+          />
 
           <Controller
             control={control}

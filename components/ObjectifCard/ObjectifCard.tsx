@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Text, ProgressBar } from "react-native-paper";
+
 /**
  * ObjectifCard Component
  *
@@ -13,8 +14,8 @@ import { Card, Text, ProgressBar } from "react-native-paper";
  * return (
  *   <ObjectifCard
  *     title="Perte de poids"
- *     startDate="01/01/2024"
- *     endDate="31/12/2024"
+ *     startDate="2024-01-01"
+ *     endDate="2024-12-31"
  *     description="Objectif de perte de poids pour l'année 2024."
  *     progress={0.4}
  *     onPress={() => console.log('Accéder à l\'objectif')}
@@ -23,9 +24,9 @@ import { Card, Text, ProgressBar } from "react-native-paper";
  *
  * @param {Object} props - Les propriétés du composant.
  * @param {string} props.title - Le titre de l'objectif.
- * @param {string} props.startDate - La date de début de l'objectif.
- * @param {string} props.endDate - La date de fin de l'objectif.
- * @param {string} props.description - La description de l'objectif. Si la description dépasse 100 caractères, elle est tronquée avec "...".
+ * @param {string} [props.startDate] - La date de début de l'objectif.
+ * @param {string} [props.endDate] - La date de fin de l'objectif.
+ * @param {string} [props.description] - La description de l'objectif.
  * @param {number} props.progress - La progression de l'objectif, exprimée sous forme de nombre entre 0 et 1 (ex. 0.5 pour 50%).
  * @param {function} [props.onPress] - Fonction optionnelle appelée lorsque la carte est pressée.
  *
@@ -34,21 +35,34 @@ import { Card, Text, ProgressBar } from "react-native-paper";
 
 interface ObjectifCardProps {
   title: string;
-  startDate: string;
-  endDate: string;
-  description: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
   progress: number;
   onPress?: () => void;
 }
 
+const formatDate = (date?: string) => {
+  if (!date) return null;
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
+
 const ObjectifCard: React.FC<ObjectifCardProps> = ({
   title,
-  startDate,
-  endDate,
-  description,
+  startDate = new Date().toISOString().split("T")[0],
+  endDate = new Date().toISOString().split("T")[0],
+  description = "Sans description",
   progress,
   onPress,
 }) => {
+  const formattedStartDate = formatDate(startDate);
+  const formattedEndDate = formatDate(endDate);
+
   return (
     <Card style={styles.card} onPress={onPress} testID="objectif-card">
       <Card.Content>
@@ -71,7 +85,7 @@ const ObjectifCard: React.FC<ObjectifCardProps> = ({
           </View>
         </View>
         <Text style={styles.date}>
-          Du {startDate} au {endDate}
+          {`Du ${formattedStartDate} au ${formattedEndDate}`}
         </Text>
         <Text style={styles.description}>
           {description.length > 100

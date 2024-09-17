@@ -1,14 +1,16 @@
 import { NB_ELTS_PER_PAGE } from "../lib/constants";
 import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
-import { TablesInsert } from "../types/database.types";
+import { TablesInsert, TablesUpdate } from "../types/database.types";
 import { ProfileFilter } from "../types/filters.types";
 
 export const fetchProfileById = async (id: number) => {
-  const { data, error } = await client.from("profiles").select("*").eq(
+  const { data, error } = await client.from("profiles").select(
+    "*,exercises(*,categories(name)),goals(*),programs(*)",
+  ).eq(
     "id",
     id,
-  );
+  ).single();
   if (error) throw new Error(error.message);
   return data;
 };
@@ -20,8 +22,8 @@ export const fetchProfiles = async (
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
   let query = client
-    .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar)")
+    .from("profiles")
+    .select("*")
     .range(start, end);
 
   if (filter?.pseudo) {
@@ -46,14 +48,20 @@ export const deleteProfile = async (
   if (error) throw new Error(error.message);
 };
 
-export const upsertProfile = async (
-  body: TablesInsert<"profiles">,
+export const updateProfile = async (
+  body: TablesUpdate<"profiles">,
 ) => {
   const { data, error } = await client
     .from("profiles")
-    .upsert(body)
+    .update(body).eq("id", body.id!)
     .select();
 
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const fetchProgress = async () => {
+  const { data, error } = await client.from("progress").select("*");
   if (error) throw new Error(error.message);
   return data;
 };
