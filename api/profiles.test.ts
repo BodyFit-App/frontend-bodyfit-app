@@ -2,6 +2,7 @@ import {
   deleteProfile,
   fetchProfileById,
   fetchProfiles,
+  fetchProgress,
   updateProfile,
 } from "./profiles";
 const { setTestData, setTestError } = require("@supabase/supabase-js");
@@ -135,6 +136,24 @@ describe("Tests api/goals", () => {
       await expect(
         updateProfile({ id: 1, pseudo: "User1" }),
       ).rejects.toThrow("Failed to upsert profile");
+    });
+  });
+
+  describe("fetchProfiles", () => {
+    it("should return data when the fetch is successful", async () => {
+      setTestData([{ cardio: 1000 }]);
+
+      const data = await fetchProgress();
+
+      expect(data).toEqual([{ cardio: 1000 }]);
+    });
+
+    it("should throw an error when the fetch fails", async () => {
+      setTestError(new Error("Failed to fetch profiles"));
+
+      await expect(fetchProgress()).rejects.toThrow(
+        "Failed to fetch profiles",
+      );
     });
   });
 });
