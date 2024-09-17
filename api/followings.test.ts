@@ -1,6 +1,7 @@
 import {
   addFollowing,
   deleteFolowing,
+  fetchFolloweesActivity,
   fetchFollowingsByProfileId,
 } from "./followings";
 const { setTestData, setTestError } = require("@supabase/supabase-js");
@@ -73,6 +74,22 @@ describe("Tests api/favorites", () => {
       setTestError(new Error("Failed to delete following"));
 
       await expect(deleteFolowing(1)).rejects.toThrow(
+        "Failed to delete following",
+      );
+    });
+  });
+
+  describe("fetchFolloweesActivity", () => {
+    it("should not throw an error when the deletion is successful", async () => {
+      setTestData([]);
+
+      await expect(fetchFolloweesActivity()).resolves.not.toThrow();
+    });
+
+    it("should throw an error when the deletion fails", async () => {
+      setTestError(new Error("Failed to delete following"));
+
+      await expect(fetchFolloweesActivity()).rejects.toThrow(
         "Failed to delete following",
       );
     });
