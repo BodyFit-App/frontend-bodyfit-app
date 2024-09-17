@@ -26,7 +26,7 @@ export default function ExerciseDropdown({ value, onChange }: Props) {
     <MultiSelectDropdown
       CustomMultiSelectDropdownInput={DropdownInput}
       label="Exercices"
-      placeholder="Sélectionner vos catégories"
+      placeholder="Sélectionner vos exercices"
       disabled={!data}
       options={options}
       value={value.map((numbers) => numbers.toString())}
