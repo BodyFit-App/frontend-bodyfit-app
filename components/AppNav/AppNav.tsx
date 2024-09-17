@@ -32,7 +32,7 @@ function AppNav() {
         )} */}
         <Stack.Screen
           name="BottomTabs"
-          component={ProfileCreationScreen as any}
+          component={BottomTabs}
           options={{ headerShown: false }}
         />
         <Stack.Screen
