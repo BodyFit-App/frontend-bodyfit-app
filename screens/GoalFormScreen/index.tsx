@@ -24,6 +24,7 @@ import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 import { slugify } from "../../lib/helpers";
+import ProgramDropdown from "../../components/ProgramDropdown/ProgramDropdown";
 
 type ParamListBase = {
   GoalFormScreen: {
@@ -242,6 +243,14 @@ export default function GoalFormScreen({
           />
 
           <Divider bold />
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ProgramDropdown onChange={onChange} value={value || null} />
+            )}
+            name="program_id"
+          />
 
           <Controller
             control={control}
