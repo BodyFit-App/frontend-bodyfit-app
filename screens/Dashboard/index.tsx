@@ -19,81 +19,40 @@ const DashboardScreen = () => {
   const navigation = useNavigation();
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
+  
+  console.log('profileId', profileId);
 
-  const { data: profile, isSuccess, isLoading, isError } = useQuery({
+  const { data: profile, isSuccess } = useQuery({
     queryKey: ["profile", profileId],
     queryFn: () => fetchProfileById(profileId),
     enabled: !!profileId,
   });
 
   const { data: goals } = useQuery({
-    queryKey: ["goals", profileId],
-    queryFn: () => fetchGoalById(profileId),
-    enabled: !!profileId,
+	queryKey: ["goals", profileId],
+	queryFn: () => fetchGoalById(profileId),
+	enabled: !!profileId,
   });
 
   const { data: exercises } = useQuery({
-    queryKey: ["exercises", profileId],
-    queryFn: () => fetchExerciseById(profileId),
-    enabled: !!profileId,
+	queryKey: ["exercises", profileId],
+	queryFn: () => fetchExerciseById(profileId),
+	enabled: !!profileId,
   });
 
   const { data: programs } = useQuery({
-    queryKey: ["programs", profileId],
-    queryFn: () => fetchProgramById(profileId),
-    enabled: !!profileId,
+	queryKey: ["programs", profileId],
+	queryFn: () => fetchProgramById(profileId),
+	enabled: !!profileId,
   });
 
-  const { data: followers } = useQuery({
-	queryKey: ["followers", profileId],
+  const { data: followings } = useQuery({
+	queryKey: ["followings", profileId],
 	queryFn: () => fetchFollowingsByProfileId(profileId, 1),
 	enabled: !!profileId,
   });
 
-  const [chartType, setChartType] = useState<'time' | 'exercises'>('time');
 
-  const getChartData = () => {
-    if (chartType === 'time') {
-      return exercises?.map((exercise) => exercise.duration) || [];
-    } else {
-      return exercises?.map((exercise) => exercise.count || 1) || [];
-    }
-  };
-
-  const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800'];
-
-  const recentGoals = goals?.slice?.(-2) || [];
-  const recentExercises = exercises?.slice(-2) || [];
-  const recentPrograms = programs?.slice(-2) || [];
-
-  const renderLegend = () => {
-    const legendData = [
-      { category: 'Course à pied', color: '#F44336' },
-      { category: 'Natation', color: '#2196F3' },
-      { category: 'Cyclisme', color: '#FFEB3B' },
-      { category: 'Yoga', color: '#4CAF50' },
-      { category: 'Musculation', color: '#FF9800' },
-    ];
-
-    return (
-      <View style={styles.legendContainer}>
-        {legendData.map((item, index) => (
-          <View key={index} style={styles.legendItem}>
-            <View style={[styles.legendColor, { backgroundColor: item.color }]} />
-            <Text style={styles.legendText}>{item.category}</Text>
-          </View>
-        ))}
-      </View>
-    );
-  };
-
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (isError) {
-    return <Text>Error loading profile</Text>;
-  }
 
   return (
     <ScrollView>
@@ -102,11 +61,11 @@ const DashboardScreen = () => {
           <ProfilHeader
             name={profile.firstname ?? ''}
             username={profile.pseudo ?? ''}
-            followers={followers. || 0}
+            followers={0}
             profileImage={profile.avatar_url ?? ''}
-            exercisesCount={recentExercises.length}
-            programsCount={recentPrograms.length}
-            goalsCount={recentGoals.length}
+            exercisesCount={ 0}
+            programsCount={ 0}
+            goalsCount={0}
             onEditProfile={() => {}}
             onShareProfile={() => {}}
           />
@@ -118,29 +77,29 @@ const DashboardScreen = () => {
         <View style={styles.containerbtn}>
           <CustomButton
             children='Exercices'
-            style={[styles.btn, chartType === 'exercises' && styles.btnActive]}
+            style={[styles.btn]}
             labelStyle={{ fontSize: 12, fontWeight: '600' }}
-            onPress={() => setChartType('exercises')}
+            onPress={() =>  navigation.navigate('ExercisesScreen' as never)}
           />
           <CustomButton
             children='Temps'
-            style={[styles.btn, chartType === 'time' && styles.btnActive]}
+            style={[styles.btn]}
             labelStyle={{ fontSize: 12, fontWeight: '600' }}
-            onPress={() => setChartType('time')}
+            onPress={() => navigation.navigate('ExercisesScreen' as never)}
           />
         </View>
 
         <View style={styles.containergrah}>
           <PieChart
             widthAndHeight={250}
-            series={getChartData()}
-            sliceColor={sliceColor}
+            series={[10, 20, 30, 40, 50]}
+            sliceColor={['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']}
             doughnut={true}
             coverRadius={0.45}
             coverFill={theme.colors.background}
           />
         </View>
-        {renderLegend()}
+
       </View>
 
       <View style={styles.containerobj}>
@@ -151,7 +110,7 @@ const DashboardScreen = () => {
           </Text>
         </View>
         <View style={styles.containercard}>
-          {recentGoals.map((goal) => (
+        {/*   {goals.map((goal) => (
             <ObjectifCard
               key={goal.id}
               title={goal.title}
@@ -160,7 +119,7 @@ const DashboardScreen = () => {
               startDate={goal.start_date}
               endDate={goal.end_date}
             />
-          ))}
+          ))} */}
         </View>
       </View>
 
@@ -172,7 +131,7 @@ const DashboardScreen = () => {
           </Text>
         </View>
         <View style={styles.containercard}>
-          {recentExercises.map((exercise) => (
+       {/*    {exercises.map((exercise) => (
             <ActivityCard
               key={exercise.id}
               exerciseTitle={exercise.title}
@@ -183,8 +142,8 @@ const DashboardScreen = () => {
               onToggleFavorite={() => console.log('Toggle Favorite')}
               onExercisePress={() => console.log('Go to exercise')}
             />
-          ))}
-        </View>
+          ))}*/}
+        </View> 
       </View>
 
       <View style={styles.containerobj}>
@@ -195,7 +154,7 @@ const DashboardScreen = () => {
           </Text>
         </View>
         <View style={styles.containercard}>
-          {recentPrograms.map((program) => (
+         {/*  {programs.map((program) => (
             <ActivityCard
               key={program.id}
               exerciseTitle={program.title}
@@ -207,12 +166,14 @@ const DashboardScreen = () => {
               onToggleFavorite={() => console.log('Toggle Favorite')}
               onExercisePress={() => console.log('Go to program')}
             />
-          ))}
+          ))} */}
         </View>
       </View>
     </ScrollView>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   profilheader: {
