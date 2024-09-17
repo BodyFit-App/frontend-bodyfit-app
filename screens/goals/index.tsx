@@ -2,18 +2,32 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { Text } from "react-native-paper";
+import { GoalFilter } from "../../types/filters.types";
+import { GoalOrder } from "../../types/orders.types";
 import { fetchGoals } from "../../api/goals";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
 
 export const GoalsScreen = () => {
-  const [filter, setFilter] = useState("Plus récents");
   const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<GoalFilter>({});
+  const [order, setOrder] = useState<GoalOrder>({field: "created_at", asc: false,});
+  const [count, setCount] = useState(0);
 
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
+
+  const handleFetchGoals = async ({ pageParam }: any) => {
+    try {
+      const goals = await fetchGoals(pageParam, filter, order);
+      setCount(goals.count ?? 0);
+      return goals;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
 
   const {
     data,
@@ -24,20 +38,17 @@ export const GoalsScreen = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", filter],
-    queryFn: ({ pageParam }) => fetchGoals(pageParam),
+    queryKey: ["goals", filter, order],
+    queryFn: handleFetchGoals,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   type RootStackParamList = {
     Goal: { id: number };
   };
 
-  type GoalScreenNavigationProp = StackNavigationProp<
-    RootStackParamList,
-    "Goal"
-  >;
+  type GoalScreenNavigationProp = StackNavigationProp<RootStackParamList, "Goal">;
 
   const navigation = useNavigation<GoalScreenNavigationProp>();
 
@@ -45,19 +56,32 @@ export const GoalsScreen = () => {
     navigation.navigate("Goal", { id });
   };
 
-  // à revoir
-  const filteredData = data?.pages.map((group) =>
-    group.data.filter(
-      (goal) =>
-        goal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (goal.description && goal.description.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-  );
 
-  const totalGoals = filteredData?.reduce(
-    (total, page) => total + page.length,
-    0
-  );
+  const applySearchFilter = (search: string) => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      title: search.length > 0 ? search : undefined,
+    }));
+  };
+
+  const handleFilterChange = (selectedFilter: string) => {
+    switch (selectedFilter) {
+      case "Plus récents":
+        setOrder({ field: "created_at", asc: false });
+        break;
+      case "Moins récents":
+        setOrder({ field: "created_at", asc: true });
+        break;
+      case "A-Z":
+        setOrder({ field: "title", asc: true });
+        break;
+      case "Z-A":
+        setOrder({ field: "title", asc: false });
+        break;
+      default:
+        setOrder({ field: "created_at", asc: false });
+    }
+  };
 
   return status === "pending" ? (
     <Text>Loading...</Text>
@@ -68,39 +92,47 @@ export const GoalsScreen = () => {
       <View style={styles.searchBarContainer}>
         <CustomSearchBar
           placeholder={"Rechercher"}
-          onChangeText={setSearchQuery}
+          onChangeText={(query) => {
+            setSearchQuery(query);
+            applySearchFilter(query);
+          }}
           value={searchQuery}
         />
       </View>
 
       <FilterBar
         filters={filterList}
-        defaultFilter={filter}
-        onFilterChange={setFilter}
-        resultsCount={totalGoals}
+        defaultFilter={filter.title || "Plus récents"}
+        onFilterChange={handleFilterChange}
+        resultsCount={count}
       />
 
-      <ScrollView>
-        {filteredData?.map((group, i) => (
-          <React.Fragment key={i}>
-            {group.map(({ id, title, description, steps, date_start, date_end }) => (
-              <ObjectifCard
-                key={id}
-                title={title}
-                description={description ?? ""}
-                startDate={date_start ?? ""}
-                endDate={date_end ?? ""}
-                progress={
-                  steps && steps.length > 0
-                    ? steps.filter((step) => step.achieved).length / steps.length
-                    : 0
-                }
-                onPress={() => handleObjectifPress(id)}
-              />
-            ))}
-          </React.Fragment>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={data?.pages.flatMap((page) => page.data)}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <ObjectifCard
+            key={item.id}
+            title={item.title}
+            description={item.description ?? ""}
+            startDate={item.date_start ?? ""}
+            endDate={item.date_end ?? ""}
+            progress={
+              item.steps && item.steps.length > 0
+                ? item.steps.filter((step) => step.achieved).length / item.steps.length
+                : 0
+            }
+            onPress={() => handleObjectifPress(item.id)}
+          />
+        )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator size="large" /> : null}
+      />
     </View>
   );
 };
