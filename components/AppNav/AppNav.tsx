@@ -48,7 +48,7 @@ function AppNav() {
         <Stack.Screen
         name="Dashboard"
         component={DashboardScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
          <Stack.Screen
           name="BottomTabs"
