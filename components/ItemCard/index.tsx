@@ -7,8 +7,9 @@ type Props = {
   title: string;
   pseudo: string;
   description?: string;
-  categories: string[];
-  time: number;
+  categories?: string[];
+  time?: number;
+  total?: number;
   onPressNav: (...args: any[]) => void;
   isFav: boolean;
   onPressFav: (...args: any[]) => void;
@@ -20,6 +21,7 @@ export default function ItemCard({
   description,
   categories = [],
   time,
+  total,
   onPressNav,
   isFav,
   onPressFav,
@@ -57,13 +59,38 @@ export default function ItemCard({
             </Text>
             {!!time && (
               <View
-                style={{ flexDirection: "row", gap: 8, alignItems: "baseline" }}
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                  alignItems: "baseline",
+                }}
               >
                 <Icon source="watch" size={16} color={theme.colors.primary} />
                 <Text
                   style={{ color: theme.colors.primary, fontWeight: "700" }}
                 >
                   {time} min
+                </Text>
+              </View>
+            )}
+            {!!total && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                  alignItems: "baseline",
+                }}
+              >
+                <Icon
+                  source="dumbbell"
+                  size={16}
+                  color={theme.colors.primary}
+                />
+
+                <Text
+                  style={{ color: theme.colors.primary, fontWeight: "700" }}
+                >
+                  {total}
                 </Text>
               </View>
             )}

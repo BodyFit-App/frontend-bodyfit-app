@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     borderColor: "#42424D",
     borderWidth: 1,
     borderRadius: 10,
-    width: "90%",
+    marginTop: 20,
+    marginBottom: 20,
   },
   textColor: {
     color: theme.colors.primary,
