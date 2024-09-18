@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFavExerciseMutation } from "../hooks/useFavExerciseMutation";
 import { addFavExercise, deleteFavExercise } from "../api/favorites";
@@ -12,7 +12,7 @@ jest.mock("../api/favorites", () => ({
 // Initialize QueryClient
 const queryClient = new QueryClient();
 
-const wrapper = ({ children }) => (
+const wrapper = ({ children }: any) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
@@ -22,40 +22,69 @@ describe("useFavExerciseMutation", () => {
   });
 
   it("should call addFavExercise when isFav is false", async () => {
-    // Mock implementation for addFavExercise
-    addFavExercise.mockResolvedValue({ id: 1, isFav: true });
+    (addFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: true });
 
-    const { result, waitForNextUpdate } = renderHook(
-      () => useFavExerciseMutation("testFilter"),
-      { wrapper }
-    );
-
-    act(() => {
-      result.current.handleMutationFav(1, false); // Trigger the mutation with isFav as false
+    queryClient.setQueryData(["exercises", "testFilter"], {
+      pages: [
+        {
+          exercises: [{ id: 1, isFav: false }],
+        },
+      ],
     });
 
-    await waitForNextUpdate(); // Wait for the mutation to complete
+    const { result } = renderHook(() => useFavExerciseMutation("testFilter"), {
+      wrapper,
+    });
+
+    act(() => {
+      result.current.handleMutationFav(1, false);
+    });
+
+    await new Promise(setImmediate);
 
     expect(addFavExercise).toHaveBeenCalledWith(1);
     expect(deleteFavExercise).not.toHaveBeenCalled();
+
+    expect(queryClient.getQueryData(["exercises", "testFilter"])).toEqual({
+      pages: [
+        {
+          exercises: [{ id: 1, isFav: true }],
+        },
+      ],
+    });
   });
 
   it("should call deleteFavExercise when isFav is true", async () => {
-    // Mock implementation for deleteFavExercise
-    deleteFavExercise.mockResolvedValue({ id: 1, isFav: false });
+    (deleteFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: false });
 
-    const { result, waitForNextUpdate } = renderHook(
-      () => useFavExerciseMutation("testFilter"),
-      { wrapper }
-    );
-
-    act(() => {
-      result.current.handleMutationFav(1, true); // Trigger the mutation with isFav as true
+    // Mock the query client cache
+    queryClient.setQueryData(["exercises", "testFilter"], {
+      pages: [
+        {
+          exercises: [{ id: 1, isFav: true }],
+        },
+      ],
     });
 
-    await waitForNextUpdate(); // Wait for the mutation to complete
+    const { result } = renderHook(() => useFavExerciseMutation("testFilter"), {
+      wrapper,
+    });
+
+    act(() => {
+      result.current.handleMutationFav(1, true);
+    });
+
+    await new Promise(setImmediate);
 
     expect(deleteFavExercise).toHaveBeenCalledWith(1);
     expect(addFavExercise).not.toHaveBeenCalled();
+
+    expect(queryClient.getQueryData(["exercises", "testFilter"])).toEqual({
+      pages: [
+        {
+          exercises: [{ id: 1, isFav: false }],
+        },
+      ],
+    });
   });
 });
