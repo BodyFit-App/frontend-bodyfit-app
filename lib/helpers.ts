@@ -1,3 +1,5 @@
+import { fetchExercises } from "../api/exercises";
+import { fetchPrograms } from "../api/programs";
 import { Tables } from "../types/database.types";
 
 export const getRange = (page: number, perPage: number): [number, number] => {
@@ -10,7 +12,7 @@ export const getRange = (page: number, perPage: number): [number, number] => {
 };
 
 export const formatExercisesWithFavorites = (
-  exercises: Tables<"exercises">[],
+  exercises: Awaited<ReturnType<typeof fetchExercises>>["data"],
   favorites: number[],
   nextCursor: number | null,
 ) => {
@@ -24,7 +26,7 @@ export const formatExercisesWithFavorites = (
 };
 
 export const formatProgramsWithFavorites = (
-  programs: Tables<"programs">[],
+  programs: Awaited<ReturnType<typeof fetchPrograms>>["data"],
   favorites: number[],
   nextCursor: number | null,
 ) => {

@@ -19,7 +19,21 @@ function AppNav() {
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator>
+      <Stack.Navigator
+      screenOptions={{
+        headerStatusBarHeight: 40,
+        headerStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          color: theme.colors.text,
+          fontSize: 20,
+          paddingBottom: 20,
+        },
+        headerBackTitleVisible: false,
+        headerLeftContainerStyle: { paddingBottom: 20 }, 
+      }}>
         {/* TODO: Uncomment later to protect routes 
          {session ? (
           <Stack.Screen
@@ -37,6 +51,11 @@ function AppNav() {
         options={{ headerShown: false }}
       />
          <Stack.Screen
+          name="BottomTabs"
+          component={BottomTabs as any}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{ headerShown: false }}

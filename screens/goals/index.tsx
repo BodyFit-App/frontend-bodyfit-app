@@ -1,11 +1,36 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { View } from "react-native";
-import { Text } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { GoalOrder } from "../../types/orders.types";
 import { fetchGoals } from "../../api/goals";
+import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
+import FilterBar from "../../components/FilterBar/FilterBar";
+import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
+import { useDebounce } from "../../hooks/useDebounce";
 
 export const GoalsScreen = () => {
-  const [filter, setFilter] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const [order, setOrder] = useState<GoalOrder>({
+    field: "created_at",
+    asc: false,
+  });
+  const [count, setCount] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
+
+  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
+
+  const handleFetchGoals = async ({ pageParam }: any) => {
+    try {
+      const goals = await fetchGoals(pageParam, {title: debouncedSearchQuery}, order);
+      setCount(goals.count ?? 0);
+      return goals;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
 
   const {
     data,
@@ -13,30 +38,101 @@ export const GoalsScreen = () => {
     fetchNextPage,
     hasNextPage,
     status,
-    isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", filter],
-    queryFn: ({ pageParam }) => fetchGoals(pageParam),
+    queryKey: ["goals", {title: debouncedSearchQuery},  order],
+    queryFn: handleFetchGoals,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  return status === "pending" ? (
-    <Text>Loading...</Text>
-  ) : status === "error" ? (
-    <Text>Error: {error.message}</Text>
-  ) : (
-    <View>
-      {data?.pages.map((group, i) => (
-        <React.Fragment>
-          {group.data.map(({ id, title }) => (
-            <Text key={id} style={{ color: "white" }}>
-              {title}
-            </Text>
-          ))}
-        </React.Fragment>
-      ))}
+  const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
+
+  const uniqueData = mergedData?.filter(
+     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+   ); 
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleObjectifPress = (id: number) => {
+    navigation.navigate("Goal", { id });
+  };
+
+  const handleFilterChange = (selectedFilter: string) => {
+    setSelectedFilter(selectedFilter);
+    switch (selectedFilter) {
+      case "Plus récents":
+        setOrder({ field: "created_at", asc: false });
+        break;
+      case "Moins récents":
+        setOrder({ field: "created_at", asc: true });
+        break;
+      case "A-Z":
+        setOrder({ field: "title", asc: true });
+        break;
+      case "Z-A":
+        setOrder({ field: "title", asc: false });
+        break;
+      default:
+        setOrder({ field: "created_at", asc: false });
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchBarContainer}>
+        <CustomSearchBar
+          placeholder="Rechercher"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+        />
+      </View>
+      <FilterBar
+        filters={filterList}
+        defaultFilter={selectedFilter}
+        onFilterChange={handleFilterChange}
+        resultsCount={count}
+      />
+      <FlatList
+        data={uniqueData ?? []}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <ObjectifCard
+            title={item.title}
+            description={item.description ?? ""}
+            startDate={item.date_start ?? ""}
+            endDate={item.date_end ?? ""}
+            progress={
+              item.steps && item.steps.length > 0
+                ? item.steps.filter((step) => step.achieved).length /
+                  item.steps.length
+                : 0
+            }
+            onPress={() => handleObjectifPress(item.id)}
+          />
+        )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator size="large" /> : null
+        }
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  searchBarContainer: {
+    width: "100%",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+});
