@@ -132,6 +132,8 @@ describe("formatExercisesWithFavorites", () => {
         visible: true,
         banner_image: null,
         estimated_time_seconds: null,
+        categories: [],
+        profiles: null,
       },
       {
         id: 2,
@@ -142,8 +144,11 @@ describe("formatExercisesWithFavorites", () => {
         visible: true,
         banner_image: null,
         estimated_time_seconds: null,
+        categories: [],
+        profiles: null,
       },
     ];
+
     const favorites = [1];
     const nextCursor = null;
 
@@ -166,6 +171,8 @@ describe("formatExercisesWithFavorites", () => {
           banner_image: null,
           estimated_time_seconds: null,
           isFav: true,
+          categories: [],
+          profiles: null,
         },
         {
           id: 2,
@@ -177,6 +184,8 @@ describe("formatExercisesWithFavorites", () => {
           banner_image: null,
           estimated_time_seconds: null,
           isFav: false,
+          categories: [],
+          profiles: null,
         },
       ],
     });
@@ -193,6 +202,8 @@ describe("formatExercisesWithFavorites", () => {
         visible: true,
         banner_image: null,
         estimated_time_seconds: null,
+        categories: [],
+        profiles: null,
       },
     ];
     const favorites: any = [];
@@ -217,13 +228,15 @@ describe("formatExercisesWithFavorites", () => {
           banner_image: null,
           estimated_time_seconds: null,
           isFav: false,
+          categories: [],
+          profiles: null,
         },
       ],
     });
   });
 
   it("should handle empty exercises array", () => {
-    const exercises: Tables<"exercises">[] = [];
+    const exercises: any = [];
     const favorites = [1, 2, 3];
     const nextCursor = null;
 
