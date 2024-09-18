@@ -22,7 +22,7 @@ export const addFavExercise = async (exerciseId: number) => {
 
 export const deleteFavExercise = async (id: number) => {
   const { error } = await client.from("favorite_exercises").delete().eq(
-    "id",
+    "exercise_id",
     id,
   );
   if (error) throw new Error(error.message);
