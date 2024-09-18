@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
-import { GoalFilter } from "../../types/filters.types";
 import { GoalOrder } from "../../types/orders.types";
 import { fetchGoals } from "../../api/goals";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
@@ -14,7 +13,6 @@ import { useDebounce } from "../../hooks/useDebounce";
 export const GoalsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const [filter, setFilter] = useState<GoalFilter>({});
   const [order, setOrder] = useState<GoalOrder>({
     field: "created_at",
     asc: false,
@@ -26,7 +24,7 @@ export const GoalsScreen = () => {
 
   const handleFetchGoals = async ({ pageParam }: any) => {
     try {
-      const goals = await fetchGoals(pageParam, filter, order);
+      const goals = await fetchGoals(pageParam, {title: debouncedSearchQuery}, order);
       setCount(goals.count ?? 0);
       return goals;
     } catch (error) {
@@ -42,7 +40,7 @@ export const GoalsScreen = () => {
     status,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", filter, order],
+    queryKey: ["goals", {title: debouncedSearchQuery},  order],
     queryFn: handleFetchGoals,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -50,21 +48,14 @@ export const GoalsScreen = () => {
 
   const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
 
-  const uniqueData = mergedData.filter(
-    (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-  );
+  const uniqueData = mergedData?.filter(
+     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+   ); 
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handleObjectifPress = (id: number) => {
     navigation.navigate("Goal", { id });
-  };
-
-  const applySearchFilter = (search: string) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      title: search.length > 0 ? search : undefined,
-    }));
   };
 
   const handleFilterChange = (selectedFilter: string) => {
@@ -87,10 +78,6 @@ export const GoalsScreen = () => {
     }
   };
 
-  useEffect(() => {
-    applySearchFilter(debouncedSearchQuery);
-  }, [debouncedSearchQuery]);
-
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
@@ -100,17 +87,15 @@ export const GoalsScreen = () => {
           value={searchQuery}
         />
       </View>
-
       <FilterBar
         filters={filterList}
         defaultFilter={selectedFilter}
         onFilterChange={handleFilterChange}
         resultsCount={count}
       />
-
       <FlatList
-        data={uniqueData}
-        keyExtractor={(item) => item.id.toString()}
+        data={uniqueData ?? []}
+        keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
           <ObjectifCard
             title={item.title}
