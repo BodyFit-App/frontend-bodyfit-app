@@ -14,6 +14,7 @@ import DashboardScreen from "../../screens/Dashboard";
 import { ExerciseScreen } from "../../screens/exercise";
 import { ExercisesScreen } from "../../screens/exercises";
 import { GoalsScreen } from "../../screens/goals";
+import { ProgramsScreen } from "../../screens/programs";
 
 const Stack = createStackNavigator<any>();
 
@@ -48,6 +49,12 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
+
+        <Stack.Screen
+          name="Programs"
+          component={ProgramsScreen}
+          options={{ headerShown: true }}
+        />
         
         <Stack.Screen
           name="Exercises"

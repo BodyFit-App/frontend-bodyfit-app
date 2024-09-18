@@ -32,7 +32,7 @@ export const fetchPrograms = async (
   let query = client
     .from("programs")
     .select(
-      "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar))),profiles(*)",
+      "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*)",
       { count: "exact" },
     )
     .range(start, end);
@@ -59,7 +59,9 @@ export const fetchPrograms = async (
 
   const { data, count, error } = await query;
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(error.message);
+  }
 
   const totalPages = count ? Math.ceil(count! / NB_ELTS_PER_PAGE) : 0;
   const nextPage = page + 1;
@@ -67,6 +69,7 @@ export const fetchPrograms = async (
 
   return { data, nextCursor, count };
 };
+
 
 export const getFavoriteStatusForPrograms = async (programIds: number[]) => {
   const { data, error } = await client
