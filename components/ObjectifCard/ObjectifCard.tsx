@@ -43,25 +43,38 @@ interface ObjectifCardProps {
 }
 
 const formatDate = (date?: string) => {
-  if (!date) return null;
+  if (!date) return "Dates à définir";
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) return "Dates à définir";
   const options: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   };
-  return new Date(date).toLocaleDateString(undefined, options);
+  return parsedDate.toLocaleDateString(undefined, options);
 };
 
 const ObjectifCard: React.FC<ObjectifCardProps> = ({
   title,
-  startDate = new Date().toISOString().split("T")[0],
-  endDate = new Date().toISOString().split("T")[0],
+  startDate,
+  endDate,
   description = "Sans description",
   progress,
   onPress,
 }) => {
-  const formattedStartDate = formatDate(startDate);
+  const formattedStartDate = formatDate(startDate); 
   const formattedEndDate = formatDate(endDate);
+
+  const renderDate = () => {
+    if (formattedStartDate !== "Dates à définir" && formattedEndDate !== "Dates à définir") {
+      return `Du ${formattedStartDate} au ${formattedEndDate}`;
+    } else if (formattedStartDate !== "Dates à définir") {
+      return `Débute le ${formattedStartDate}`;
+    } else if (formattedEndDate !== "Dates à définir") {
+      return `Jusqu'au ${formattedEndDate}`;
+    }
+    return "Dates à définir";
+  };
 
   return (
     <Card style={styles.card} onPress={onPress} testID="objectif-card">
@@ -85,7 +98,7 @@ const ObjectifCard: React.FC<ObjectifCardProps> = ({
           </View>
         </View>
         <Text style={styles.date}>
-          {`Du ${formattedStartDate} au ${formattedEndDate}`}
+          {renderDate()} {/* Appel à la fonction qui rend les dates */}
         </Text>
         <Text style={styles.description}>
           {description.length > 100
