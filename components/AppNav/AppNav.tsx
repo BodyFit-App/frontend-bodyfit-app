@@ -20,20 +20,21 @@ function AppNav() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-      screenOptions={{
-        headerStatusBarHeight: 40,
-        headerStyle: {
-          backgroundColor: theme.colors.background,
-        },
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          color: theme.colors.text,
-          fontSize: 20,
-          paddingBottom: 20,
-        },
-        headerBackTitleVisible: false,
-        headerLeftContainerStyle: { paddingBottom: 20 }, 
-      }}>
+        screenOptions={{
+          headerStatusBarHeight: 40,
+          headerStyle: {
+            backgroundColor: theme.colors.background,
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: theme.colors.text,
+            fontSize: 20,
+            paddingBottom: 20,
+          },
+          headerBackTitleVisible: false,
+          headerLeftContainerStyle: { paddingBottom: 20 },
+        }}
+      >
         {/* TODO: Uncomment later to protect routes 
          {session ? (
           <Stack.Screen
@@ -44,13 +45,13 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
-       
+
         <Stack.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{ headerShown: true }}
-      />
-         <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
           name="BottomTabs"
           component={BottomTabs as any}
           options={{ headerShown: false }}
@@ -60,13 +61,13 @@ function AppNav() {
           component={HomeScreen}
           options={{ headerShown: false }}
         />
-        
+
         <Stack.Screen
           name="GoalFormScreen"
           options={{ title: "Créer mon exercice" }}
           component={GoalFormScreen as any}
         />
-        
+
         <Stack.Screen
           name="ProgramFormScreen"
           options={{ title: "Créer mon exercice" }}

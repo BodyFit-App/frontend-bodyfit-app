@@ -1,4 +1,10 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import {
@@ -9,8 +15,13 @@ import { ExerciseFilter } from "../../types/filters.types";
 import { Button, Text } from "react-native-paper";
 import { formatExercisesWithFavorites } from "../../lib/helpers";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
+import { Item } from "react-native-paper/lib/typescript/components/List/List";
+import ItemCard from "../../components/ItemCard";
+import { addFavExercise, deleteFavExercise } from "../../api/favorites";
+import { useFavExerciseMutation } from "../../hooks/useFavExerciseMutation";
 
 export const ExercisesScreen = () => {
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<ExerciseFilter>({});
 
   const [count, setCount] = useState(0);
@@ -49,6 +60,12 @@ export const ExercisesScreen = () => {
     getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
   });
 
+  const { handleMutationFav, isError } = useFavExerciseMutation(filter);
+
+  const toggleFavorite = (id: number, isFav: boolean) => {
+    handleMutationFav(id, isFav);
+  };
+
   return status === "pending" ? (
     <Text>Loading...</Text>
   ) : status === "error" ? (
@@ -58,15 +75,18 @@ export const ExercisesScreen = () => {
       <ScrollView>
         {data!.pages.map((group, i) => (
           <React.Fragment key={i}>
-            {group.exercises.map(({ id, title, description, isFav }) => (
-              <ObjectifCard
+            {group.exercises.map(({ id, isFav }) => (
+              <ItemCard
                 key={id}
-                title={title}
-                startDate={""}
-                endDate={""}
-                description={""}
-                progress={0.2}
-                onPress={() => console.log("coucou")}
+                title={""}
+                pseudo={""}
+                categories={[]}
+                time={0}
+                onPressNav={function (...args: any[]): void {
+                  throw new Error("Function not implemented.");
+                }}
+                isFav={isFav}
+                onPressFav={() => toggleFavorite(id, isFav)}
               />
             ))}
           </React.Fragment>
