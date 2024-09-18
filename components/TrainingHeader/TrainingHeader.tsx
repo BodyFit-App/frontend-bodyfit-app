@@ -1,7 +1,8 @@
-import React from "react";
-import { StyleSheet, View, Image, Dimensions } from "react-native";
-import { Card, Text, Chip, IconButton } from "react-native-paper";
-import InputChip from "../InputChip/InputChip";
+import React from 'react';
+import { StyleSheet, View, Image, Dimensions } from 'react-native';
+import { Card, Text, Chip, IconButton } from 'react-native-paper';
+import InputChip from '../InputChip/InputChip';
+import theme from '../../theme';
 
 /**
  * Propriétés pour le composant TrainingHeader
@@ -21,131 +22,127 @@ import InputChip from "../InputChip/InputChip";
  */
 
 interface TrainingHeaderProps {
-  title: string;
-  imageUrl: string;
-  duration: string;
-  categories: string[];
-  isFavorite: boolean;
-  onToggleFavorite: () => void;
+	title: string;
+	imageUrl: string;
+	duration: string;
+	categories: string[];
+	isFavorite: boolean;
+	onToggleFavorite: () => void;
 }
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 const TrainingHeader: React.FC<TrainingHeaderProps> = ({
-  title,
-  imageUrl,
-  duration,
-  categories,
-  isFavorite,
-  onToggleFavorite,
+	title,
+	imageUrl,
+	duration,
+	categories,
+	isFavorite,
+	onToggleFavorite,
 }) => {
-  return (
-    <Card style={styles.card}>
-      <View style={styles.line} />
-      <Text style={styles.title}>{title}</Text>
-      <Image source={{ uri: imageUrl }} style={styles.image} testID="training-image"/>
-      <View style={styles.infoContainer}>
-        <Text style={styles.label}>Catégorie</Text>
-        <View style={styles.rightSection}>
-          <IconButton icon="clock-outline" iconColor="#2F80ED" size={18} />
-          <Text style={styles.duration}>{duration}</Text>
-        </View>
-      </View>
-      <View style={styles.tagsAndFavoriteContainer}>
-        <View style={styles.tagContainer}>
-          {categories.map((tag, index) => (
-            <InputChip key={index} children={tag} style={styles.chip} textStyle={styles.chipText}/>
-          ))}
-        </View>
-        <View style={styles.favoriteContainer}>
-          <IconButton
-            icon={isFavorite ? "star" : "star-outline"}
-            iconColor={isFavorite ? "#2F80ED" : "#A0A0A0"}
-            size={35}
-            onPress={onToggleFavorite}
-            style={styles.iconButton}
-            testID="favorite-button"
-          />
-        </View>
-      </View>
-      <View style={styles.line} />
-    </Card>
-  );
+	return (
+		<Card style={styles.card}>
+			<Text style={styles.title}>{title}</Text>
+			<Image
+				source={{ uri: imageUrl }}
+				style={styles.image}
+				testID='training-image'
+			/>
+			<View style={styles.containerInfo}>
+				<View>
+					<Text style={styles.titleCat}>Catégorie</Text>
+					<View style={styles.containerChip}>
+						{categories.map((tag, index) => (
+							<InputChip
+								key={index}
+								children={tag}
+								style={styles.chip}
+								textStyle={{ fontSize: 13, lineHeight: 15 }}
+							/>
+						))}
+					</View>
+				</View>
+				<View>
+					<View style={styles.containerDuration}>
+						<IconButton
+							style={{ padding: 0, margin: 0 }}
+							icon='clock-outline'
+							iconColor='#2F80ED'
+							size={18}
+						/>
+						<Text style={styles.txtDuration}>{duration}</Text>
+					</View>
+					<View style={{ alignItems: 'flex-end' }}>
+						<IconButton
+							style={{ padding: 0, margin: 0 }}
+							icon={isFavorite ? 'star' : 'star-outline'}
+							iconColor={isFavorite ? '#2F80ED' : '#A0A0A0'}
+							size={25}
+							onPress={onToggleFavorite}
+							testID='favorite-button'
+						/>
+					</View>
+				</View>
+			</View>
+		</Card>
+	);
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#161626",
-    borderColor: "#2F80ED",
-    borderWidth: 0,
-    width: width,
-    alignSelf: "center",
-  },
-  line: {
-    height: 1,
-    backgroundColor: "#A0A0A0",
-  },
-  title: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: 18,
-    textAlign: "left",
-    marginVertical: 10,
-    paddingLeft: 10,
-  },
-  image: {
-    width: "100%",
-    height: 200,
-  },
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  label: {
-    color: "#ffffff",
-    fontWeight: "bold",
-  },
-  rightSection: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  duration: {
-    color: "#2F80ED",
+	card: {
+		borderRadius: 0,
+		backgroundColor: '#161626',
+		borderColor: theme.colors.border,
+		borderBottomWidth: 1,
+		borderTopWidth: 1,
+		width: width,
+		alignSelf: 'center',
+	},
+	containerInfo: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		padding: 16,
+		alignItems: 'center',
+    alignContent  : 'center',
+
+
+	},
+	containerChip: {
+		flexDirection: 'row',
+	},
+	containerDuration: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 0,
+		margin: 0,
+	},
+	txtDuration: {
+		color: theme.colors.text,
+		fontSize: 16,
+	},
+
+	titleCat: {
+		color: '#ffffff',
+		fontSize: 16,
+		fontWeight: 'bold',
+		marginBottom: 15,
     marginLeft: 5,
-    fontWeight: "bold",
-  },
-  tagsAndFavoriteContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingHorizontal: 10,
-  },
-  tagContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 1,
-  },
-  chip: {
-    backgroundColor: "#0b0b12",
-    borderRadius: 8,
-    borderColor: "#2F80ED",
-    marginRight: 5,
-    marginBottom: 5,
-  },
-  chipText: {
-    lineHeight: 16,
-    fontSize: 10,
-    color: "#ffffff",
-  },
-  favoriteContainer: {
-    justifyContent: "flex-start",
-  },
-  iconButton: {
-    marginTop: 1,
-  },
+	},
+	title: {
+		color: '#ffffff',
+		fontWeight: 'bold',
+		fontSize: 32,
+		textAlign: 'left',
+		padding: 16,
+		textTransform: 'uppercase',
+	},
+	image: {
+		height: 250,
+	},
+	chip: {
+		height: 30,
+		marginRight: 5,
+	},
 });
 
 export default TrainingHeader;

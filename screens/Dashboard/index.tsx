@@ -186,7 +186,7 @@ const DashboardScreen = () => {
 								pseudo={profile.pseudo ?? ''}
 								isFav={true}
 								onPressFav={() => console.log('Toggle Favorite')}
-								onPressNav={() => console.log('Go to exercise')}
+								onPressNav={() => navigation.navigate('Exercise' as never)}
 							/>
 						</View>
 					))}

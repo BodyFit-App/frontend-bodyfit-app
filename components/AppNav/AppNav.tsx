@@ -11,6 +11,7 @@ import ProgramFormScreen from "../../screens/ProgramFormScreen";
 import RegisterScreen from "../../screens/register";
 import GoalFormScreen from "../../screens/GoalFormScreen";
 import DashboardScreen from "../../screens/Dashboard";
+import { ExerciseScreen } from "../../screens/exercise";
 
 const Stack = createStackNavigator<any>();
 
@@ -44,12 +45,18 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
-       
-        <Stack.Screen
+         <Stack.Screen
+        name="Exercise"
+        component={ExerciseScreen}
+        options={{ headerShown: true }}
+      />
+          <Stack.Screen
         name="Dashboard"
         component={DashboardScreen}
         options={{ headerShown: true }}
       />
+      
+      
          <Stack.Screen
           name="BottomTabs"
           component={BottomTabs as any}
