@@ -1,3 +1,4 @@
+import { fetchExercises } from "../api/exercises";
 import { Tables } from "../types/database.types";
 
 export const getRange = (page: number, perPage: number): [number, number] => {
@@ -10,7 +11,7 @@ export const getRange = (page: number, perPage: number): [number, number] => {
 };
 
 export const formatExercisesWithFavorites = (
-  exercises: Tables<"exercises">[],
+  exercises: Awaited<ReturnType<typeof fetchExercises>>["data"],
   favorites: number[],
   nextCursor: number | null,
 ) => {
