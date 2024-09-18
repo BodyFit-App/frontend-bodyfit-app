@@ -13,7 +13,6 @@ export default function CustomButton({
       labelStyle={{ fontSize: 16 }}
       style={{
         borderColor: theme.colors.border,
-        paddingVertical: 3,
         borderWidth: 1,
         borderRadius: 6,
         backgroundColor: theme.colors.backgroundButton,

@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(47, 128, 237, 0.3)",
+flex: 1,
   },
   headerContainer: {
     flexDirection: "row",
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2F80ED",
     flex: 1,

@@ -2,7 +2,7 @@ import React from "react";
 import { BottomNavigation } from "react-native-paper";
 import ActualiteScreen from "../../screens/Actualites";
 import { ExercisesScreen } from "../../screens/exercises";
-import ProfilScreen from "../../screens/Profil";
+import ProfilScreen from "../../screens/Dashboard";
 import theme from "../../theme";
 import ExplorerScreen from "../../screens/ExplorerScreen";
 
