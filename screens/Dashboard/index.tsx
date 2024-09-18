@@ -37,14 +37,12 @@ const DashboardScreen = () => {
   useEffect(() => {
     if (profile) {
       const exercises = profile.exercises || [];
-  
-      // Préparer les données pour baser le graphique sur les catégories, non sur les exercices
+
       const categoryData: { [key: string]: number } = {};
   
       exercises.forEach(exercise => {
         exercise.categories.forEach(category => {
           if (category.name && category.name !== 'Inconnu') {
-            // Ajouter du temps à la catégorie si elle existe déjà, sinon l'initialiser
             if (categoryData[category.name]) {
               categoryData[category.name] += exercise.estimated_time_seconds || 0;
             } else {
@@ -54,8 +52,8 @@ const DashboardScreen = () => {
         });
       });
   
-      const data = Object.values(categoryData); // Les données pour chaque catégorie
-      const labels = Object.keys(categoryData); // Les labels des catégories
+      const data = Object.values(categoryData); 
+      const labels = Object.keys(categoryData); 
   
       if (data.every(value => value === 0)) {
         setChartData([]);
@@ -64,7 +62,6 @@ const DashboardScreen = () => {
       } else {
         setChartData(data);
   
-        // Attribuer les couleurs pour chaque catégorie
         const colors = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800'];
         const colorCount = Math.max(data.length, colors.length);
         const colorsForChart = colors.slice(0, colorCount);
@@ -74,7 +71,7 @@ const DashboardScreen = () => {
         }
   
         setSliceColors(colorsForChart.slice(0, data.length));
-        setChartLabels(labels.slice(0, data.length)); // Mettre à jour les labels des catégories
+        setChartLabels(labels.slice(0, data.length));
       }
     }
   }, [profile]);
