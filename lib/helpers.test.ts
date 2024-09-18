@@ -34,6 +34,8 @@ describe("formatProgramsWithFavorites", () => {
         created_at: "2000-12-20",
         description: "Exemple",
         visible: true,
+        sessions: [],
+        profiles: null,
       },
       {
         id: 2,
@@ -42,6 +44,8 @@ describe("formatProgramsWithFavorites", () => {
         created_at: "2001-05-10",
         description: "Exemple",
         visible: false,
+        sessions: [],
+        profiles: null,
       },
     ];
     const favorites = [1];
@@ -60,6 +64,8 @@ describe("formatProgramsWithFavorites", () => {
           description: "Exemple",
           visible: true,
           isFav: true,
+          sessions: [],
+          profiles: null,
         },
         {
           id: 2,
@@ -69,6 +75,8 @@ describe("formatProgramsWithFavorites", () => {
           description: "Exemple",
           visible: false,
           isFav: false,
+          sessions: [],
+          profiles: null,
         },
       ],
     });
@@ -83,6 +91,8 @@ describe("formatProgramsWithFavorites", () => {
         created_at: "2000-12-20",
         description: "Exemple",
         visible: true,
+        sessions: [],
+        profiles: null,
       },
     ];
     const favorites: any = [];
@@ -101,13 +111,15 @@ describe("formatProgramsWithFavorites", () => {
           description: "Exemple",
           visible: true,
           isFav: false,
+          sessions: [],
+          profiles: null,
         },
       ],
     });
   });
 
   it("should handle empty programs array", () => {
-    const programs: Tables<"programs">[] = [];
+    const programs: any[] = [];
     const favorites = [1, 2, 3];
     const nextCursor = null;
 
