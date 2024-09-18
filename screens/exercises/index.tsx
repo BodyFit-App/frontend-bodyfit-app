@@ -100,7 +100,7 @@ export const ExercisesScreen = () => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const handleObjectifPress = (id: number) => {
+  const handleExercicePress = (id: number) => {
     navigation.navigate("Exercise", { id });
   };
 
@@ -139,7 +139,7 @@ export const ExercisesScreen = () => {
               )}
               isFav={item.isFav}
               onPressFav={() => toggleFavorite(item.id, item.isFav)}
-              onPressNav={() => handleObjectifPress(item.id)}
+              onPressNav={() => handleExercicePress(item.id)}
             />
           </View>
         )}
