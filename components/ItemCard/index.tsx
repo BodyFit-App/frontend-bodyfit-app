@@ -55,7 +55,7 @@ export default function ItemCard({
             <Text style={{ color: theme.colors.primary, fontWeight: "700" }}>
               {`@${pseudo.toLocaleLowerCase()}`}
             </Text>
-            {time && (
+            {!!time && (
               <View
                 style={{ flexDirection: "row", gap: 8, alignItems: "baseline" }}
               >
@@ -75,7 +75,7 @@ export default function ItemCard({
           >
             {title}
           </Text>
-          {description && (
+          {!!description && (
             <Text
               style={{ color: "white", marginBottom: 2 }}
               numberOfLines={3}

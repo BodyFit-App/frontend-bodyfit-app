@@ -11,6 +11,7 @@ import ProgramFormScreen from "../../screens/ProgramFormScreen";
 import RegisterScreen from "../../screens/register";
 import ProfileCreationScreen from "../../screens/ProfileCreation";
 import GoalFormScreen from "../../screens/GoalFormScreen";
+import { ExercisesScreen } from "../../screens/exercises";
 
 const Stack = createStackNavigator<any>();
 
@@ -20,20 +21,21 @@ function AppNav() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-      screenOptions={{
-        headerStatusBarHeight: 40,
-        headerStyle: {
-          backgroundColor: theme.colors.background,
-        },
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          color: theme.colors.text,
-          fontSize: 20,
-          paddingBottom: 20,
-        },
-        headerBackTitleVisible: false,
-        headerLeftContainerStyle: { paddingBottom: 20 }, 
-      }}>
+        screenOptions={{
+          headerStatusBarHeight: 40,
+          headerStyle: {
+            backgroundColor: theme.colors.background,
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+            color: theme.colors.text,
+            fontSize: 20,
+            paddingBottom: 20,
+          },
+          headerBackTitleVisible: false,
+          headerLeftContainerStyle: { paddingBottom: 20 },
+        }}
+      >
         {/* TODO: Uncomment later to protect routes 
          {session ? (
           <Stack.Screen
@@ -46,7 +48,7 @@ function AppNav() {
         )} */}
         <Stack.Screen
           name="BottomTabs"
-          component={BottomTabs as any}
+          component={ExercisesScreen as any}
           options={{ headerShown: false }}
         />
         <Stack.Screen
