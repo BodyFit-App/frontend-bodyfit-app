@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		textAlign: 'left',
 		padding: 16,
+		marginVertical: 10,
 		textTransform: 'uppercase',
 	},
 	image: {
