@@ -115,8 +115,7 @@ const DashboardScreen = () => {
 								widthAndHeight={250}
 								series={chartData}
 								sliceColor={pieChartColors}
-								doughnut={true}
-								coverRadius={0.45}
+								coverRadius={0.50}
 								coverFill={theme.colors.background}
 							/>
 							<View style={styles.legendContainer}>
