@@ -30,21 +30,24 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
+       
         <Stack.Screen
         name="Dashboard"
         component={DashboardScreen}
         options={{ headerShown: false }}
       />
+         <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        
         <Stack.Screen
           name="GoalFormScreen"
           options={{ title: "Créer mon exercice" }}
           component={GoalFormScreen as any}
         />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
+        
         <Stack.Screen
           name="ProgramFormScreen"
           options={{ title: "Créer mon exercice" }}
