@@ -10,7 +10,7 @@ export const fetchExerciseById = async (
 ) => {
   const { data, error } = await client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar_url)")
+    .select("*,categories(*),profiles(id,pseudo,avatar_url,firstname,lastname)")
     .eq("id", id)
     .single();
 

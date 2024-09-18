@@ -6,6 +6,8 @@ import { MD2Colors, Text } from 'react-native-paper';
 import { useParams } from 'react-router-native';
 import TrainingHeader from '../../components/TrainingHeader/TrainingHeader';
 import { getPublicUrl } from '../../lib/supabase';
+import CreatorCard from '../../components/CreatorCard';
+import { fetchProfileById } from '../../api/profiles';
 
 export const ExerciseScreen = () => {
 	const id = 47;
@@ -40,6 +42,14 @@ export const ExerciseScreen = () => {
 			<View style={styles.containertxt}>
 				<Text style={styles.txtdescription}>{data?.description}</Text>
 			</View>
+      <View>
+        <CreatorCard 
+		  firstname={data?.profiles?.firstname || ''}
+          lastname={data?.profiles?.lastname || ''}
+          pseudo={data?.profiles?.pseudo || ''}
+          avatarUrl={getPublicUrl('images', data?.profiles?.avatar_url ?? '')}
+        />
+      </View>
 		</ScrollView>
 	);
 };
