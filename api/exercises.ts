@@ -87,17 +87,11 @@ export const fetchDropdownExercises = async () => {
 
   const { data, error } = await client.from("exercises")
     .select("id, title, profile_id, favorite_exercises(*)")
-    .eq("visible", true);
+    .eq("visible", true).eq("profile_id", profile_id);
 
   if (error) throw new Error(error.message);
 
-  const filteredExercises = data.filter((exercise) =>
-    exercise.profile_id === profile_id ||
-    (exercise.favorite_exercises &&
-      exercise.favorite_exercises.some((fav) => fav.profile_id === profile_id))
-  );
-
-  return filteredExercises;
+  return data;
 };
 
 export const deleteExercise = async (

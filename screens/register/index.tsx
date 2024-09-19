@@ -7,8 +7,10 @@ import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import theme from "../../theme";
 import { client } from "../../lib/supabase";
+import { useAuth } from "../../hooks/useAuth";
 
 const RegisterScreen = () => {
+  const { signUp } = useAuth();
   const navigation = useNavigation();
   const [checked, setChecked] = useState(false);
 
@@ -30,7 +32,8 @@ const RegisterScreen = () => {
       console.log("Veuillez accepter les termes et conditions.");
     }
 
-    const { error } = await client.auth.signUp(data);
+    const { error } = await signUp(data.email, data.password);
+
     if (error) {
       console.log("Erreur de connexion", error.message);
     }

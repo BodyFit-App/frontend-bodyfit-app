@@ -29,8 +29,11 @@ export const useAuth = () => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    return await client.auth.signInWithPassword({ email, password });
+    return client.auth.signInWithPassword({ email, password });
   };
+
+  const signUp = async (email: string, password: string) =>
+    client.auth.signUp({ email, password });
 
   const signOut = async () => {
     setLoading(true);
@@ -42,6 +45,7 @@ export const useAuth = () => {
   return {
     session,
     signIn,
+    signUp,
     signOut,
     loading,
   };
