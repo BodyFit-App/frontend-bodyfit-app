@@ -31,11 +31,16 @@ export const deleteFolowing = async (id: number) => {
   if (error) throw new Error(error.message);
 };
 
-export const fetchFolloweesActivity = async () => {
-  const { data, error } = await client.from("user_content").select("*").range(
-    0,
-    NB_ELTS_PER_PAGE,
-  ).order("created_at");
+export const fetchFolloweesActivity = async ( page: number = 1) => {
+  const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
+
+  const { data, error } = await client
+    .from('user_content')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(start, end);
+
   if (error) throw new Error(error.message);
   return data;
 };
+

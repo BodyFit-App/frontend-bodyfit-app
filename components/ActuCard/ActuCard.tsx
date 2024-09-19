@@ -27,8 +27,8 @@ interface ActuCardProps {
   username: string;
   fullName: string;
   profileImageUrl?: string;
-  actionDescription: string;
-  exerciseLinkText: string;
+  actionDescription?: string;
+  exerciseLinkText?: string;
   onExercisePress: () => void;
   onUsernamePress: () => void;
 }
@@ -68,7 +68,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
           <Text variant="labelSmall" style={styles.description}>
             {actionDescription}{" "}
             <Text style={styles.link} onPress={onExercisePress}>
-              {truncateText(exerciseLinkText, 15)}
+              {truncateText(exerciseLinkText ?? '', 15)}
             </Text>
           </Text>
         </View>
