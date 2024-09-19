@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
 import { fetchExerciseById } from '../../api/exercises';
-import { MD2Colors, Text } from 'react-native-paper';
+import { Divider, MD2Colors, Text } from 'react-native-paper';
 import { useParams } from 'react-router-native';
 import TrainingHeader from '../../components/TrainingHeader/TrainingHeader';
 import { getPublicUrl } from '../../lib/supabase';
@@ -40,9 +40,13 @@ export const ExerciseScreen = () => {
 				/>
 			</View>
 			<View style={styles.containertxt}>
+			<Text style={styles.title}>Description</Text>
+			<Divider style={{height: 1, marginBottom: 20}}/>
 				<Text style={styles.txtdescription}>{data?.description}</Text>
 			</View>
       <View>
+	  <Text style={styles.title}>Créateur</Text>
+	  <Divider style={{height: 1, marginBottom: 20}}/>
         <CreatorCard 
 		  firstname={data?.profiles?.firstname || ''}
           lastname={data?.profiles?.lastname || ''}
@@ -61,4 +65,9 @@ const styles = StyleSheet.create({
 	txtdescription: {
 		fontSize: 20,
 	},
+	title: {
+		fontSize: 25,
+		fontWeight: '600',
+		marginBottom: 10,
+	  },
 });

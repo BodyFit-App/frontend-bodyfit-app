@@ -12,6 +12,7 @@ import RegisterScreen from "../../screens/register";
 import GoalFormScreen from "../../screens/GoalFormScreen";
 import DashboardScreen from "../../screens/Dashboard";
 import { ExerciseScreen } from "../../screens/exercise";
+import { ProgramScreen } from "../../screens/program";
 
 const Stack = createStackNavigator<any>();
 
@@ -46,6 +47,11 @@ function AppNav() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )} */}
+        <Stack.Screen
+         name='Mon Programme'
+          component={ProgramScreen}
+          options={{ headerShown: true }}
+        />
          <Stack.Screen
         name="Exercise"
         component={ExerciseScreen}
