@@ -50,6 +50,8 @@ export const ExercisesScreen = () => {
     }
   };
 
+  const queryKey = ["exercises", { title: debouncedSearchQuery }, order];
+
   const {
     data,
     error,
@@ -59,7 +61,7 @@ export const ExercisesScreen = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["exercises", { title: debouncedSearchQuery }, order],
+    queryKey: queryKey,
     queryFn: fetchExercicesWithFavorites,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -71,11 +73,10 @@ export const ExercisesScreen = () => {
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
   );
 
-  
-  const { handleMutationFav, isError } = useFavExerciseMutation({ title: debouncedSearchQuery, order });
+  const { handleMutationFav } = useFavExerciseMutation(queryKey);
 
   const toggleFavorite = (id: number, isFav: boolean) => {
-    handleMutationFav(id, !isFav);
+    handleMutationFav(id, isFav);
   };
 
   const handleFilterChange = (selectedFilter: string) => {
@@ -127,7 +128,6 @@ export const ExercisesScreen = () => {
             <ItemCard
               title={item.title}
               pseudo={item.profiles?.pseudo || "Unknown"}
-              description={item.description || ""}
               categories={
                 item.categories ? item.categories.map((cat) => cat.name) : []
               }

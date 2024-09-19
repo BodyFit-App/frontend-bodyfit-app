@@ -17,14 +17,12 @@ export const handleToggleFavorites = async (
   }
 };
 
-export const useFavExerciseMutation = (filter: any) => {
+export const useFavExerciseMutation = (queryKey: any) => {
   const queryClient = useQueryClient();
 
   const mutationFav = useMutation({
     mutationFn: handleToggleFavorites,
     onSuccess: ({ id, isFav }) => {
-      const queryKey = ["exercises", filter];
-
       const cachedData = queryClient.getQueryData(queryKey);
 
       if (!cachedData) {
