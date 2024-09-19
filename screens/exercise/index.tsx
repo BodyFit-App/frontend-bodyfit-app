@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { ActivityIndicator, ScrollView, View, StyleSheet } from "react-native";
 import { fetchExerciseById } from "../../api/exercises";
@@ -6,14 +6,31 @@ import { Divider, MD2Colors, Text } from "react-native-paper";
 import TrainingHeader from "../../components/TrainingHeader/TrainingHeader";
 import { getPublicUrl } from "../../lib/supabase";
 import CreatorCard from "../../components/CreatorCard";
+import { handleToggleFavoriteExercise } from "../../api/favorites";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ExerciseScreen = () => {
   const id = 47;
+  const { session } = useAuth();
+
+  const queryClient = useQueryClient();
+  const queryKey = ["exercise", id];
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["exercise", id],
-    queryFn: () => fetchExerciseById(+id!),
+    queryKey: queryKey,
+    queryFn: () =>
+      fetchExerciseById(id, session?.user.user_metadata.profile_id),
   });
+
+  const mutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: handleToggleFavoriteExercise,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
+  const toggleFavorite = (id: number, isFav: boolean) => {
+    mutation.mutate({ id, isFav });
+  };
 
   if (isLoading)
     return <ActivityIndicator animating={true} color={MD2Colors.red800} />;
@@ -31,7 +48,9 @@ export const ExerciseScreen = () => {
           isFavorite={
             !!data?.favorite_exercises && data.favorite_exercises.length > 0
           }
-          onToggleFavorite={() => {}}
+          onToggleFavorite={() =>
+            toggleFavorite(data!.id, data!.favorite_exercises.length > 0)
+          }
         />
       </View>
       <View style={styles.containertxt}>

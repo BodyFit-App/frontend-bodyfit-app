@@ -4,18 +4,23 @@ import { client } from "../lib/supabase";
 import { TablesInsert } from "../types/database.types";
 import { ProgramFilter } from "../types/filters.types";
 import { ProgramOrder } from "../types/orders.types";
-import { addExerciseSession } from "./sessions";
 
 export const fetchProgramById = async (
   id: number,
+  profileIdForFavorites?: number,
 ) => {
-  const { data, error } = await client
+  let query = client
     .from("programs")
     .select(
-      "*,sessions(*,exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*)",
+      "*,sessions(*,exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*),favorite_programs!left(profile_id)",
     )
-    .eq("id", id)
-    .single();
+    .eq("id", id);
+
+  if (profileIdForFavorites) {
+    query = query.eq("favorite_programs.profile_id", profileIdForFavorites);
+  }
+
+  const { data, error } = await query.single();
 
   if (error) throw new Error(error.message);
 
