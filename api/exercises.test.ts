@@ -3,7 +3,6 @@ import {
   deleteExercise,
   fetchExerciseById,
   fetchExercises,
-  getFavoriteStatusForExercises,
   resetExerciseCategories,
   upsertExercise,
 } from "./exercises";
@@ -252,54 +251,25 @@ describe("Tests api/exercices", () => {
   });
 });
 
-describe("getFavoriteStatusForExercises", () => {
-  it("should return favorite exercise IDs when fetch is successful", async () => {
-    const exerciseIds = [1, 2, 3];
-    const mockData = [{ exercise_id: 1 }, { exercise_id: 3 }];
-    setTestData(mockData);
+describe("deleteExerciseCategories", () => {
+  it("should not throw when deletion is successful", async () => {
+    setTestError(null);
 
-    const result = await getFavoriteStatusForExercises(exerciseIds);
+    const exerciseId = 1;
+    const catId = 2;
 
-    expect(result).toEqual([1, 3]);
+    await expect(resetExerciseCategories(exerciseId)).resolves.not
+      .toThrow();
   });
 
-  it("should return an empty array when no exercises are favorites", async () => {
-    const exerciseIds = [1, 2, 3];
-    setTestData([]);
+  it("should throw an error when deletion fails", async () => {
+    setTestError(new Error("Failed to delete exercise category"));
 
-    const result = await getFavoriteStatusForExercises(exerciseIds);
+    const exerciseId = 1;
+    const catId = 2;
 
-    expect(result).toEqual([]);
-  });
-
-  it("should throw an error when fetch fails", async () => {
-    setTestError(new Error("Failed to fetch favorite exercises"));
-
-    await expect(getFavoriteStatusForExercises([1, 2, 3])).rejects.toThrow(
-      "Failed to fetch favorite exercises",
+    await expect(resetExerciseCategories(exerciseId)).rejects.toThrow(
+      "Failed to delete exercise category",
     );
-  });
-
-  describe("deleteExerciseCategories", () => {
-    it("should not throw when deletion is successful", async () => {
-      setTestError(null);
-
-      const exerciseId = 1;
-      const catId = 2;
-
-      await expect(resetExerciseCategories(exerciseId)).resolves.not
-        .toThrow();
-    });
-
-    it("should throw an error when deletion fails", async () => {
-      setTestError(new Error("Failed to delete exercise category"));
-
-      const exerciseId = 1;
-      const catId = 2;
-
-      await expect(resetExerciseCategories(exerciseId)).rejects.toThrow(
-        "Failed to delete exercise category",
-      );
-    });
   });
 });

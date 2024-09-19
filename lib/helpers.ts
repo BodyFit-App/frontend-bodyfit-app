@@ -13,28 +13,26 @@ export const getRange = (page: number, perPage: number): [number, number] => {
 
 export const formatExercisesWithFavorites = (
   exercises: Awaited<ReturnType<typeof fetchExercises>>["data"],
-  favorites: number[],
   nextCursor: number | null,
 ) => {
   return {
     nextCursor,
     exercises: exercises.map((exercise) => ({
       ...exercise,
-      isFav: favorites.includes(exercise.id),
+      isFav: exercise.favorite_exercises.length > 0,
     })),
   };
 };
 
 export const formatProgramsWithFavorites = (
   programs: Awaited<ReturnType<typeof fetchPrograms>>["data"],
-  favorites: number[],
   nextCursor: number | null,
 ) => {
   return {
     nextCursor,
     programs: programs.map((program) => ({
       ...program,
-      isFav: favorites.includes(program.id),
+      isFav: program.favorite_programs.length > 0,
     })),
   };
 };

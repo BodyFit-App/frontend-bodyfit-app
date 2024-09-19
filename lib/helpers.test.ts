@@ -4,7 +4,6 @@ import {
   getRange,
   slugify,
 } from "./helpers";
-import { Tables } from "../types/database.types";
 
 describe("Test helpers", () => {
   describe("getRange", () => {
@@ -36,6 +35,7 @@ describe("formatProgramsWithFavorites", () => {
         visible: true,
         sessions: [],
         profiles: null,
+        favorite_programs: [{ profile_id: 0 }],
       },
       {
         id: 2,
@@ -46,12 +46,12 @@ describe("formatProgramsWithFavorites", () => {
         visible: false,
         sessions: [],
         profiles: null,
+        favorite_programs: [],
       },
     ];
-    const favorites = [1];
     const nextCursor = null;
 
-    const result = formatProgramsWithFavorites(programs, favorites, nextCursor);
+    const result = formatProgramsWithFavorites(programs, nextCursor);
 
     expect(result).toEqual({
       nextCursor: null,
@@ -66,6 +66,7 @@ describe("formatProgramsWithFavorites", () => {
           isFav: true,
           sessions: [],
           profiles: null,
+          favorite_programs: [{ profile_id: 0 }],
         },
         {
           id: 2,
@@ -77,6 +78,7 @@ describe("formatProgramsWithFavorites", () => {
           isFav: false,
           sessions: [],
           profiles: null,
+          favorite_programs: [],
         },
       ],
     });
@@ -93,28 +95,17 @@ describe("formatProgramsWithFavorites", () => {
         visible: true,
         sessions: [],
         profiles: null,
+        isFav: false,
+        favorite_programs: [],
       },
     ];
-    const favorites: any = [];
     const nextCursor = 456;
 
-    const result = formatProgramsWithFavorites(programs, favorites, nextCursor);
+    const result = formatProgramsWithFavorites(programs, nextCursor);
 
     expect(result).toEqual({
       nextCursor: 456,
-      programs: [
-        {
-          id: 1,
-          title: "Fitness Program",
-          profile_id: 1,
-          created_at: "2000-12-20",
-          description: "Exemple",
-          visible: true,
-          isFav: false,
-          sessions: [],
-          profiles: null,
-        },
-      ],
+      programs,
     });
   });
 
@@ -123,7 +114,7 @@ describe("formatProgramsWithFavorites", () => {
     const favorites = [1, 2, 3];
     const nextCursor = null;
 
-    const result = formatProgramsWithFavorites(programs, favorites, nextCursor);
+    const result = formatProgramsWithFavorites(programs, nextCursor);
 
     expect(result).toEqual({
       nextCursor: null,
@@ -146,6 +137,7 @@ describe("formatExercisesWithFavorites", () => {
         estimated_time_seconds: null,
         categories: [],
         profiles: null,
+        favorite_exercises: [],
       },
       {
         id: 2,
@@ -158,6 +150,7 @@ describe("formatExercisesWithFavorites", () => {
         estimated_time_seconds: null,
         categories: [],
         profiles: null,
+        favorite_exercises: [{ profile_id: 0 }],
       },
     ];
 
@@ -166,7 +159,6 @@ describe("formatExercisesWithFavorites", () => {
 
     const result = formatExercisesWithFavorites(
       exercises,
-      favorites,
       nextCursor,
     );
 
@@ -182,9 +174,10 @@ describe("formatExercisesWithFavorites", () => {
           visible: true,
           banner_image: null,
           estimated_time_seconds: null,
-          isFav: true,
+          isFav: false,
           categories: [],
           profiles: null,
+          favorite_exercises: [],
         },
         {
           id: 2,
@@ -195,9 +188,10 @@ describe("formatExercisesWithFavorites", () => {
           visible: true,
           banner_image: null,
           estimated_time_seconds: null,
-          isFav: false,
+          isFav: true,
           categories: [],
           profiles: null,
+          favorite_exercises: [{ profile_id: 0 }],
         },
       ],
     });
@@ -206,55 +200,39 @@ describe("formatExercisesWithFavorites", () => {
   it("should return exercises with correct nextCursor", () => {
     const exercises = [
       {
-        id: 1,
-        title: "Pull Up",
+        id: 2,
+        title: "Push Up",
         description: "Example",
-        profile_id: 1,
-        created_at: "2000-10-20",
+        profile_id: 2,
+        created_at: "2001-01-15",
         visible: true,
         banner_image: null,
         estimated_time_seconds: null,
+        isFav: true,
         categories: [],
         profiles: null,
+        favorite_exercises: [{ profile_id: 0 }],
       },
     ];
-    const favorites: any = [];
     const nextCursor = 123;
 
     const result = formatExercisesWithFavorites(
       exercises,
-      favorites,
       nextCursor,
     );
 
     expect(result).toEqual({
       nextCursor: 123,
-      exercises: [
-        {
-          id: 1,
-          title: "Pull Up",
-          description: "Example",
-          profile_id: 1,
-          created_at: "2000-10-20",
-          visible: true,
-          banner_image: null,
-          estimated_time_seconds: null,
-          isFav: false,
-          categories: [],
-          profiles: null,
-        },
-      ],
+      exercises,
     });
   });
 
   it("should handle empty exercises array", () => {
     const exercises: any = [];
-    const favorites = [1, 2, 3];
     const nextCursor = null;
 
     const result = formatExercisesWithFavorites(
       exercises,
-      favorites,
       nextCursor,
     );
 
