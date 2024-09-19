@@ -8,13 +8,20 @@ import { ExerciseOrder } from "../types/orders.types";
 
 export const fetchExerciseById = async (
   id: number,
+  profileIdForFavorites?: number,
 ) => {
-  const { data, error } = await client
+  let query = client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar_url,firstname,lastname)")
-    .eq("id", id)
-    .single();
+    .select(
+      "*,categories(*),profiles(id,pseudo,avatar_url,firstname,lastname),favorite_exercises!left(profile_id)",
+    )
+    .eq("id", id);
 
+  if (profileIdForFavorites) {
+    query = query.eq("favorite_exercises.profile_id", profileIdForFavorites);
+  }
+
+  const { data, error } = await query.single();
   if (error) throw new Error(error.message);
 
   return data;
