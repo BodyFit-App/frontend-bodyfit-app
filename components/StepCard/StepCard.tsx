@@ -86,7 +86,7 @@ const StepCard: React.FC<StepCardProps> = ({
               Étape {stepNumber} sur {totalSteps}
             </Text>
             <IconButton
-              icon={isValidated ? "check" : "check-outline"}
+              icon={isValidated ? "check" : "check"}
               iconColor={isValidated ? "#2F80ED" : "#A0A0A0"}
               size={20}
               onPress={onValidate}
@@ -96,7 +96,7 @@ const StepCard: React.FC<StepCardProps> = ({
           </>
         )}
       </View>
-      <Text style={styles.description}>{description}</Text>
+      <Text  style={styles.description}>{description}</Text>
     </Card>
   );
 };
@@ -104,15 +104,15 @@ const StepCard: React.FC<StepCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#161626",
-    width: "95%",
+    borderColor: "#2F80ED",
+    borderWidth: 1,
     marginBottom: 10,
-    borderRadius: 0,
+    borderRadius: 5,
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
   },
   stepTitle: {
     color: "#2F80ED",
