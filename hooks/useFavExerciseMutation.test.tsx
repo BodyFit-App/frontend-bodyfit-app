@@ -24,7 +24,8 @@ describe("useFavExerciseMutation", () => {
   it("should call addFavExercise when isFav is false", async () => {
     (addFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: true });
 
-    queryClient.setQueryData(["exercises", "testFilter"], {
+    const queryKey = ["exercises", "testFilter"];
+    queryClient.setQueryData(queryKey, {
       pages: [
         {
           exercises: [{ id: 1, isFav: false }],
@@ -32,7 +33,7 @@ describe("useFavExerciseMutation", () => {
       ],
     });
 
-    const { result } = renderHook(() => useFavExerciseMutation("testFilter"), {
+    const { result } = renderHook(() => useFavExerciseMutation(queryKey), {
       wrapper,
     });
 
@@ -45,7 +46,7 @@ describe("useFavExerciseMutation", () => {
     expect(addFavExercise).toHaveBeenCalledWith(1);
     expect(deleteFavExercise).not.toHaveBeenCalled();
 
-    expect(queryClient.getQueryData(["exercises", "testFilter"])).toEqual({
+    expect(queryClient.getQueryData(queryKey)).toEqual({
       pages: [
         {
           exercises: [{ id: 1, isFav: true }],
@@ -57,8 +58,8 @@ describe("useFavExerciseMutation", () => {
   it("should call deleteFavExercise when isFav is true", async () => {
     (deleteFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: false });
 
-    // Mock the query client cache
-    queryClient.setQueryData(["exercises", "testFilter"], {
+    const queryKey = ["exercises", "testFilter"];
+    queryClient.setQueryData(queryKey, {
       pages: [
         {
           exercises: [{ id: 1, isFav: true }],
@@ -66,7 +67,7 @@ describe("useFavExerciseMutation", () => {
       ],
     });
 
-    const { result } = renderHook(() => useFavExerciseMutation("testFilter"), {
+    const { result } = renderHook(() => useFavExerciseMutation(queryKey), {
       wrapper,
     });
 
@@ -79,7 +80,7 @@ describe("useFavExerciseMutation", () => {
     expect(deleteFavExercise).toHaveBeenCalledWith(1);
     expect(addFavExercise).not.toHaveBeenCalled();
 
-    expect(queryClient.getQueryData(["exercises", "testFilter"])).toEqual({
+    expect(queryClient.getQueryData(queryKey)).toEqual({
       pages: [
         {
           exercises: [{ id: 1, isFav: false }],
