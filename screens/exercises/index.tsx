@@ -1,19 +1,20 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchExercises } from "../../api/exercises";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ItemCard from "../../components/ItemCard";
-import {
-  handleToggleFavoriteExercise,
-  useToggleMutation,
-} from "../../hooks/useToggleMutation";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ExerciseOrder } from "../../types/orders.types";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
+import { handleToggleFavoriteExercise } from "../../api/favorites";
 
 export const ExercisesScreen = () => {
   const { session } = useAuth();
@@ -60,13 +61,14 @@ export const ExercisesScreen = () => {
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
   );
 
-  const { handleMutation } = useToggleMutation(
-    () => queryClient.invalidateQueries({ queryKey }),
-    handleToggleFavoriteExercise
-  );
+  const mutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: handleToggleFavoriteExercise,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
 
   const toggleFavorite = (id: number, isFav: boolean) => {
-    handleMutation({ id, isFav });
+    mutation.mutate({ id, isFav });
   };
 
   const handleFilterChange = (selectedFilter: string) => {
