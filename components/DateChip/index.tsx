@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Avatar, Card, Icon, IconButton } from 'react-native-paper';
+import { Avatar, Card, Icon } from 'react-native-paper';
 import theme from '../../theme';
 
 interface DateChipProps {
   title: string;
   date?: Date;
-
 }
 
 export default function DateChip({
@@ -18,10 +17,10 @@ export default function DateChip({
     <Card style={styles.card}>
       <Card.Content style={styles.container}>
         <View style={styles.containerInfo}>
-          <Text style={styles.titleLarge}>Date de début</Text>
-          <Text style={styles.bodyMedium}>02/02/1994</Text>
+          <Text style={styles.titleLarge}>{title}</Text>
+          <Text style={styles.bodyMedium}>{formattedDate}</Text>
         </View>
-        <Icon source="calendar" size={26} color={theme.colors.primary} />
+        <Icon source="calendar" size={24} color={theme.colors.primary} />
       </Card.Content>
     </Card>
   );
@@ -32,27 +31,28 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.backgroundNav,
     borderColor: theme.colors.primary,
     borderWidth: 2,
+ 
   },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-
+    paddingVertical: 6, 
+    paddingHorizontal: 12, 
   },
   containerInfo: {
     flexDirection: 'column',
     marginRight: 16,
-    alignItems:'flex-start'
+    alignItems: 'flex-start',
   },
   titleLarge: {
-    fontSize: 14,
+    fontSize: 12,
     color: theme.colors.primary,
-    fontWeight: '700', 
+    fontWeight: '700',
   },
   bodyMedium: {
-    fontSize: 17,
+    fontSize: 12,
     color: theme.colors.textFollow,
     marginTop: 4,
-   
   },
 });
