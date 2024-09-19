@@ -55,7 +55,7 @@ function AppNav() {
           component={ProgramsScreen}
           options={{ headerShown: true }}
         />
-        
+
         <Stack.Screen
           name="Exercises"
           component={ExercisesScreen}
@@ -66,19 +66,18 @@ function AppNav() {
           component={GoalsScreen}
           options={{ headerShown: true }}
         />
-         <Stack.Screen
-        name="Exercise"
-        component={ExerciseScreen}
-        options={{ headerShown: true }}
-      />
-          <Stack.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{ headerShown: true }}
-      />
-      
-      
-         <Stack.Screen
+        <Stack.Screen
+          name="Exercise"
+          component={ExerciseScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ headerShown: true }}
+        />
+
+        <Stack.Screen
           name="BottomTabs"
           component={BottomTabs as any}
           options={{ headerShown: false }}

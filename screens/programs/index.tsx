@@ -13,6 +13,7 @@ import { ProgramOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useFavProgramMutation } from "../../hooks/useFavProgramMutation";
 
 export const ProgramsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,6 +50,8 @@ export const ProgramsScreen = () => {
     }
   };
 
+  const queryKey = ["programs", { title: debouncedSearchQuery }, order];
+
   const {
     data,
     error,
@@ -58,7 +61,7 @@ export const ProgramsScreen = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["programs", { title: debouncedSearchQuery }, order],
+    queryKey,
     queryFn: fetchProgramsWithFavorites,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage?.nextCursor ?? null,
@@ -92,9 +95,15 @@ export const ProgramsScreen = () => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const handleProgramPress = (id: number) => {  
+  const handleProgramPress = (id: number) => {
     navigation.navigate("Program", { id });
   };
+
+  const toggleFavorite = (id: number, isFav: boolean) => {
+    handleMutationFav(id, isFav);
+  };
+
+  const { handleMutationFav } = useFavProgramMutation(queryKey);
 
   return (
     <View style={styles.container}>
@@ -120,8 +129,8 @@ export const ProgramsScreen = () => {
               title={item.title}
               description={item.description ?? ""}
               pseudo={item.profiles?.pseudo ?? ""}
-              isFav={true}
-              onPressFav={() => console.log("Toggle Favorite")}
+              isFav={item.isFav}
+              onPressFav={() => toggleFavorite(item.id, item.isFav)}
               onPressNav={() => handleProgramPress(item.id)}
             />
           </View>
