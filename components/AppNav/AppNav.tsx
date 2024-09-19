@@ -52,7 +52,7 @@ function AppNav() {
         )} */}
         <Stack.Screen
           name="Mon Programme"
-          component={ProgramsScreen}
+          component={ProgramScreen}
           options={{ headerShown: true }}
         />
         <Stack.Screen
