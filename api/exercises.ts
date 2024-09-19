@@ -1,3 +1,4 @@
+import { User } from "@supabase/supabase-js";
 import { NB_ELTS_PER_PAGE } from "../lib/constants";
 import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
@@ -7,13 +8,20 @@ import { ExerciseOrder } from "../types/orders.types";
 
 export const fetchExerciseById = async (
   id: number,
+  profileIdForFavorites?: number,
 ) => {
-  const { data, error } = await client
+  let query = client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar_url,firstname,lastname)")
-    .eq("id", id)
-    .single();
+    .select(
+      "*,categories(*),profiles(id,pseudo,avatar_url,firstname,lastname),favorite_exercises!left(profile_id)",
+    )
+    .eq("id", id);
 
+  if (profileIdForFavorites) {
+    query = query.eq("favorite_exercises.profile_id", profileIdForFavorites);
+  }
+
+  const { data, error } = await query.single();
   if (error) throw new Error(error.message);
 
   return data;
@@ -23,15 +31,23 @@ export const fetchExercises = async (
   page: number = 1,
   filter?: ExerciseFilter,
   order: ExerciseOrder = { field: "created_at", asc: false },
+  profileIdForFavorites?: number,
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
   let query = client
     .from("exercises")
-    .select("*,categories(*),profiles(id,pseudo,avatar_url)", {
-      count: "exact",
-    })
+    .select(
+      `*,categories(*),profiles(*),favorite_exercises!left(profile_id)`,
+      {
+        count: "exact",
+      },
+    )
     .range(start, end);
+
+  if (profileIdForFavorites) {
+    query = query.eq("favorite_exercises.profile_id", profileIdForFavorites);
+  }
 
   if (filter?.category) {
     query = query.eq("categories.name", filter.category);
@@ -82,17 +98,6 @@ export const fetchDropdownExercises = async () => {
   );
 
   return filteredExercises;
-};
-
-export const getFavoriteStatusForExercises = async (exerciseIds: number[]) => {
-  const { data, error } = await client
-    .from("favorite_exercises")
-    .select("exercise_id")
-    .in("exercise_id", exerciseIds);
-
-  if (error) throw new Error(error.message);
-
-  return data.map(({ exercise_id }) => exercise_id);
 };
 
 export const deleteExercise = async (

@@ -1,7 +1,3 @@
-import { fetchExercises } from "../api/exercises";
-import { fetchPrograms } from "../api/programs";
-import { Tables } from "../types/database.types";
-
 export const getRange = (page: number, perPage: number): [number, number] => {
   if (page < 1) {
     return [0, perPage - 1];
@@ -9,34 +5,6 @@ export const getRange = (page: number, perPage: number): [number, number] => {
   const start = (page - 1) * perPage;
   const end = start + perPage - 1;
   return [start, end];
-};
-
-export const formatExercisesWithFavorites = (
-  exercises: Awaited<ReturnType<typeof fetchExercises>>["data"],
-  favorites: number[],
-  nextCursor: number | null,
-) => {
-  return {
-    nextCursor,
-    exercises: exercises.map((exercise) => ({
-      ...exercise,
-      isFav: favorites.includes(exercise.id),
-    })),
-  };
-};
-
-export const formatProgramsWithFavorites = (
-  programs: Awaited<ReturnType<typeof fetchPrograms>>["data"],
-  favorites: number[],
-  nextCursor: number | null,
-) => {
-  return {
-    nextCursor,
-    programs: programs.map((program) => ({
-      ...program,
-      isFav: favorites.includes(program.id),
-    })),
-  };
 };
 
 export function slugify(title: string): string {
