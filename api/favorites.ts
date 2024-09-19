@@ -46,10 +46,10 @@ export const addFavProgram = async (programId: number) => {
   if (error) throw new Error(error.message);
 };
 
-export const deleteFavProgram = async (id: number) => {
+export const deleteFavProgram = async (programId: number) => {
   const { error } = await client.from("favorite_programs").delete().eq(
-    "id",
-    id,
+    "program_id",
+    programId,
   );
   if (error) throw new Error(error.message);
 };
