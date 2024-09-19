@@ -1,4 +1,8 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchPrograms } from "../../api/programs";
@@ -9,12 +13,10 @@ import { ProgramOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-  handleToggleFavoriteProgram,
-  useToggleMutation,
-} from "../../hooks/useToggleMutation";
+import { handleToggleFavoriteProgram } from "../../api/favorites";
 
 export const ProgramsScreen = () => {
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
   const [order, setOrder] = useState<ProgramOrder>({
@@ -77,15 +79,15 @@ export const ProgramsScreen = () => {
     navigation.navigate("Program", { id });
   };
 
-  const toggleFavorite = (id: number, isFav: boolean) => {
-    handleMutation({ id, isFav });
-  };
+  const mutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: handleToggleFavoriteProgram,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
 
-  const queryClient = useQueryClient();
-  const { handleMutation } = useToggleMutation(
-    () => queryClient.invalidateQueries({ queryKey }),
-    handleToggleFavoriteProgram
-  );
+  const toggleFavorite = (id: number, isFav: boolean) => {
+    mutation.mutate({ id, isFav });
+  };
 
   return (
     <View style={styles.container}>
