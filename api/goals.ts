@@ -89,3 +89,15 @@ export const resetSteps = async (
 
   if (error) throw new Error(error.message);
 };
+
+export const updateStepStatus = async (
+  id: number,
+  isAchieved: boolean,
+) => {
+  const { data, error } = await client
+    .from("steps")
+    .update({ achieved: isAchieved })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+  return data;
+};
