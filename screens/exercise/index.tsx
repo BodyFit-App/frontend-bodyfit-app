@@ -44,16 +44,16 @@ export const ExerciseScreen = () => {
 			<Divider style={{height: 1, marginBottom: 20}}/>
 				<Text style={styles.txtdescription}>{data?.description}</Text>
 			</View>
-      <View>
-	  <Text style={styles.title}>Créateur</Text>
-	  <Divider style={{height: 1, marginBottom: 20}}/>
-        <CreatorCard 
-		  firstname={data?.profiles?.firstname || ''}
-          lastname={data?.profiles?.lastname || ''}
-          pseudo={data?.profiles?.pseudo || ''}
-          avatarUrl={getPublicUrl('images', data?.profiles?.avatar_url ?? '')}
-        />
-      </View>
+			<View style={styles.containertxt}>
+        <Text style={styles.title}>Créateur</Text>
+        <Divider style={{height: 1}}/>
+        </View>
+				<CreatorCard
+					firstname={data?.profiles?.firstname || ''}
+					lastname={data?.profiles?.lastname || ''}
+					pseudo={data?.profiles?.pseudo || ''}
+					avatarUrl={getPublicUrl('images', data?.profiles?.avatar_url ?? '')}
+				/>
 		</ScrollView>
 	);
 };
