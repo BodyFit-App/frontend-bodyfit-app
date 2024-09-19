@@ -24,7 +24,7 @@ import theme from '../../theme';
 interface TrainingHeaderProps {
 	title: string;
 	imageUrl: string;
-	duration: string;
+	duration?: string;
 	categories: string[];
 	isFavorite: boolean;
 	onToggleFavorite: () => void;
@@ -70,7 +70,7 @@ const TrainingHeader: React.FC<TrainingHeaderProps> = ({
 							iconColor='#2F80ED'
 							size={18}
 						/>
-						<Text style={styles.txtDuration}>{duration}</Text>
+						<Text style={styles.txtDuration}>{duration}min</Text>
 					</View>
 					<View style={{ alignItems: 'flex-end' }}>
 						<IconButton
