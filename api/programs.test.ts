@@ -3,7 +3,6 @@ import {
   deleteProgram,
   fetchProgramById,
   fetchPrograms,
-  getFavoriteStatusForPrograms,
   upsertProgram,
 } from "./programs";
 import { Tables } from "../types/database.types";
@@ -249,34 +248,5 @@ describe("Tests api/programs", () => {
         "Failed to add session",
       );
     });
-  });
-});
-
-describe("getFavoriteStatusForPrograms", () => {
-  it("should return favorite program IDs when fetch is successful", async () => {
-    const programIds = [1, 2, 3];
-    const mockData = [{ program_id: 1 }, { program_id: 2 }];
-    setTestData(mockData);
-
-    const result = await getFavoriteStatusForPrograms(programIds);
-
-    expect(result).toEqual([1, 2]);
-  });
-
-  it("should return an empty array when no programs are favorites", async () => {
-    const programIds = [1, 2, 3];
-    setTestData([]);
-
-    const result = await getFavoriteStatusForPrograms(programIds);
-
-    expect(result).toEqual([]);
-  });
-
-  it("should throw an error when fetch fails", async () => {
-    setTestError(new Error("Failed to fetch favorite programs"));
-
-    await expect(getFavoriteStatusForPrograms([1, 2, 3])).rejects.toThrow(
-      "Failed to fetch favorite programs",
-    );
   });
 });

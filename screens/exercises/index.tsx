@@ -1,10 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
-import {
-  fetchExercises,
-  getFavoriteStatusForExercises,
-} from "../../api/exercises";
+import { fetchExercises } from "../../api/exercises";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { formatExercisesWithFavorites } from "../../lib/helpers";
@@ -14,9 +11,10 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { ExerciseOrder } from "../../types/orders.types";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
-import { ExerciseFilter } from "../../types/filters.types";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ExercisesScreen = () => {
+  const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [count, setCount] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
@@ -33,19 +31,13 @@ export const ExercisesScreen = () => {
       const exercices = await fetchExercises(
         pageParam,
         { title: debouncedSearchQuery },
-        order
+        order,
+        session?.user.user_metadata.profile_id
       );
       setCount(exercices.count ?? 0);
-      const favorites = await getFavoriteStatusForExercises(
-        exercices.data.map(({ id }) => id)
-      );
-
-      return formatExercisesWithFavorites(
-        exercices.data,
-        favorites,
-        exercices.nextCursor
-      );
+      return formatExercisesWithFavorites(exercices.data, exercices.nextCursor);
     } catch (error) {
+      console.error(error);
       throw new Error((error as Error).message);
     }
   };

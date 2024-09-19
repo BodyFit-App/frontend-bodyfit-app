@@ -26,16 +26,21 @@ export const fetchPrograms = async (
   page: number = 1,
   filter?: ProgramFilter,
   order: ProgramOrder = { field: "created_at", asc: false },
+  profileIdForFavorites?: number,
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
   let query = client
     .from("programs")
     .select(
-      "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*)",
+      "*,sessions(exercises(*,categories(*),profiles(id,pseudo,avatar_url))),profiles(*),favorite_programs!left(profile_id)",
       { count: "exact" },
     )
     .range(start, end);
+
+  if (profileIdForFavorites) {
+    query = query.eq("favorite_programs.profile_id", profileIdForFavorites);
+  }
 
   if (filter?.category) {
     query = query.contains("sessions.exercises.categories.name", [
@@ -68,18 +73,6 @@ export const fetchPrograms = async (
   const nextCursor = nextPage > totalPages ? null : nextPage;
 
   return { data, nextCursor, count };
-};
-
-
-export const getFavoriteStatusForPrograms = async (programIds: number[]) => {
-  const { data, error } = await client
-    .from("favorite_programs")
-    .select("program_id")
-    .in("program_id", programIds);
-
-  if (error) throw new Error(error.message);
-
-  return data.map(({ program_id }) => program_id);
 };
 
 export const deleteProgram = async (

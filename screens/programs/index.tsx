@@ -1,10 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
-import {
-  fetchPrograms,
-  getFavoriteStatusForPrograms,
-} from "../../api/programs";
+import { fetchPrograms } from "../../api/programs";
 import { formatProgramsWithFavorites } from "../../lib/helpers";
 import ItemCard from "../../components/ItemCard";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
@@ -36,15 +33,8 @@ export const ProgramsScreen = () => {
       );
 
       setCount(programs.count ?? 0);
-      const favorites = await getFavoriteStatusForPrograms(
-        programs.data.map(({ id }) => id)
-      );
 
-      return formatProgramsWithFavorites(
-        programs.data,
-        favorites,
-        programs.nextCursor
-      );
+      return formatProgramsWithFavorites(programs.data, programs.nextCursor);
     } catch (error) {
       throw new Error((error as Error).message);
     }
