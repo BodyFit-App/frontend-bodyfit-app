@@ -1,12 +1,14 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchExercises } from "../../api/exercises";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { formatExercisesWithFavorites } from "../../lib/helpers";
 import ItemCard from "../../components/ItemCard";
-import { useFavExerciseMutation } from "../../hooks/useFavExerciseMutation";
+import {
+  handleToggleFavoriteExercise,
+  useToggleMutation,
+} from "../../hooks/useToggleMutation";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ExerciseOrder } from "../../types/orders.types";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
@@ -16,7 +18,6 @@ import { useAuth } from "../../hooks/useAuth";
 export const ExercisesScreen = () => {
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [count, setCount] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
   const [order, setOrder] = useState<ExerciseOrder>({
     field: "created_at",
@@ -26,49 +27,46 @@ export const ExercisesScreen = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
-  const fetchExercicesWithFavorites = async ({ pageParam }: any) => {
+  const fetchExercicesInfinite = async ({ pageParam }: any) => {
     try {
-      const exercices = await fetchExercises(
+      return fetchExercises(
         pageParam,
         { title: debouncedSearchQuery },
         order,
         session?.user.user_metadata.profile_id
       );
-      setCount(exercices.count ?? 0);
-      return formatExercisesWithFavorites(exercices.data, exercices.nextCursor);
     } catch (error) {
       console.error(error);
       throw new Error((error as Error).message);
     }
   };
 
+  const queryClient = useQueryClient();
   const queryKey = ["exercises", { title: debouncedSearchQuery }, order];
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    status,
-    isFetching,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: queryKey,
-    queryFn: fetchExercicesWithFavorites,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: queryKey,
+      queryFn: fetchExercicesInfinite,
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
-  const mergedData = data?.pages.flatMap((page) => page.exercises) ?? [];
+  const count = data?.pages[0].count ?? 0;
+
+  const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
 
   const uniqueData = mergedData?.filter(
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
   );
 
-  const { handleMutationFav } = useFavExerciseMutation(queryKey);
+  const { handleMutation } = useToggleMutation(
+    () => queryClient.invalidateQueries({ queryKey }),
+    handleToggleFavoriteExercise
+  );
 
   const toggleFavorite = (id: number, isFav: boolean) => {
-    handleMutationFav(id, isFav);
+    handleMutation({ id, isFav });
   };
 
   const handleFilterChange = (selectedFilter: string) => {
@@ -129,8 +127,10 @@ export const ExercisesScreen = () => {
                   : "0 min",
                 10
               )}
-              isFav={item.isFav}
-              onPressFav={() => toggleFavorite(item.id, item.isFav)}
+              isFav={item.favorite_exercises.length > 0}
+              onPressFav={() =>
+                toggleFavorite(item.id, item.favorite_exercises.length > 0)
+              }
               onPressNav={() => handleExercicePress(item.id)}
             />
           </View>

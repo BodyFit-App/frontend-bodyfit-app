@@ -13,6 +13,7 @@ type Props = {
   onPressNav?: (...args: any[]) => void;
   isFav?: boolean;
   onPressFav?: (...args: any[]) => void;
+  disabledFav?: boolean;
 };
 
 export default function ItemCard({

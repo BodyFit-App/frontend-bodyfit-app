@@ -1,8 +1,7 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchPrograms } from "../../api/programs";
-import { formatProgramsWithFavorites } from "../../lib/helpers";
 import ItemCard from "../../components/ItemCard";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
@@ -10,11 +9,13 @@ import { ProgramOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useFavProgramMutation } from "../../hooks/useFavProgramMutation";
+import {
+  handleToggleFavoriteProgram,
+  useToggleMutation,
+} from "../../hooks/useToggleMutation";
 
 export const ProgramsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [count, setCount] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
   const [order, setOrder] = useState<ProgramOrder>({
     field: "created_at",
@@ -24,17 +25,9 @@ export const ProgramsScreen = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
-  const fetchProgramsWithFavorites = async ({ pageParam }: any) => {
+  const fetchProgramsInfinite = async ({ pageParam }: any) => {
     try {
-      const programs = await fetchPrograms(
-        pageParam,
-        { title: debouncedSearchQuery },
-        order
-      );
-
-      setCount(programs.count ?? 0);
-
-      return formatProgramsWithFavorites(programs.data, programs.nextCursor);
+      return fetchPrograms(pageParam, { title: debouncedSearchQuery }, order);
     } catch (error) {
       throw new Error((error as Error).message);
     }
@@ -42,22 +35,17 @@ export const ProgramsScreen = () => {
 
   const queryKey = ["programs", { title: debouncedSearchQuery }, order];
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    status,
-    isFetching,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey,
-    queryFn: fetchProgramsWithFavorites,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => lastPage?.nextCursor ?? null,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey,
+      queryFn: fetchProgramsInfinite,
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => lastPage?.nextCursor ?? null,
+    });
 
-  const mergedData = data?.pages.flatMap((page) => page.programs) ?? [];
+  const count = data?.pages[0].count ?? 0;
+
+  const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
 
   const uniqueData = mergedData?.filter(
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
@@ -90,10 +78,14 @@ export const ProgramsScreen = () => {
   };
 
   const toggleFavorite = (id: number, isFav: boolean) => {
-    handleMutationFav(id, isFav);
+    handleMutation({ id, isFav });
   };
 
-  const { handleMutationFav } = useFavProgramMutation(queryKey);
+  const queryClient = useQueryClient();
+  const { handleMutation } = useToggleMutation(
+    () => queryClient.invalidateQueries({ queryKey }),
+    handleToggleFavoriteProgram
+  );
 
   return (
     <View style={styles.container}>
@@ -119,8 +111,10 @@ export const ProgramsScreen = () => {
               title={item.title}
               description={item.description ?? ""}
               pseudo={item.profiles?.pseudo ?? ""}
-              isFav={item.isFav}
-              onPressFav={() => toggleFavorite(item.id, item.isFav)}
+              isFav={item.favorite_programs.length > 0}
+              onPressFav={() =>
+                toggleFavorite(item.id, item.favorite_programs.length > 0)
+              }
               onPressNav={() => handleProgramPress(item.id)}
             />
           </View>
