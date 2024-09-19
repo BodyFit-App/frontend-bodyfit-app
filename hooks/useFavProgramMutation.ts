@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addFavExercise, deleteFavExercise } from "../api/favorites";
+import { addFavProgram, deleteFavProgram } from "../api/favorites";
 
 export const handleToggleFavorites = async (
   { id, isFav }: { id: number; isFav: boolean },
 ) => {
   try {
     if (isFav) {
-      await deleteFavExercise(id);
+      await deleteFavProgram(id);
       return { id, isFav: false };
     }
-    await addFavExercise(id);
+    await addFavProgram(id);
     return { id, isFav: true };
   } catch (error) {
     console.error(error);
@@ -17,7 +17,7 @@ export const handleToggleFavorites = async (
   }
 };
 
-export const useFavExerciseMutation = (queryKey: any) => {
+export const useFavProgramMutation = (queryKey: any) => {
   const queryClient = useQueryClient();
 
   const mutationFav = useMutation({
@@ -37,8 +37,8 @@ export const useFavExerciseMutation = (queryKey: any) => {
         ...oldData,
         pages: oldData.pages.map((page: any) => ({
           ...page,
-          exercises: page.exercises.map((exercise: any) =>
-            exercise.id === id ? { ...exercise, isFav } : exercise
+          programs: page.programs.map((program: any) =>
+            program.id === id ? { ...program, isFav } : program
           ),
         })),
       }));

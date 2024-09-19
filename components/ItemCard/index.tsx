@@ -10,9 +10,9 @@ type Props = {
   categories?: string[];
   time?: number;
   total?: number;
-  onPressNav: (...args: any[]) => void;
-  isFav: boolean;
-  onPressFav: (...args: any[]) => void;
+  onPressNav?: (...args: any[]) => void;
+  isFav?: boolean;
+  onPressFav?: (...args: any[]) => void;
 };
 
 export default function ItemCard({
@@ -29,7 +29,7 @@ export default function ItemCard({
   return (
     <Card
       style={{
-        paddingLeft: 4,
+        paddingLeft: isFav !== undefined && !!onPressFav ? 4 : 16,
         paddingRight: 16,
         paddingVertical: 8,
         width: "100%",
@@ -39,13 +39,18 @@ export default function ItemCard({
       }}
     >
       <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-        <IconButton
-          onPress={onPressFav}
-          icon={() => (
-            <Icon source={isFav ? "star" : "star-outline"} size={28} />
-          )}
-        />
-        <TouchableOpacity onPress={onPressNav} style={{ flex: 1 }}>
+        {isFav !== undefined && !!onPressFav && (
+          <IconButton
+            onPress={onPressFav}
+            icon={() => (
+              <Icon source={isFav ? "star" : "star-outline"} size={28} />
+            )}
+          />
+        )}
+        <TouchableOpacity
+          onPress={onPressNav ?? (() => {})}
+          style={{ flex: 1 }}
+        >
           <View
             style={{
               flexDirection: "row",
@@ -117,15 +122,17 @@ export default function ItemCard({
               gap: 8,
             }}
           >
-            <Text
-              style={{
-                fontSize: 12,
-                color: theme.colors.textPlaceholder,
-                marginTop: 4,
-              }}
-            >
-              {categories.join(" • ")}
-            </Text>
+            {!!categories && categories.length > 0 && (
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: theme.colors.textPlaceholder,
+                  marginTop: 4,
+                }}
+              >
+                {categories.join(" • ")}
+              </Text>
+            )}
           </View>
         </TouchableOpacity>
       </View>

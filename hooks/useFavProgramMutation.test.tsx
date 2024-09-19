@@ -1,12 +1,12 @@
 import { renderHook, act } from "@testing-library/react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useFavExerciseMutation } from "../hooks/useFavExerciseMutation";
-import { addFavExercise, deleteFavExercise } from "../api/favorites";
+import { addFavProgram, deleteFavProgram } from "../api/favorites";
+import { useFavProgramMutation } from "./useFavProgramMutation";
 
 // Mock API functions
 jest.mock("../api/favorites", () => ({
-  addFavExercise: jest.fn(),
-  deleteFavExercise: jest.fn(),
+  addFavProgram: jest.fn(),
+  deleteFavProgram: jest.fn(),
 }));
 
 // Initialize QueryClient
@@ -16,24 +16,24 @@ const wrapper = ({ children }: any) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
-describe("useFavExerciseMutation", () => {
+describe("useFavProgramMutation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should call addFavExercise when isFav is false", async () => {
-    (addFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: true });
+  it("should call addFavProgram when isFav is false", async () => {
+    (addFavProgram as jest.Mock).mockResolvedValue({ id: 1, isFav: true });
 
-    const queryKey = ["exercises", "testFilter"];
+    const queryKey = ["programs", "testFilter"];
     queryClient.setQueryData(queryKey, {
       pages: [
         {
-          exercises: [{ id: 1, isFav: false }],
+          programs: [{ id: 1, isFav: false }],
         },
       ],
     });
 
-    const { result } = renderHook(() => useFavExerciseMutation(queryKey), {
+    const { result } = renderHook(() => useFavProgramMutation(queryKey), {
       wrapper,
     });
 
@@ -43,31 +43,31 @@ describe("useFavExerciseMutation", () => {
 
     await new Promise(setImmediate);
 
-    expect(addFavExercise).toHaveBeenCalledWith(1);
-    expect(deleteFavExercise).not.toHaveBeenCalled();
+    expect(addFavProgram).toHaveBeenCalledWith(1);
+    expect(deleteFavProgram).not.toHaveBeenCalled();
 
     expect(queryClient.getQueryData(queryKey)).toEqual({
       pages: [
         {
-          exercises: [{ id: 1, isFav: true }],
+          programs: [{ id: 1, isFav: true }],
         },
       ],
     });
   });
 
   it("should call deleteFavExercise when isFav is true", async () => {
-    (deleteFavExercise as jest.Mock).mockResolvedValue({ id: 1, isFav: false });
+    (deleteFavProgram as jest.Mock).mockResolvedValue({ id: 1, isFav: false });
 
-    const queryKey = ["exercises", "testFilter"];
+    const queryKey = ["programs", "testFilter"];
     queryClient.setQueryData(queryKey, {
       pages: [
         {
-          exercises: [{ id: 1, isFav: true }],
+          programs: [{ id: 1, isFav: true }],
         },
       ],
     });
 
-    const { result } = renderHook(() => useFavExerciseMutation(queryKey), {
+    const { result } = renderHook(() => useFavProgramMutation(queryKey), {
       wrapper,
     });
 
@@ -77,13 +77,13 @@ describe("useFavExerciseMutation", () => {
 
     await new Promise(setImmediate);
 
-    expect(deleteFavExercise).toHaveBeenCalledWith(1);
-    expect(addFavExercise).not.toHaveBeenCalled();
+    expect(deleteFavProgram).toHaveBeenCalledWith(1);
+    expect(addFavProgram).not.toHaveBeenCalled();
 
     expect(queryClient.getQueryData(queryKey)).toEqual({
       pages: [
         {
-          exercises: [{ id: 1, isFav: false }],
+          programs: [{ id: 1, isFav: false }],
         },
       ],
     });

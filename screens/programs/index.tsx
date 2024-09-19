@@ -1,31 +1,162 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { ActivityIndicator, View } from "react-native";
-import { ProgramFilter } from "../../types/filters.types";
-import { MD2Colors, Text } from "react-native-paper";
-import { fetchPrograms } from "../../api/programs";
+import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  fetchPrograms,
+  getFavoriteStatusForPrograms,
+} from "../../api/programs";
+import { formatProgramsWithFavorites } from "../../lib/helpers";
+import ItemCard from "../../components/ItemCard";
+import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
+import FilterBar from "../../components/FilterBar/FilterBar";
+import { ProgramOrder } from "../../types/orders.types";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useFavProgramMutation } from "../../hooks/useFavProgramMutation";
 
 export const ProgramsScreen = () => {
-  const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState<ProgramFilter>({});
-
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["programs", page, filter],
-    queryFn: () => fetchPrograms(page, filter),
+  const [searchQuery, setSearchQuery] = useState("");
+  const [count, setCount] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
+  const [order, setOrder] = useState<ProgramOrder>({
+    field: "created_at",
+    asc: false,
   });
 
-  if (isLoading)
-    return <ActivityIndicator animating={true} color={MD2Colors.red800} />;
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
-  if (error) return <Text>{error.message}</Text>;
+  const fetchProgramsWithFavorites = async ({ pageParam }: any) => {
+    try {
+      const programs = await fetchPrograms(
+        pageParam,
+        { title: debouncedSearchQuery },
+        order
+      );
+
+      setCount(programs.count ?? 0);
+      const favorites = await getFavoriteStatusForPrograms(
+        programs.data.map(({ id }) => id)
+      );
+
+      return formatProgramsWithFavorites(
+        programs.data,
+        favorites,
+        programs.nextCursor
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const queryKey = ["programs", { title: debouncedSearchQuery }, order];
+
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    status,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey,
+    queryFn: fetchProgramsWithFavorites,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage?.nextCursor ?? null,
+  });
+
+  const mergedData = data?.pages.flatMap((page) => page.programs) ?? [];
+
+  const uniqueData = mergedData?.filter(
+    (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+  );
+
+  const handleFilterChange = (selectedFilter: string) => {
+    setSelectedFilter(selectedFilter);
+    switch (selectedFilter) {
+      case "Plus récents":
+        setOrder({ field: "created_at", asc: false });
+        break;
+      case "Moins récents":
+        setOrder({ field: "created_at", asc: true });
+        break;
+      case "A-Z":
+        setOrder({ field: "title", asc: true });
+        break;
+      case "Z-A":
+        setOrder({ field: "title", asc: false });
+        break;
+      default:
+        setOrder({ field: "created_at", asc: false });
+    }
+  };
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleProgramPress = (id: number) => {
+    navigation.navigate("Program", { id });
+  };
+
+  const toggleFavorite = (id: number, isFav: boolean) => {
+    handleMutationFav(id, isFav);
+  };
+
+  const { handleMutationFav } = useFavProgramMutation(queryKey);
 
   return (
-    <View>
-      {data?.map(({ id, title }) => (
-        <Text key={id} style={{ color: "white" }}>
-          {title}
-        </Text>
-      ))}
+    <View style={styles.container}>
+      <View style={styles.searchBarContainer}>
+        <CustomSearchBar
+          placeholder="Rechercher"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+        />
+      </View>
+      <FilterBar
+        filters={filterList}
+        defaultFilter={selectedFilter}
+        onFilterChange={handleFilterChange}
+        resultsCount={count}
+      />
+      <FlatList
+        data={uniqueData ?? []}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <View style={{ marginBottom: 10 }}>
+            <ItemCard
+              title={item.title}
+              description={item.description ?? ""}
+              pseudo={item.profiles?.pseudo ?? ""}
+              isFav={item.isFav}
+              onPressFav={() => toggleFavorite(item.id, item.isFav)}
+              onPressNav={() => handleProgramPress(item.id)}
+            />
+          </View>
+        )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator size="large" /> : null
+        }
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  searchBarContainer: {
+    width: "100%",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+});

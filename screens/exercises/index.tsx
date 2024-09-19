@@ -1,34 +1,40 @@
-import {
-  QueryClient,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import {
   fetchExercises,
   getFavoriteStatusForExercises,
 } from "../../api/exercises";
-import { ExerciseFilter } from "../../types/filters.types";
-import { Button, Text } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { formatExercisesWithFavorites } from "../../lib/helpers";
-import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
-import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import ItemCard from "../../components/ItemCard";
-import { addFavExercise, deleteFavExercise } from "../../api/favorites";
 import { useFavExerciseMutation } from "../../hooks/useFavExerciseMutation";
+import { useDebounce } from "../../hooks/useDebounce";
+import { ExerciseOrder } from "../../types/orders.types";
+import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
+import FilterBar from "../../components/FilterBar/FilterBar";
+import { ExerciseFilter } from "../../types/filters.types";
 
 export const ExercisesScreen = () => {
-  const queryClient = useQueryClient();
-  const [filter, setFilter] = useState<ExerciseFilter>({});
-
+  const [searchQuery, setSearchQuery] = useState("");
   const [count, setCount] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
+  const [order, setOrder] = useState<ExerciseOrder>({
+    field: "created_at",
+    asc: false,
+  });
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
   const fetchExercicesWithFavorites = async ({ pageParam }: any) => {
     try {
-      const exercices = await fetchExercises(pageParam, filter);
+      const exercices = await fetchExercises(
+        pageParam,
+        { title: debouncedSearchQuery },
+        order
+      );
       setCount(exercices.count ?? 0);
       const favorites = await getFavoriteStatusForExercises(
         exercices.data.map(({ id }) => id)
@@ -44,7 +50,8 @@ export const ExercisesScreen = () => {
     }
   };
 
-  // Check the doc if needed https://tanstack.com/query/latest/docs/framework/react/guides/infinite-queries
+  const queryKey = ["exercises", { title: debouncedSearchQuery }, order];
+
   const {
     data,
     error,
@@ -54,46 +61,110 @@ export const ExercisesScreen = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["exercises", filter],
+    queryKey: queryKey,
     queryFn: fetchExercicesWithFavorites,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const { handleMutationFav, isError } = useFavExerciseMutation(filter);
+  const mergedData = data?.pages.flatMap((page) => page.exercises) ?? [];
+
+  const uniqueData = mergedData?.filter(
+    (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+  );
+
+  const { handleMutationFav } = useFavExerciseMutation(queryKey);
 
   const toggleFavorite = (id: number, isFav: boolean) => {
     handleMutationFav(id, isFav);
   };
 
-  return status === "pending" ? (
-    <Text>Loading...</Text>
-  ) : status === "error" ? (
-    <Text>Error: {error.message}</Text>
-  ) : (
-    <View>
-      <ScrollView>
-        {data!.pages.map((group, i) => (
-          <React.Fragment key={i}>
-            {group.exercises.map(({ id, isFav }) => (
-              <ItemCard
-                key={id}
-                title={""}
-                pseudo={""}
-                categories={[]}
-                time={0}
-                onPressNav={function (...args: any[]): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isFav={isFav}
-                onPressFav={() => toggleFavorite(id, isFav)}
-              />
-            ))}
-          </React.Fragment>
-        ))}
-        <Text>{count}</Text>
-        <Text>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</Text>
-      </ScrollView>
+  const handleFilterChange = (selectedFilter: string) => {
+    setSelectedFilter(selectedFilter);
+    switch (selectedFilter) {
+      case "Plus récents":
+        setOrder({ field: "created_at", asc: false });
+        break;
+      case "Moins récents":
+        setOrder({ field: "created_at", asc: true });
+        break;
+      case "A-Z":
+        setOrder({ field: "title", asc: true });
+        break;
+      case "Z-A":
+        setOrder({ field: "title", asc: false });
+        break;
+      default:
+        setOrder({ field: "created_at", asc: false });
+    }
+  };
+
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleExercicePress = (id: number) => {
+    navigation.navigate("Exercise", { id });
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchBarContainer}>
+        <CustomSearchBar
+          placeholder="Rechercher"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+        />
+      </View>
+      <FilterBar
+        filters={filterList}
+        defaultFilter={selectedFilter}
+        onFilterChange={handleFilterChange}
+        resultsCount={count}
+      />
+      <FlatList
+        data={uniqueData ?? []}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <View style={{ marginBottom: 10 }}>
+            <ItemCard
+              title={item.title}
+              pseudo={item.profiles?.pseudo || "Unknown"}
+              categories={
+                item.categories ? item.categories.map((cat) => cat.name) : []
+              }
+              time={parseInt(
+                item.estimated_time_seconds
+                  ? `${Math.floor(item.estimated_time_seconds / 60)} min`
+                  : "0 min",
+                10
+              )}
+              isFav={item.isFav}
+              onPressFav={() => toggleFavorite(item.id, item.isFav)}
+              onPressNav={() => handleExercicePress(item.id)}
+            />
+          </View>
+        )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator size="large" /> : null
+        }
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  searchBarContainer: {
+    width: "100%",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+});

@@ -71,9 +71,6 @@ export const ProgramScreen = () => {
                 time={exercise.estimated_time_seconds ?? 0}
                 categories={exercise.categories.map((categorie) => categorie.name) ?? []}
                 pseudo={data?.profiles?.pseudo || ''}
-                isFav={true}
-  
-                onPressFav={() => console.log('Toggle Favorite')}
                 onPressNav={() => console.log('Go to exercise')}
               />
               </View>
