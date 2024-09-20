@@ -101,22 +101,6 @@ describe("Tests api/goals", () => {
     });
   });
 
-  describe("deleteProfile", () => {
-    it("should not throw an error when the deletion is successful", async () => {
-      setTestData(null);
-
-      await expect(deleteProfile(1)).resolves.not.toThrow();
-    });
-
-    it("should throw an error when the deletion fails", async () => {
-      setTestError(new Error("Failed to delete profile"));
-
-      await expect(deleteProfile(1)).rejects.toThrow(
-        "Failed to delete profile",
-      );
-    });
-  });
-
   describe("updateProfile", () => {
     it("should return data when the upsert is successful", async () => {
       const mockData = [{ id: 1, pseudo: "User1", avatar: "avatar1.png" }];

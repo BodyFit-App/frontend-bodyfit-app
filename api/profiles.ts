@@ -6,7 +6,7 @@ import { ProfileFilter } from "../types/filters.types";
 
 export const fetchProfileById = async (id: number) => {
   const { data, error } = await client.from("profiles").select(
-  "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
+    "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
   ).eq(
     "id",
     id,
@@ -35,17 +35,6 @@ export const fetchProfiles = async (
   if (error) throw new Error(error.message);
 
   return data;
-};
-
-export const deleteProfile = async (
-  id: number,
-) => {
-  const { error } = await client
-    .from("profiles")
-    .delete()
-    .eq("id", id);
-
-  if (error) throw new Error(error.message);
 };
 
 export const updateProfile = async (
