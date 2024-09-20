@@ -30,7 +30,7 @@ interface ActuCardProps {
   profileImageUrl?: string;
   actionDescription?: string;
   exerciseLinkText?: string;
-  onExercisePress: () => void;
+  onActivityPress: () => void;
   onUsernamePress: () => void;
 }
 
@@ -40,7 +40,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
   profileImageUrl,
   actionDescription,
   exerciseLinkText,
-  onExercisePress,
+  onActivityPress,
   onUsernamePress,
 }) => {
   const truncateText = (text: string, maxLength: number) => {
@@ -68,7 +68,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
           </Text>
           <Text variant="labelSmall" style={styles.description}>
             {actionDescription}{" "}
-            <Text style={styles.link} onPress={onExercisePress}>
+            <Text style={styles.link} onPress={onActivityPress}>
               {truncateText(exerciseLinkText ?? '', 15)}
             </Text>
           </Text>

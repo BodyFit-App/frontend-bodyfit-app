@@ -13,9 +13,6 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 const ActualiteScreen = () => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const fetchFolloweesActivityWithPagination = async ({ pageParam = 1 }) => {
     try {
@@ -27,8 +24,6 @@ const ActualiteScreen = () => {
     }
   };
   
-  
-
   const {
     data,
     fetchNextPage,
@@ -50,17 +45,11 @@ const ActualiteScreen = () => {
     (item, index, self) => index === self.findIndex((t) => t.title === item.title)
   ); 
 
-  const count = data?.pages[0].count ?? 0;
-
-  const handleFilterChange = (selectedFilter: string) => {
-    //setSelectedFilter(selectedFilter);
-  };
-
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handleExercicePress = (id: number, type: string) => {
-    navigation.navigate(type, { id });
+    navigation.navigate(type);
   };
 
   const adjustText = (item: any)=> {
@@ -74,17 +63,6 @@ const ActualiteScreen = () => {
 
   return (
     <View style={styles.container}>
-      <CustomSearchBar
-        placeholder="Rechercher"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      />
-      <FilterBar
-        filters={["Plus récents", "Moins récents"]}
-        defaultFilter={selectedFilter}
-        onFilterChange={handleFilterChange}
-        resultsCount={count}
-      />
       <FlatList
   data={uniqueData}
   keyExtractor={(_, i) => i.toString()}
@@ -95,7 +73,7 @@ const ActualiteScreen = () => {
       profileImageUrl={item.avatar_url || ""}
       actionDescription={adjustText(item.type) || ""}
       exerciseLinkText={item.title || ""}
-      onExercisePress={() => console.log("Pressed on exercise")}
+      onActivityPress={() => console.log("Pressed on exercise")}
       onUsernamePress={() => console.log("Pressed on username")}
     />
   )}

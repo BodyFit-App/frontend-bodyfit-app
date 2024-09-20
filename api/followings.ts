@@ -36,7 +36,7 @@ export const fetchFolloweesActivity = async (page: number = 1,) => {
 const { data, error, count } = await client
   .from("user_content")
   .select("*", { count: "exact" })
-  .range(start, end)  // Ajustez ici pour utiliser start et end
+  .range(start, end)
   .order("time");
   if (error) throw new Error(error.message);
 
