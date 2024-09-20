@@ -67,7 +67,7 @@ export const ProfileFormScreen = ({
     mutationFn: handleUpdate,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", profileId] });
-      // navigation.goBack();
+      navigation.goBack();
     },
   });
 

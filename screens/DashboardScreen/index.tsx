@@ -12,13 +12,16 @@ import { fetchProfileById, fetchProgress } from "../../api/profiles";
 import { fetchFollowingsByProfileId } from "../../api/followings";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
-import { fetchPrograms } from "../../api/programs";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const DashboardScreen = () => {
-	const navigation = useNavigation();
-	const { session, signOut } = useAuth();
-	const profileId = session?.user.user_metadata.profile_id;
-	
+const DashboardScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
+  const { session, signOut } = useAuth();
+  const profileId = session?.user.user_metadata.profile_id;
 
   const { data: profile } = useQuery({
     queryKey: ["profile", profileId],
@@ -81,33 +84,35 @@ const DashboardScreen = () => {
   const pieChartColors = chartData.length > 0 ? sliceColors : [];
   const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
-	const handleSignOut = async () => {
-        try {
-            await signOut();  
-			navigation.navigate('Landing' as never); 
-        } catch (error) {
-            console.error('Erreur lors de la déconnexion', error);
-        }
-    };
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigation.navigate("Landing" as never);
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion", error);
+    }
+  };
 
-	return (
-		<ScrollView>
-			<View style={styles.profilheader}>
-				{profile && (
-					<ProfilHeader
-						firstname={profile.firstname ?? ''}
-						lastname={profile.lastname ?? ''}
-						username={profile.pseudo ?? ''}
-						followers={profile.followedBy?.length ?? 0}
-						profileImage={getPublicUrl('images', profile.avatar_url ?? '')}
-						exercisesCount={profile.exercises?.length ?? 0}
-						programsCount={profile.programs?.length ?? 0}
-						goalsCount={profile.goals?.length ?? 0}
-						onEditProfile={() => {}}
-						onSignOutProfile={() => {signOut()}}
-					/>
-				)}
-			</View>
+  return (
+    <ScrollView>
+      <View style={styles.profilheader}>
+        {profile && (
+          <ProfilHeader
+            firstname={profile.firstname ?? ""}
+            lastname={profile.lastname ?? ""}
+            username={profile.pseudo ?? ""}
+            followers={profile.followedBy?.length ?? 0}
+            profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
+            exercisesCount={profile.exercises?.length ?? 0}
+            programsCount={profile.programs?.length ?? 0}
+            goalsCount={profile.goals?.length ?? 0}
+            onEditProfile={() => {}}
+            onSignOutProfile={() => {
+              signOut();
+            }}
+          />
+        )}
+      </View>
 
       <View style={styles.containeract}>
         <Text style={styles.titletxt}>Mon activité</Text>
@@ -207,7 +212,7 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes programmes</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ProgramsScreen" as never)}
+            onPress={() => navigation.push("HomeScreen")}
           >
             Tout afficher
           </Text>

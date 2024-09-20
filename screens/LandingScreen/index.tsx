@@ -16,12 +16,12 @@ export default function LandingScreen({
       <CustomButton
         style={styles.button}
         children="Connexion"
-        onPress={() => navigation.navigate("LoginScreen")}
+        onPress={() => navigation.push("LoginScreen")}
       />
       <CustomButton
         style={styles.button}
         children="Inscription"
-        onPress={() => navigation.navigate("RegisterScreen")}
+        onPress={() => navigation.push("RegisterScreen")}
       />
     </View>
   );

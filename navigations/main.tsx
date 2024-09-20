@@ -6,26 +6,24 @@ import { useAuth } from "../hooks/useAuth";
 import { LoginScreen } from "../screens/LoginScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { ExerciseDetailsScreen } from "../screens/ExerciseDetailsScreen";
-import { ExerciseListScreen } from "../screens/ExerciseListScreen";
 import { ExerciseFormScreen } from "../screens/ExerciseFormScreen";
 import { GoalDetailsScreen } from "../screens/GoalDetailsScreen";
 import { GoalFormScreen } from "../screens/GoalFormScreen";
 import { GoalListScreen } from "../screens/GoalListScreen";
-import { ExplorerScreen } from "../screens/ExplorerScreen";
 import { ProgramDetailsScreen } from "../screens/ProgramDetailsScreen";
-import { ProgramListScreen } from "../screens/ProgramListScreen";
 import { ProgramFormScreen } from "../screens/ProgramFormScreen";
 import { ProfileFormScreen } from "../screens/ProfileFormScreen";
 import { RegisterScreen } from "../screens/RegisterScreen";
 import LandingScreen from "../screens/LandingScreen";
+import { ExerciseListScreen } from "../screens/ExerciseListScreen";
+import { ProgramListScreen } from "../screens/ProgramListScreen";
 
 export type AppParamListBase = {
   Actualites: undefined;
   DashboardScreen: undefined;
   ExerciseDetailsScreen: { id: number };
-  ExerciseListScreen: { filters?: any };
   ExerciseFormScreen: { id?: number };
-  ExplorerScreen: undefined;
+  ExerciseListScreen: { filters?: any };
   GoalDetailsScreen: { id: number };
   GoalFormScreen: { id?: number };
   GoalListScreen: { filters?: any };
@@ -87,14 +85,9 @@ export const MainNavigation = () => {
             />
             <Stack.Screen name="GoalFormScreen" component={GoalFormScreen} />
             <Stack.Screen name="GoalListScreen" component={GoalListScreen} />
-            <Stack.Screen name="ExplorerScreen" component={ExplorerScreen} />
             <Stack.Screen
               name="ProgramDetailsScreen"
               component={ProgramDetailsScreen}
-            />
-            <Stack.Screen
-              name="ProgramListScreen"
-              component={ProgramListScreen}
             />
             <Stack.Screen
               name="ProgramFormScreen"
@@ -103,6 +96,10 @@ export const MainNavigation = () => {
             <Stack.Screen
               name="ProfileFormScreen"
               component={ProfileFormScreen}
+            />
+            <Stack.Screen
+              name="ProgramListScreen"
+              component={ProgramListScreen}
             />
           </>
         ) : (

@@ -77,7 +77,7 @@ export const ProgramFormScreen = ({
        * if you try to modify a session and re-upsert, it might create a new session instead of updating it
        */
       queryClient.invalidateQueries({ queryKey: ["program", id] });
-      // navigation.goBack();
+      navigation.goBack();
     },
   });
 
