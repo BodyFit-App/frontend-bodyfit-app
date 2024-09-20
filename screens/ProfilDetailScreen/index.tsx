@@ -13,137 +13,49 @@ import { fetchFollowingsByProfileId } from '../../api/followings';
 import { getPublicUrl } from '../../lib/supabase';
 import ItemCard from '../../components/ItemCard';
 import { fetchPrograms } from '../../api/programs';
+import OtherProfilHeader from '../../components/OtherProfileHeader/OtherProfileHeader';
 
-const DashboardScreen = () => {
+const ProfilDetailScreen = () => {
 	const navigation = useNavigation();
-	const { session } = useAuth();
-	const profileId = session?.user.user_metadata.profile_id;
+	const id = 10;
 
 	const { data: profile } = useQuery({
-		queryKey: ['profile', profileId],
-		queryFn: () => fetchProfileById(profileId),
-		enabled: !!profileId,
+		queryKey: ['profile', id],
+		queryFn: () => fetchProfileById(id),
+		enabled: !!id,
 	});
 
 	const { data: followers } = useQuery({
-		queryKey: ['followers', profileId],
-		queryFn: () => fetchFollowingsByProfileId(profileId, 2),
-		enabled: !!profileId,
+		queryKey: ['followers', id],
+		queryFn: () => fetchFollowingsByProfileId(id, 2),
+		enabled: !!id,
 	});
 
-	const { data: progress } = useQuery({
-		queryFn: fetchProgress,
-		queryKey: ['progress'],
-	});
-
-	const [chartData, setChartData] = useState<number[]>([]);
-	const [sliceColors, setSliceColors] = useState<string[]>([]);
-	const [chartLabels, setChartLabels] = useState<string[]>([]);
-
-	useEffect(() => {
-		if (progress) {
-			// Agrège les données de temps total par catégorie
-			const categoryData = progress.reduce(
-				(acc: { [key: string]: number }, current) => {
-					const category = current.name;
-					if (category) {
-						acc[category] =
-							(acc[category] || 0) + (current.total_estimated_time || 0);
-					}
-					return acc;
-				},
-				{}
-			);
-
-			// Sépare les clés (catégories) et les valeurs (temps) pour alimenter le graphique
-			const data = Object.values(categoryData);
-			const labels = Object.keys(categoryData);
-
-			// Vérifie s'il y a des données valides
-			if (data.some((value) => value > 0)) {
-				const colors = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800'];
-
-				// Limite ou boucle les couleurs en fonction du nombre de catégories
-				const colorsForChart = colors.slice(0, data.length);
-				setChartData(data);
-				setSliceColors(colorsForChart);
-				setChartLabels(labels);
-			} else {
-				// Si toutes les valeurs sont 0, on réinitialise les données
-				setChartData([]);
-				setSliceColors([]);
-				setChartLabels([]);
-			}
-		}
-	}, [profile]);
-
-	const pieChartColors = chartData.length > 0 ? sliceColors : [];
-	const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
 	return (
 		<ScrollView>
 			<View style={styles.profilheader}>
 				{profile && (
-					<ProfilHeader
-						firstname={profile.firstname ?? ''}
-						lastname={profile.lastname ?? ''}
-						username={profile.pseudo ?? ''}
-						followers={followers?.length ?? 0}
-						profileImage={getPublicUrl('images', profile.avatar_url ?? '')}
-						exercisesCount={profile.exercises?.length ?? 0}
-						programsCount={profile.programs?.length ?? 0}
-						goalsCount={profile.goals?.length ?? 0}
-						onEditProfile={() => {}}
-						onShareProfile={() => {}}
-					/>
+					<OtherProfilHeader
+                        firstname={profile.firstname ?? ''}
+                        lastname={profile.lastname ?? ''}
+                        username={profile.pseudo ?? ''}
+                        followers={followers?.length ?? 0}
+                        profileImage={getPublicUrl('images', profile.avatar_url ?? '')}
+                        exercisesCount={profile.exercises?.length ?? 0}
+                        programsCount={profile.programs?.length ?? 0}
+                        goalsCount={profile.goals?.length ?? 0}
+                        followed={false}
+                        onFollowToggle={() => console.log('Toggle Follow')}               
+                    />
 				)}
 			</View>
 
-			<View style={styles.containeract}>
-				<Text style={styles.titletxt}>Mon activité</Text>
-				<View style={styles.containerbtn}>
-					<CustomButton
-						children='Temps'
-						labelStyle={{ fontSize: 12, fontWeight: '600' }}
-						onPress={() => {}}
-					/>
-				</View>
-
-				<View style={styles.containergrah}>
-					{chartData.length > 0 ? (
-						<>
-							<PieChart
-								widthAndHeight={250}
-								series={chartData}
-								sliceColor={pieChartColors}
-								coverRadius={0.50}
-								coverFill={theme.colors.background}
-							/>
-							<View style={styles.legendContainer}>
-								{pieChartLabels.map((label, index) => (
-									<View
-										style={styles.legendItem}
-										key={index}>
-										<View
-											style={[
-												styles.legendColor,
-												{ backgroundColor: pieChartColors[index] },
-											]}
-										/>
-										<Text style={styles.legendText}>{label}</Text>
-									</View>
-								))}
-							</View>
-						</>
-					) : (
-						<Text style={styles.noDataText}>Aucune donnée disponible</Text>
-					)}
-				</View>
-			</View>
+			
 
 			<View style={styles.containerobj}>
 				<View style={styles.headerRow}>
-					<Text style={styles.titletxt}>Mes objectifs</Text>
+					<Text style={styles.titletxt}>Ces objectifs</Text>
 					<Text
 						style={styles.subtitletxt}
 						onPress={() => navigation.navigate('GoalsScreen' as never)}>
@@ -166,7 +78,7 @@ const DashboardScreen = () => {
 
 			<View style={styles.containerobj}>
 				<View style={styles.headerRow}>
-					<Text style={styles.titletxt}>Mes exercices</Text>
+					<Text style={styles.titletxt}>Ces exercices</Text>
 					<Text
 						style={styles.subtitletxt}
 						onPress={() => navigation.navigate('ExercisesScreen' as never)}>
@@ -196,7 +108,7 @@ const DashboardScreen = () => {
 
 			<View style={styles.containerobj}>
 				<View style={styles.headerRow}>
-					<Text style={styles.titletxt}>Mes programmes</Text>
+					<Text style={styles.titletxt}>Ces programmes</Text>
 					<Text
 						style={styles.subtitletxt}
 						onPress={() => navigation.navigate('ProgramsScreen' as never)}>
@@ -294,4 +206,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default DashboardScreen;
+export default ProfilDetailScreen;
