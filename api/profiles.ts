@@ -6,7 +6,7 @@ import { ProfileFilter } from "../types/filters.types";
 
 export const fetchProfileById = async (id: number) => {
   const { data, error } = await client.from("profiles").select(
-   "*,exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
+  "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
   ).eq(
     "id",
     id,
