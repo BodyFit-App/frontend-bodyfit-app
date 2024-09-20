@@ -475,6 +475,14 @@ export type Database = {
       }
     }
     Views: {
+      progress: {
+        Row: {
+          name: string | null
+          repetition_count: number | null
+          total_estimated_time: number | null
+        }
+        Relationships: []
+      }
       user_content: {
         Row: {
           avatar_url: string | null
