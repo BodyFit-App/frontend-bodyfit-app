@@ -20,7 +20,7 @@ export const HomeScreen = ({
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    actuality: ActualiteScreen,
+    actuality: () => <ActualiteScreen navigation={navigation} route={route} />,
     explorer: () => <ExplorerScreen navigation={navigation} route={route} />,
     dashboard: () => <DashboardScreen navigation={navigation} route={route} />,
   });

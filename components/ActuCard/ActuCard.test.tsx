@@ -8,7 +8,7 @@ describe('ActuCard', () => {
     profileImageUrl: 'https://example.com/john.jpg',
     actionDescription: 'created a new exercise',
     exerciseLinkText: 'Check out this new exercise',
-    onExercisePress: jest.fn(),
+    onActivityPress: jest.fn(),
     onUsernamePress: jest.fn(),
   };
 
@@ -43,7 +43,7 @@ describe('ActuCard', () => {
     fireEvent.press(getByText('Check out this ...'));
 
     
-    expect(mockProps.onExercisePress).toHaveBeenCalled();
+    expect(mockProps.onActivityPress).toHaveBeenCalled();
   });
 
   it('renders the default avatar when no profileImageUrl is provided', () => {
