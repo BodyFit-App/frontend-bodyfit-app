@@ -52,7 +52,7 @@ const ActualiteScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handleExercicePress = (id: number, type: string) => {
-    navigation.navigate(type, { id });
+    navigation.push(type, { id });
   };
 
   return (

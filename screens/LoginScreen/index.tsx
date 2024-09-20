@@ -33,11 +33,6 @@ export const LoginScreen = ({
     if (error) {
       console.log("Erreur de connexion", error.message);
     }
-
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" as never }],
-    });
   };
 
   return (
@@ -103,26 +98,19 @@ export const LoginScreen = ({
             <Text style={styles.errorText}>{errors.password.message}</Text>
           )}
 
-          <Text
-            onPress={() => navigation.navigate("" as never)}
-            style={styles.textmdp}
-          >
-            Mot de passe oublié ?
-          </Text>
-
           <CustomButton style={styles.button} onPress={handleSubmit(onSubmit)}>
             Connectez-vous
           </CustomButton>
 
           <Text style={styles.textregister}>
-            Vous n'avez pas de compte ?{" "}
+            Vous n'avez pas de compte ?
             <Text
               style={{
                 textDecorationLine: "underline",
                 color: theme.colors.primary,
                 fontWeight: "600",
               }}
-              onPress={() => navigation.navigate("Register" as never)}
+              onPress={() => navigation.replace("RegisterScreen")}
             >
               Inscrivez-vous
             </Text>

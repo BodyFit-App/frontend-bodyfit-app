@@ -13,9 +13,14 @@ import { fetchFollowingsByProfileId } from "../../api/followings";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
 import { fetchPrograms } from "../../api/programs";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const DashboardScreen = () => {
-  const navigation = useNavigation();
+export const DashboardScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
@@ -85,8 +90,8 @@ const DashboardScreen = () => {
       <View style={styles.profilheader}>
         {profile && (
           <ProfilHeader
-            firstname={profile.firstname ?? ""}
-            lastname={profile.lastname ?? ""}
+            name={profile.firstname ?? ""}
+            // lastname={profile.lastname ?? ""}
             username={profile.pseudo ?? ""}
             followers={followers?.length ?? 0}
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
@@ -144,7 +149,11 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalsScreen" as never)}
+            onPress={() =>
+              navigation.push("GoalListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -168,7 +177,11 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ExercisesScreen" as never)}
+            onPress={() =>
+              navigation.push("ExerciseListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -185,7 +198,9 @@ const DashboardScreen = () => {
                 pseudo={profile.pseudo ?? ""}
                 isFav={true}
                 onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => navigation.navigate("Exercise" as never)}
+                onPressNav={() =>
+                  navigation.push("ExerciseDetailsScreen", { id: exercise.id })
+                }
               />
             </View>
           ))}
@@ -197,7 +212,11 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes programmes</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ProgramsScreen" as never)}
+            onPress={() =>
+              navigation.push("ProgramListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -290,5 +309,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default DashboardScreen;

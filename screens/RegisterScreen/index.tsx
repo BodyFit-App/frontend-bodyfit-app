@@ -40,11 +40,6 @@ export const RegisterScreen = ({
     if (error) {
       console.log("Erreur de connexion", error.message);
     }
-
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" as never }], // TODO : Mettre l'ecran création de profil plutot
-    });
   };
 
   return (
@@ -159,7 +154,7 @@ export const RegisterScreen = ({
             color: theme.colors.primary,
             fontWeight: "600",
           }}
-          onPress={() => navigation.navigate("Login" as never)}
+          onPress={() => navigation.push("LoginScreen")}
         >
           Connectez-vous
         </Text>

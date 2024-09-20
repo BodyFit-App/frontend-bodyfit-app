@@ -14,7 +14,10 @@ import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
-export const DashboardScreen = ({ navigation, route }: any) => {
+export const DashboardScreen = ({
+  navigation,
+  route,
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
@@ -140,10 +143,7 @@ export const DashboardScreen = ({ navigation, route }: any) => {
       <View style={styles.containerobj}>
         <View style={styles.headerRow}>
           <Text style={styles.titletxt}>Mes objectifs</Text>
-          <Text
-            style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalListScreen")}
-          >
+          <Text style={styles.subtitletxt} onPress={() => {}}>
             Tout afficher
           </Text>
         </View>
@@ -184,7 +184,7 @@ export const DashboardScreen = ({ navigation, route }: any) => {
                 isFav={true}
                 onPressFav={() => console.log("Toggle Favorite")}
                 onPressNav={() =>
-                  navigation.navigate("ExerciseDetailsScreen", {
+                  navigation.push("ExerciseDetailsScreen", {
                     id: exercise.id,
                   })
                 }
@@ -199,7 +199,7 @@ export const DashboardScreen = ({ navigation, route }: any) => {
           <Text style={styles.titletxt}>Mes programmes</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ProgramsScreen" as never)}
+            onPress={() => navigation.push("HomeScreen")}
           >
             Tout afficher
           </Text>

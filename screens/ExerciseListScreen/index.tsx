@@ -20,7 +20,12 @@ export const ExerciseListScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<any>) => {
+}: StackScreenProps<AppParamListBase, "ExerciseListScreen">) => {
+  return <ExerciseListScene navigation={navigation} route={route} />;
+};
+
+export const ExerciseListScene = ({ navigation, route }: any) => {
+  const filtersParam = route?.params?.filters || {};
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
@@ -30,13 +35,15 @@ export const ExerciseListScreen = ({
   });
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const filters = { title: debouncedSearchQuery, ...filtersParam };
+
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
   const fetchExercicesInfinite = async ({ pageParam }: any) => {
     try {
       return fetchExercises(
         pageParam,
-        { title: debouncedSearchQuery },
+        filters,
         order,
         session?.user.user_metadata.profile_id
       );
@@ -47,7 +54,7 @@ export const ExerciseListScreen = ({
   };
 
   const queryClient = useQueryClient();
-  const queryKey = ["exercises", { title: debouncedSearchQuery }, order];
+  const queryKey = ["exercises", filters, order];
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({

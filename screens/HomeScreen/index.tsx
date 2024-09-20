@@ -5,7 +5,7 @@ import theme from "../../theme";
 import { ExplorerScreen } from "../ExplorerScreen";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
-import { DashboardScreen } from "../DashboardScreen";
+import { DashboardScreen } from "../Dashboard";
 
 export const HomeScreen = ({
   navigation,
