@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StyleSheet, ScrollView, Text, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import theme from "../../theme";
-import { fetchProfileById, updateProfile } from "../../api/profiles";
+import {  fetchProfileById, updateProfile } from "../../api/profiles";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,12 +13,13 @@ import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { AppParamListBase } from "../../navigations/main";
 
+
 export const ProfileFormScreen = ({
   navigation,
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "ProfileFormScreen">) => {
-  const { session } = useAuth();
+  const { session, deleteAccount } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
   const queryClient = useQueryClient();
 
@@ -74,6 +75,30 @@ export const ProfileFormScreen = ({
   const onSubmit = (data: any) => {
     updateMutation.mutate(data);
   };
+
+  const handleDeleteProfile = async () => {
+    try {
+      await deleteAccount();   
+    } catch (error) {
+      console.error("Erreur lors de la suppression du profil :", error);
+    }
+  };
+
+ 
+  const confirmDelete = () => {
+    Alert.alert("Supprimer le profil", "Êtes-vous sûr de vouloir supprimer votre profil ?", [
+      {
+        text: "Annuler",
+        style: "cancel",
+      },
+      {
+        text: "Supprimer",
+        style: "destructive",
+        onPress: handleDeleteProfile,
+      },
+    ]);
+  }
+    
 
   useEffect(() => {
     if (isSuccess && profile) {
@@ -176,6 +201,9 @@ export const ProfileFormScreen = ({
 
       <CustomButton onPress={handleSubmit(onSubmit)}>
         Modifier le profil
+      </CustomButton>
+      <CustomButton onPress={confirmDelete} textColor="white" style={{ backgroundColor: "#AD2823", marginTop: 10 }}>
+        Supprimer le profil
       </CustomButton>
     </ScrollView>
   );

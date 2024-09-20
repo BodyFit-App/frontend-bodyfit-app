@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Button } from "react-native";
 import ProfilHeader from "../../components/ProfileHeader/ProfileHeader";
 import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
@@ -106,7 +106,7 @@ const DashboardScreen = ({
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
             goalsCount={profile.goals?.length ?? 0}
-            onEditProfile={() => {}}
+            onEditProfile={() => { navigation.navigate("ProfileFormScreen" as never) }}
             onSignOutProfile={() => {
               signOut();
             }}
