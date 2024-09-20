@@ -16,8 +16,9 @@ import { fetchPrograms } from '../../api/programs';
 
 const DashboardScreen = () => {
 	const navigation = useNavigation();
-	const { session } = useAuth();
+	const { session, signOut } = useAuth();
 	const profileId = session?.user.user_metadata.profile_id;
+	
 
 	const { data: profile } = useQuery({
 		queryKey: ['profile', profileId],
@@ -80,6 +81,15 @@ const DashboardScreen = () => {
 	const pieChartColors = chartData.length > 0 ? sliceColors : [];
 	const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
+	const handleSignOut = async () => {
+        try {
+            await signOut();  
+			navigation.navigate('Landing' as never); 
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion', error);
+        }
+    };
+
 	return (
 		<ScrollView>
 			<View style={styles.profilheader}>
@@ -88,13 +98,13 @@ const DashboardScreen = () => {
 						firstname={profile.firstname ?? ''}
 						lastname={profile.lastname ?? ''}
 						username={profile.pseudo ?? ''}
-						followers={followers?.length ?? 0}
+						followers={profile.followedBy?.length ?? 0}
 						profileImage={getPublicUrl('images', profile.avatar_url ?? '')}
 						exercisesCount={profile.exercises?.length ?? 0}
 						programsCount={profile.programs?.length ?? 0}
 						goalsCount={profile.goals?.length ?? 0}
 						onEditProfile={() => {}}
-						onShareProfile={() => {}}
+						onSignOutProfile={() => {signOut()}}
 					/>
 				)}
 			</View>

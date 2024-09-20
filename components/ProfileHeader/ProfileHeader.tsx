@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Avatar, Text, Button } from "react-native-paper";
+import { Avatar, Text, Button, Icon } from "react-native-paper";
+import theme from "../../theme";
 
 /**
  * Composant `ProfilHeader` qui affiche les informations du profil utilisateur, y compris le nom, le nom d'utilisateur,
@@ -54,7 +55,7 @@ interface ProfilHeaderProps {
   programsCount: number;
   goalsCount: number;
   onEditProfile: () => void;
-  onShareProfile: () => void;
+  onSignOutProfile: () => void;
 }
 
 const ProfilHeader: React.FC<ProfilHeaderProps> = ({
@@ -67,7 +68,7 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
   programsCount,
   goalsCount,
   onEditProfile,
-  onShareProfile,
+  onSignOutProfile,
 }) => {
   const defaultImage = "https://placekitten.com/200/200";
   const imageSource = profileImage
@@ -116,11 +117,11 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
         <Button
           mode="contained"
           compact
-          onPress={onShareProfile}
+          onPress={onSignOutProfile}
           style={styles.button}
           textColor="#2F80ED"
         >
-          Partager le profil
+          <Icon source={'exit-to-app'} size={20} color={theme.colors.primary} />
         </Button>
       </View>
     </View>
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     width: "100%",
   },
   button: {
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     borderColor: "#42424D",
     borderRadius: 6,
     borderWidth: 1,
+    marginRight: 10,
   },
 });
 
