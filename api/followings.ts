@@ -35,7 +35,7 @@ export const fetchFolloweesActivity = async () => {
   const { data, error } = await client.from("user_content").select("*").range(
     0,
     NB_ELTS_PER_PAGE,
-  ).order("created_at");
+  ).order("time");
   if (error) throw new Error(error.message);
   return data;
 };
