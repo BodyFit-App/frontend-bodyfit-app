@@ -5,17 +5,16 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import PieChart from "react-native-pie-chart";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
-import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileById, fetchProgress } from "../../api/profiles";
 import { fetchFollowingsByProfileId } from "../../api/followings";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
-import { fetchPrograms } from "../../api/programs";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const DashboardScreen = () => {
-  const navigation = useNavigation();
+export const DashboardScreen = ({ navigation, route }: any) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
@@ -85,8 +84,7 @@ const DashboardScreen = () => {
       <View style={styles.profilheader}>
         {profile && (
           <ProfilHeader
-            firstname={profile.firstname ?? ""}
-            lastname={profile.lastname ?? ""}
+            name={profile.firstname ?? ""}
             username={profile.pseudo ?? ""}
             followers={followers?.length ?? 0}
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
@@ -144,7 +142,7 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalsScreen" as never)}
+            onPress={() => navigation.navigate("GoalListScreen")}
           >
             Tout afficher
           </Text>
@@ -168,7 +166,7 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ExercisesScreen" as never)}
+            onPress={() => navigation.replace("HomeScreen")}
           >
             Tout afficher
           </Text>
@@ -185,7 +183,11 @@ const DashboardScreen = () => {
                 pseudo={profile.pseudo ?? ""}
                 isFav={true}
                 onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => navigation.navigate("Exercise" as never)}
+                onPressNav={() =>
+                  navigation.navigate("ExerciseDetailsScreen", {
+                    id: exercise.id,
+                  })
+                }
               />
             </View>
           ))}
@@ -290,5 +292,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default DashboardScreen;

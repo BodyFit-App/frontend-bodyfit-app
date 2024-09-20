@@ -2,25 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { TabView, SceneMap } from "react-native-tab-view";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 import theme from "../../theme";
-
-const FirstRoute = () => (
-  <View style={styles.container}>
-    <Text style={{ color: "white" }}>Screen One</Text>
-  </View>
-);
-
-const SecondRoute = () => (
-  <View style={styles.container}>
-    <Text style={{ color: "white" }}>Screen Two</Text>
-  </View>
-);
-
-const ThirdRoute = () => (
-  <View style={styles.container}>
-    <Text style={{ color: "white" }}>Screen Three</Text>
-  </View>
-);
+import { ExerciseListScreen } from "../ExerciseListScreen";
+import { ProgramListScreen } from "../ProgramListScreen";
 
 const renderTabBar = (props: any) => (
   <View style={styles.tabBar}>
@@ -47,18 +33,19 @@ const renderTabBar = (props: any) => (
   </View>
 );
 
-const ExplorerScreen = () => {
+export const ExplorerScreen = ({ navigation, route, ...props }: any) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "exercices", title: "Exercices" },
+    { key: "exercises", title: "Exercices" },
     { key: "programs", title: "Programmes" },
-    { key: "profiles", title: "Utilisateurs" },
+    // { key: "profiles", title: "Utilisateurs" },
   ]);
 
   const renderScene = SceneMap({
-    exercices: FirstRoute,
-    programs: SecondRoute,
-    profiles: ThirdRoute,
+    exercises: () => (
+      <ExerciseListScreen navigation={navigation} route={route} />
+    ),
+    programs: () => <ProgramListScreen navigation={navigation} route={route} />,
   });
 
   return (
@@ -88,5 +75,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export default ExplorerScreen;

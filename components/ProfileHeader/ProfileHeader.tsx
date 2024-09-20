@@ -30,8 +30,7 @@ import { Avatar, Text, Button } from "react-native-paper";
  * );
  *
  * @param {Object} props - Les props du composant.
- * @param {string} props.firstname - Le prénom de l'utilisateur.
- * @param {string} props.lastname - Le nom de famille de l'utilisateur.
+ * @param {string} props.name - Le nom de l'utilisateur.
  * @param {string} props.username - Le nom d'utilisateur.
  * @param {number} props.followers - Le nombre de followers.
  * @param {string} [props.profileImage] - L'URL de l'image du profil (optionnelle).
@@ -45,8 +44,7 @@ import { Avatar, Text, Button } from "react-native-paper";
  */
 
 interface ProfilHeaderProps {
-  firstname: string;
-  lastname: string;
+  name: string;
   username: string;
   followers: number;
   profileImage?: string;
@@ -58,8 +56,7 @@ interface ProfilHeaderProps {
 }
 
 const ProfilHeader: React.FC<ProfilHeaderProps> = ({
-  firstname,
-  lastname,
+  name,
   username,
   followers,
   profileImage,
@@ -79,7 +76,7 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
       <View style={styles.headerContainer}>
         <Avatar.Image  testID="profile-image"  size={100} source={imageSource} />
         <View style={styles.userInfo}>
-          <Text style={styles.name}>{firstname} {lastname}</Text>
+          <Text style={styles.name}>{name}</Text>
           <Text style={styles.username}>@{username}</Text>
           <Text style={styles.followers}>{followers} followers</Text>
         </View>
