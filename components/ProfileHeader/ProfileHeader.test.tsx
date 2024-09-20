@@ -4,10 +4,11 @@ import ProfilHeader from './ProfileHeader';
 
 describe('ProfilHeader Component', () => {
   const mockEditProfile = jest.fn();
-  const mockShareProfile = jest.fn();
+  const mockSignOutProfile = jest.fn();
 
   const defaultProps = {
-    name: 'John Doe',
+    firstname: 'John',
+    lastname: 'Doe',
     username: 'johndoe',
     followers: 100,
     profileImage: 'https://example.com/image.jpg',
@@ -15,7 +16,7 @@ describe('ProfilHeader Component', () => {
     programsCount: 5,
     goalsCount: 3,
     onEditProfile: mockEditProfile,
-    onShareProfile: mockShareProfile,
+    onSignOutProfile: mockSignOutProfile
   };
 
   it('renders the user information correctly', () => {
@@ -54,11 +55,11 @@ describe('ProfilHeader Component', () => {
     expect(mockEditProfile).toHaveBeenCalled();
   });
 
-  it('calls onShareProfile when the "Partager le profil" button is pressed', () => {
+/*   it('calls onShareProfile when the "Partager le profil" button is pressed', () => {
     const { getByText } = render(<ProfilHeader {...defaultProps} />);
 
     fireEvent.press(getByText('Partager le profil'));
 
     expect(mockShareProfile).toHaveBeenCalled();
-  });
+  }); */
 });

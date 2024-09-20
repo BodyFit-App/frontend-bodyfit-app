@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Avatar, Text, Button, Icon } from "react-native-paper";
+import { Avatar, Text, Button } from "react-native-paper";
+import CustomButton from "../CustomButton/CustomButton";
 import theme from "../../theme";
 
 /**
- * Composant `ProfilHeader` qui affiche les informations du profil utilisateur, y compris le nom, le nom d'utilisateur,
+ * Composant `OtherProfilHeader` qui affiche les informations du profil utilisateur, y compris le nom, le nom d'utilisateur,
  * le nombre de followers, ainsi que des statistiques sur les exercices, programmes et objectifs créés.
  * Le composant affiche également des boutons pour modifier et partager le profil.
  *
@@ -17,7 +18,7 @@ import theme from "../../theme";
  *   console.log('Partager le profil');
  * };
  * return (
- *   <ProfilHeader
+ *   <OtherProfilHeader
  *     name="John Doe"
  *     username="johndoe"
  *     followers={0}
@@ -25,8 +26,6 @@ import theme from "../../theme";
  *     exercisesCount={10}
  *     programsCount={5}
  *     goalsCount={3}
- *     onEditProfile={handleEditProfile}
- *     onShareProfile={handleShareProfile}
  *   />
  * );
  *
@@ -39,36 +38,35 @@ import theme from "../../theme";
  * @param {number} props.exercisesCount - Le nombre d'exercices créés par l'utilisateur.
  * @param {number} props.programsCount - Le nombre de programmes créés par l'utilisateur.
  * @param {number} props.goalsCount - Le nombre d'objectifs accomplis par l'utilisateur.
- * @param {function} props.onEditProfile - La fonction à appeler lorsque l'utilisateur clique sur "Modifier le profil".
- * @param {function} props.onShareProfile - La fonction à appeler lorsque l'utilisateur clique sur "Partager le profil".
  *
- * @returns {JSX.Element} Le composant `ProfilHeader`.
+ * @returns {JSX.Element} Le composant `OtherProfilHeader`.
  */
 
-interface ProfilHeaderProps {
-  firstname: string;
-  lastname: string;
+interface OtherProfilHeaderProps {
+firstname: string;
+lastname: string;
   username: string;
   followers: number;
   profileImage?: string;
   exercisesCount: number;
   programsCount: number;
   goalsCount: number;
-  onEditProfile: () => void;
-  onSignOutProfile: () => void;
+  followed: boolean;
+  onFollowToggle: () => void;
 }
 
-const ProfilHeader: React.FC<ProfilHeaderProps> = ({
+const OtherProfilHeader: React.FC<OtherProfilHeaderProps> = ({
   firstname,
-  lastname,
+    lastname,
   username,
   followers,
   profileImage,
   exercisesCount,
   programsCount,
   goalsCount,
-  onEditProfile,
-  onSignOutProfile,
+    followed,
+  
+    onFollowToggle,
 }) => {
   const defaultImage = "https://placekitten.com/200/200";
   const imageSource = profileImage
@@ -103,26 +101,15 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
           <Text style={styles.statLabel}>accomplis</Text>
         </View>
       </View>
-
       <View style={styles.buttonsContainer}>
-        <Button
-          mode="contained"
-          compact
-          onPress={onEditProfile}
+      <CustomButton
+          {...(followed ? { style: { backgroundColor: theme.colors.primary, borderWidth: 0} } : "")}
+          {...(followed ? { textColor: theme.colors.textFollow  } : "")}
+          onPress={onFollowToggle}
           style={styles.button}
-          textColor="#2F80ED"
         >
-          Modifier le profil
-        </Button>
-        <Button
-          mode="contained"
-          compact
-          onPress={onSignOutProfile}
-          style={styles.button}
-          textColor="#2F80ED"
-        >
-          <Icon source={'exit-to-app'} size={20} color={theme.colors.primary} />
-        </Button>
+          {followed ? "Suivi(e)" : "Suivre"}
+        </CustomButton>
       </View>
     </View>
   );
@@ -181,7 +168,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
     width: "100%",
   },
   button: {
@@ -189,8 +176,8 @@ const styles = StyleSheet.create({
     borderColor: "#42424D",
     borderRadius: 6,
     borderWidth: 1,
-    marginRight: 10,
+    flex: 1,
   },
 });
 
-export default ProfilHeader;
+export default OtherProfilHeader;

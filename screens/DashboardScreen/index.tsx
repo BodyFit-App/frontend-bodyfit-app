@@ -5,6 +5,7 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import PieChart from "react-native-pie-chart";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileById, fetchProgress } from "../../api/profiles";
@@ -14,11 +15,12 @@ import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
-export const DashboardScreen = ({
+const DashboardScreen = ({
   navigation,
   route,
+  ...props
 }: StackScreenProps<AppParamListBase, "HomeScreen">) => {
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
   const { data: profile } = useQuery({
@@ -82,20 +84,32 @@ export const DashboardScreen = ({
   const pieChartColors = chartData.length > 0 ? sliceColors : [];
   const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigation.navigate("Landing" as never);
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion", error);
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.profilheader}>
         {profile && (
           <ProfilHeader
-            name={profile.firstname ?? ""}
+            firstname={profile.firstname ?? ""}
+            lastname={profile.lastname ?? ""}
             username={profile.pseudo ?? ""}
-            followers={followers?.length ?? 0}
+            followers={profile.followedBy?.length ?? 0}
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
             goalsCount={profile.goals?.length ?? 0}
             onEditProfile={() => {}}
-            onShareProfile={() => {}}
+            onSignOutProfile={() => {
+              signOut();
+            }}
           />
         )}
       </View>
@@ -143,7 +157,10 @@ export const DashboardScreen = ({
       <View style={styles.containerobj}>
         <View style={styles.headerRow}>
           <Text style={styles.titletxt}>Mes objectifs</Text>
-          <Text style={styles.subtitletxt} onPress={() => {}}>
+          <Text
+            style={styles.subtitletxt}
+            onPress={() => navigation.navigate("GoalsScreen" as never)}
+          >
             Tout afficher
           </Text>
         </View>
@@ -166,7 +183,7 @@ export const DashboardScreen = ({
           <Text style={styles.titletxt}>Mes exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.replace("HomeScreen")}
+            onPress={() => navigation.navigate("ExercisesScreen" as never)}
           >
             Tout afficher
           </Text>
@@ -183,11 +200,7 @@ export const DashboardScreen = ({
                 pseudo={profile.pseudo ?? ""}
                 isFav={true}
                 onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() =>
-                  navigation.push("ExerciseDetailsScreen", {
-                    id: exercise.id,
-                  })
-                }
+                onPressNav={() => navigation.navigate("Exercise" as never)}
               />
             </View>
           ))}
@@ -292,3 +305,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+export default DashboardScreen;
