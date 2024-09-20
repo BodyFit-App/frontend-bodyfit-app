@@ -5,7 +5,7 @@ import theme from "./theme";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AppNav from "./components/AppNav/AppNav";
+import { MainNavigation } from "./navigations/main";
 
 const queryClient = new QueryClient();
 
@@ -15,7 +15,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <PaperProvider theme={theme}>
           <SafeAreaView style={styles.container}>
-            <AppNav />
+            <MainNavigation />
           </SafeAreaView>
         </PaperProvider>
       </QueryClientProvider>
@@ -26,6 +26,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: theme.colors.background,
   },
 });

@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { GoalOrder } from "../../types/orders.types";
 import { fetchGoals } from "../../api/goals";
@@ -9,8 +9,13 @@ import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
 import { useDebounce } from "../../hooks/useDebounce";
+import { AppParamListBase } from "../../navigations/main";
 
-export const GoalsScreen = () => {
+export const GoalListScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "GoalListScreen">) => {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [order, setOrder] = useState<GoalOrder>({
@@ -24,7 +29,11 @@ export const GoalsScreen = () => {
 
   const handleFetchGoals = async ({ pageParam }: any) => {
     try {
-      const goals = await fetchGoals(pageParam, {title: debouncedSearchQuery}, order);
+      const goals = await fetchGoals(
+        pageParam,
+        { title: debouncedSearchQuery },
+        order
+      );
       setCount(goals.count ?? 0);
       return goals;
     } catch (error) {
@@ -40,7 +49,7 @@ export const GoalsScreen = () => {
     status,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", {title: debouncedSearchQuery},  order],
+    queryKey: ["goals", { title: debouncedSearchQuery }, order],
     queryFn: handleFetchGoals,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -49,13 +58,11 @@ export const GoalsScreen = () => {
   const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
 
   const uniqueData = mergedData?.filter(
-     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-   ); 
-
-  const navigation = useNavigation<StackNavigationProp<any>>();
+    (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+  );
 
   const handleObjectifPress = (id: number) => {
-    navigation.navigate("Goal", { id });
+    navigation.navigate("GoalDetailsScreen", { id });
   };
 
   const handleFilterChange = (selectedFilter: string) => {

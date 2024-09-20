@@ -16,7 +16,6 @@ const ActualiteScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  console.log("debouncedSearchQuery", debouncedSearchQuery);
 
   const fetchFolloweesActivityWithPagination = async ({ pageParam }: any) => {
     try {
@@ -43,15 +42,12 @@ const ActualiteScreen = () => {
       return pages.length + 1;
     },
   });
-  console.log("data", data);
-  
-  const mergedData = data?.pages.flatMap((page) => page) ?? [];
 
+  const mergedData = data?.pages.flatMap((page) => page) ?? [];
 
   const handleFilterChange = (selectedFilter: string) => {
     setSelectedFilter(selectedFilter);
   };
-
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 

@@ -5,20 +5,18 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import PieChart from "react-native-pie-chart";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
-import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileById, fetchProgress } from "../../api/profiles";
 import { fetchFollowingsByProfileId } from "../../api/followings";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
-import { fetchPrograms } from "../../api/programs";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const DashboardScreen = () => {
-	const navigation = useNavigation();
-	const { session, signOut } = useAuth();
-	const profileId = session?.user.user_metadata.profile_id;
-	
+export const DashboardScreen = ({ navigation, route }: any) => {
+  const { session } = useAuth();
+  const profileId = session?.user.user_metadata.profile_id;
 
   const { data: profile } = useQuery({
     queryKey: ["profile", profileId],
@@ -81,33 +79,23 @@ const DashboardScreen = () => {
   const pieChartColors = chartData.length > 0 ? sliceColors : [];
   const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
-	const handleSignOut = async () => {
-        try {
-            await signOut();  
-			navigation.navigate('Landing' as never); 
-        } catch (error) {
-            console.error('Erreur lors de la déconnexion', error);
-        }
-    };
-
-	return (
-		<ScrollView>
-			<View style={styles.profilheader}>
-				{profile && (
-					<ProfilHeader
-						firstname={profile.firstname ?? ''}
-						lastname={profile.lastname ?? ''}
-						username={profile.pseudo ?? ''}
-						followers={profile.followedBy?.length ?? 0}
-						profileImage={getPublicUrl('images', profile.avatar_url ?? '')}
-						exercisesCount={profile.exercises?.length ?? 0}
-						programsCount={profile.programs?.length ?? 0}
-						goalsCount={profile.goals?.length ?? 0}
-						onEditProfile={() => {}}
-						onSignOutProfile={() => {signOut()}}
-					/>
-				)}
-			</View>
+  return (
+    <ScrollView>
+      <View style={styles.profilheader}>
+        {profile && (
+          <ProfilHeader
+            name={profile.firstname ?? ""}
+            username={profile.pseudo ?? ""}
+            followers={followers?.length ?? 0}
+            profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
+            exercisesCount={profile.exercises?.length ?? 0}
+            programsCount={profile.programs?.length ?? 0}
+            goalsCount={profile.goals?.length ?? 0}
+            onEditProfile={() => {}}
+            onShareProfile={() => {}}
+          />
+        )}
+      </View>
 
       <View style={styles.containeract}>
         <Text style={styles.titletxt}>Mon activité</Text>
@@ -154,7 +142,7 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalsScreen" as never)}
+            onPress={() => navigation.navigate("GoalListScreen")}
           >
             Tout afficher
           </Text>
@@ -178,7 +166,7 @@ const DashboardScreen = () => {
           <Text style={styles.titletxt}>Mes exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ExercisesScreen" as never)}
+            onPress={() => navigation.replace("HomeScreen")}
           >
             Tout afficher
           </Text>
@@ -195,7 +183,11 @@ const DashboardScreen = () => {
                 pseudo={profile.pseudo ?? ""}
                 isFav={true}
                 onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => navigation.navigate("Exercise" as never)}
+                onPressNav={() =>
+                  navigation.navigate("ExerciseDetailsScreen", {
+                    id: exercise.id,
+                  })
+                }
               />
             </View>
           ))}
@@ -300,5 +292,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default DashboardScreen;

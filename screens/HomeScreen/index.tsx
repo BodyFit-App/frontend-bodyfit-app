@@ -1,25 +1,28 @@
 import React from "react";
 import { BottomNavigation } from "react-native-paper";
-import ActualiteScreen from "../../screens/Actualites";
-import { ExercisesScreen } from "../../screens/exercises";
-import ProfilScreen from "../../screens/Dashboard";
+import ActualiteScreen from "../Actualites";
 import theme from "../../theme";
-import ExplorerScreen from "../../screens/ExplorerScreen";
+import { ExplorerScreen } from "../ExplorerScreen";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
+import { DashboardScreen } from "../DashboardScreen";
 
-export function BottomTabs() {
+export const HomeScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "actualite", title: "Actualité", focusedIcon: "newspaper" },
-    { key: "exercices", title: "Exercices", focusedIcon: "dumbbell" },
+    { key: "actuality", title: "Actualité", focusedIcon: "newspaper" },
     { key: "explorer", title: "Explorer", focusedIcon: "compass" },
-    { key: "profil", title: "Profil", focusedIcon: "account" },
+    { key: "dashboard", title: "Profil", focusedIcon: "account" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    actualite: ActualiteScreen,
-    exercices: ExercisesScreen,
-    explorer: ExplorerScreen,
-    profil: ProfilScreen,
+    actuality: ActualiteScreen,
+    explorer: () => <ExplorerScreen navigation={navigation} route={route} />,
+    dashboard: () => <DashboardScreen navigation={navigation} route={route} />,
   });
 
   return (
@@ -38,4 +41,4 @@ export function BottomTabs() {
       style={{ paddingTop: 32 }}
     />
   );
-}
+};
