@@ -33,21 +33,19 @@ const renderTabBar = (props: any) => (
   </View>
 );
 
-export const ExplorerScreen = ({
-  navigation,
-  route,
-  ...props
-}: StackScreenProps<AppParamListBase, "ExplorerScreen">) => {
+export const ExplorerScreen = ({ navigation, route, ...props }: any) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "exercices", title: "Exercices" },
+    { key: "exercises", title: "Exercices" },
     { key: "programs", title: "Programmes" },
-    { key: "profiles", title: "Utilisateurs" },
+    // { key: "profiles", title: "Utilisateurs" },
   ]);
 
   const renderScene = SceneMap({
-    // exercices: ExerciseListScreen,
-    // programs: ProgramListScreen,
+    exercises: () => (
+      <ExerciseListScreen navigation={navigation} route={route} />
+    ),
+    programs: () => <ProgramListScreen navigation={navigation} route={route} />,
   });
 
   return (

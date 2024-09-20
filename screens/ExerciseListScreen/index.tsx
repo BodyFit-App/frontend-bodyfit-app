@@ -20,7 +20,7 @@ export const ExerciseListScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<AppParamListBase, "ExerciseListScreen">) => {
+}: StackScreenProps<any>) => {
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");

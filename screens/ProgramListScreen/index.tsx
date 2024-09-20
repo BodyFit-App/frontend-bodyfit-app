@@ -15,12 +15,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { handleToggleFavoriteProgram } from "../../api/favorites";
 import { AppParamListBase } from "../../navigations/main";
 
-export const ProgramListScreen = ({
-  navigation,
-  route,
-  ...props
-}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
-  const filters = route.params.filters;
+export const ProgramListScreen = ({ navigation, route, ...props }: any) => {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");

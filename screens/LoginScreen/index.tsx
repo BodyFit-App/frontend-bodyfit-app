@@ -9,7 +9,7 @@ import theme from "../../theme";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
-const LoginScreen = ({
+export const LoginScreen = ({
   navigation,
   route,
   ...props
@@ -191,5 +191,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default LoginScreen;

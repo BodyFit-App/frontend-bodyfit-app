@@ -14,10 +14,7 @@ import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
-export const DashboardScreen = ({
-  navigation,
-  route,
-}: StackScreenProps<AppParamListBase, "DashboardScreen">) => {
+export const DashboardScreen = ({ navigation, route }: any) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
@@ -145,9 +142,7 @@ export const DashboardScreen = ({
           <Text style={styles.titletxt}>Mes objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() =>
-              navigation.navigate("GoalListScreen", { filters: undefined })
-            }
+            onPress={() => navigation.navigate("GoalListScreen")}
           >
             Tout afficher
           </Text>
