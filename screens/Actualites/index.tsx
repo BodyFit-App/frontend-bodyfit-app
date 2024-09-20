@@ -17,14 +17,17 @@ const ActualiteScreen = () => {
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  const fetchFolloweesActivityWithPagination = async ({ pageParam }: any) => {
+  const fetchFolloweesActivityWithPagination = async ({ pageParam = 1 }) => {
     try {
-      return fetchFolloweesActivity(pageParam);
+      const { data, nextCursor, count } = await fetchFolloweesActivity(pageParam);
+      return { data, nextCursor, count };
     } catch (error) {
       console.error(error);
       throw new Error((error as Error).message);
     }
   };
+  
+  
 
   const {
     data,
@@ -34,26 +37,40 @@ const ActualiteScreen = () => {
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["followeesActivity", profileId, { title: debouncedSearchQuery }],
+    queryKey: ["followeesActivity", profileId],
     queryFn: fetchFolloweesActivityWithPagination,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage.length === 0) return undefined;
-      return pages.length + 1;
-    },
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
+  
+  console.log("data", data);
+  
+  const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
+  const uniqueData = mergedData?.filter(
+    (item, index, self) => index === self.findIndex((t) => t.title === item.title)
+  ); 
 
-  const mergedData = data?.pages.flatMap((page) => page) ?? [];
+  const count = data?.pages[0].count ?? 0;
 
   const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
+    //setSelectedFilter(selectedFilter);
   };
+
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handleExercicePress = (id: number, type: string) => {
     navigation.navigate(type, { id });
   };
+
+  const adjustText = (item: any)=> {
+    if (item === "goals"){
+       return "a atteint son objectif:"
+    } else if (item === "exercises"){
+       return "a créé un nouvel exercise:"
+    }  else {
+       return "a ajouté le programme:"}
+  }
 
   return (
     <View style={styles.container}>
@@ -66,28 +83,31 @@ const ActualiteScreen = () => {
         filters={["Plus récents", "Moins récents"]}
         defaultFilter={selectedFilter}
         onFilterChange={handleFilterChange}
+        resultsCount={count}
       />
       <FlatList
-        data={mergedData}
-        keyExtractor={(_, i) => i.toString()}
-        renderItem={({ item }) => (
-          <ActuCard
-            username={item.pseudo || "Unknown"}
-            fullName={`${item.firstname || ""} ${item.lastname || ""}`}
-            profileImageUrl={item.avatar_url || ""}
-            exerciseLinkText={item.title || "Exercice"}
-            onExercisePress={() => console.log("Pressed on exercise")}
-            onUsernamePress={() => console.log("Pressed on username")}
-          />
-        )}
-        onEndReached={() => {
-          if (hasNextPage) fetchNextPage();
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          isFetchingNextPage ? <ActivityIndicator size="large" /> : null
-        }
-      />
+  data={uniqueData}
+  keyExtractor={(_, i) => i.toString()}
+  renderItem={({ item }) => (
+    <ActuCard
+      username={item.pseudo || ""}
+      fullName={`${item.firstname || ""} ${item.lastname || ""}`}
+      profileImageUrl={item.avatar_url || ""}
+      actionDescription={adjustText(item.type) || ""}
+      exerciseLinkText={item.title || ""}
+      onExercisePress={() => console.log("Pressed on exercise")}
+      onUsernamePress={() => console.log("Pressed on username")}
+    />
+  )}
+  onEndReached={() => {
+    if (hasNextPage) fetchNextPage();
+  }}
+  onEndReachedThreshold={0.5}
+  ListFooterComponent={
+    isFetchingNextPage ? <ActivityIndicator size="large" /> : null
+  }
+/>
+
     </View>
   );
 };

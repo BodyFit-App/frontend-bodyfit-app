@@ -1,3 +1,4 @@
+
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Text, Card } from "react-native-paper";
@@ -79,10 +80,12 @@ const ActuCard: React.FC<ActuCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#161626",
+    backgroundColor: "transparent",
     marginBottom: 10,
     borderRadius: 10,
     padding: 10,
+    borderBottomColor: "#36363e",
+    borderBottomWidth: 1,
   },
   headerContainer: {
     flexDirection: "row",
