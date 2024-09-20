@@ -47,7 +47,7 @@ const renderTabBar = (props: any) => (
   </View>
 );
 
-const ExplorerScreen = () => {
+export const ExplorerScreen = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "exercices", title: "Exercices" },
@@ -88,5 +88,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export default ExplorerScreen;

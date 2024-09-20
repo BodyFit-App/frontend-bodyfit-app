@@ -23,7 +23,7 @@ type ParamListBase = {
   };
 };
 
-const ProgramFormScreen = () => {
+export const ProgramFormScreen = () => {
   const route = useRoute<RouteProp<ParamListBase>>();
   const queryClient = useQueryClient();
   const programId = route.params?.programId;
@@ -142,5 +142,3 @@ const ProgramFormScreen = () => {
     </View>
   );
 };
-
-export default ProgramFormScreen;

@@ -1,25 +1,22 @@
 import React from "react";
 import { BottomNavigation } from "react-native-paper";
-import ActualiteScreen from "../../screens/Actualites";
-import { ExercisesScreen } from "../../screens/exercises";
-import ProfilScreen from "../../screens/Dashboard";
+import ActualiteScreen from "../Actualites";
 import theme from "../../theme";
-import ExplorerScreen from "../../screens/ExplorerScreen";
+import { DashboardScreen } from "../DashboardScreen";
+import { ExplorerScreen } from "../ExplorerScreen";
 
-export function BottomTabs() {
+export const HomeScreen = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "actualite", title: "Actualité", focusedIcon: "newspaper" },
-    { key: "exercices", title: "Exercices", focusedIcon: "dumbbell" },
     { key: "explorer", title: "Explorer", focusedIcon: "compass" },
-    { key: "profil", title: "Profil", focusedIcon: "account" },
+    { key: "dashboard", title: "Profil", focusedIcon: "account" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    actualite: ActualiteScreen,
-    exercices: ExercisesScreen,
+    actuality: ActualiteScreen,
     explorer: ExplorerScreen,
-    profil: ProfilScreen,
+    dashboard: DashboardScreen,
   });
 
   return (
@@ -38,4 +35,4 @@ export function BottomTabs() {
       style={{ paddingTop: 32 }}
     />
   );
-}
+};

@@ -9,7 +9,7 @@ import theme from "../../theme";
 import { client } from "../../lib/supabase";
 import { useAuth } from "../../hooks/useAuth";
 
-const RegisterScreen = () => {
+export const RegisterScreen = () => {
   const { signUp } = useAuth();
   const navigation = useNavigation();
   const [checked, setChecked] = useState(false);
@@ -221,5 +221,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default RegisterScreen;

@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { handleToggleFavoriteProgram } from "../../api/favorites";
 
-export const ProgramsScreen = () => {
+export const ProgramListScreen = () => {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");

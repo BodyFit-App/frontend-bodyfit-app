@@ -10,7 +10,7 @@ import GoalHeader from "../../components/GoalHeader";
 import { fetchGoalById, updateStepStatus } from "../../api/goals";
 import StepCard from "../../components/StepCard/StepCard";
 
-export const GoalScreen = () => {
+export const GoalDetailsScreen = () => {
   const id = 8;
 
   const queryClient = useQueryClient();

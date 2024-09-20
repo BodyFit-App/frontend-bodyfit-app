@@ -27,7 +27,7 @@ type ParamListBase = {
   };
 };
 
-export default function ExerciseFormScreen() {
+export const ExerciseFormScreen = () => {
   const { session } = useAuth();
   const route = useRoute<RouteProp<ParamListBase>>();
   const navigation = useNavigation();
@@ -222,4 +222,4 @@ export default function ExerciseFormScreen() {
       </ScrollView>
     </View>
   );
-}
+};

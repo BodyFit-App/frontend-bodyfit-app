@@ -36,11 +36,11 @@ export type GoalData = any;
 
 registerTranslation("fr", fr);
 
-export default function GoalFormScreen({
+export const GoalFormScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<ParamListBase, "GoalFormScreen">) {
+}: StackScreenProps<ParamListBase, "GoalFormScreen">) => {
   const { session } = useAuth();
   const queryClient = useQueryClient();
   const { goalId } = route.params || {};
@@ -282,4 +282,4 @@ export default function GoalFormScreen({
       </ScrollView>
     </View>
   );
-}
+};

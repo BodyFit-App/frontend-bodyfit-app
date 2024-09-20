@@ -16,7 +16,7 @@ import { handleToggleFavoriteProgram } from "../../api/favorites";
 import { useAuth } from "../../hooks/useAuth";
 import theme from "../../theme";
 
-export const ProgramScreen = () => {
+export const ProgramDetailsScreen = () => {
   const id = 12;
 
   const { session } = useAuth();

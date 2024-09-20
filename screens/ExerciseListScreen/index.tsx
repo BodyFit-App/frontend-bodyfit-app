@@ -16,7 +16,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
 import { handleToggleFavoriteExercise } from "../../api/favorites";
 
-export const ExercisesScreen = () => {
+export const ExerciseListScreen = () => {
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");

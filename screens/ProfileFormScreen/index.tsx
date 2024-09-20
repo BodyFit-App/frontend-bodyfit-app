@@ -17,11 +17,11 @@ type ParamListBase = {
   ProfileFormScreen: undefined;
 };
 
-export default function ProfileCreationScreen({
+export const ProfileFormScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<ParamListBase, "ProfileFormScreen">) {
+}: StackScreenProps<ParamListBase, "ProfileFormScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
   const queryClient = useQueryClient();
@@ -183,7 +183,7 @@ export default function ProfileCreationScreen({
       </CustomButton>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

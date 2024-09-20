@@ -9,7 +9,7 @@ import CreatorCard from "../../components/CreatorCard";
 import { handleToggleFavoriteExercise } from "../../api/favorites";
 import { useAuth } from "../../hooks/useAuth";
 
-export const ExerciseScreen = () => {
+export const ExerciseDetailsScreen = () => {
   const id = 47;
   const { session } = useAuth();
 

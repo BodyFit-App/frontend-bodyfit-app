@@ -10,7 +10,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
 import { useDebounce } from "../../hooks/useDebounce";
 
-export const GoalsScreen = () => {
+export const GoalListScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [order, setOrder] = useState<GoalOrder>({
@@ -24,7 +24,11 @@ export const GoalsScreen = () => {
 
   const handleFetchGoals = async ({ pageParam }: any) => {
     try {
-      const goals = await fetchGoals(pageParam, {title: debouncedSearchQuery}, order);
+      const goals = await fetchGoals(
+        pageParam,
+        { title: debouncedSearchQuery },
+        order
+      );
       setCount(goals.count ?? 0);
       return goals;
     } catch (error) {
@@ -40,7 +44,7 @@ export const GoalsScreen = () => {
     status,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["goals", {title: debouncedSearchQuery},  order],
+    queryKey: ["goals", { title: debouncedSearchQuery }, order],
     queryFn: handleFetchGoals,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -49,8 +53,8 @@ export const GoalsScreen = () => {
   const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
 
   const uniqueData = mergedData?.filter(
-     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-   ); 
+    (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+  );
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
