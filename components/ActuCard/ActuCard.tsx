@@ -1,3 +1,4 @@
+
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Text, Card } from "react-native-paper";
@@ -29,7 +30,7 @@ interface ActuCardProps {
   profileImageUrl?: string;
   actionDescription?: string;
   exerciseLinkText?: string;
-  onExercisePress: () => void;
+  onActivityPress: () => void;
   onUsernamePress: () => void;
 }
 
@@ -39,7 +40,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
   profileImageUrl,
   actionDescription,
   exerciseLinkText,
-  onExercisePress,
+  onActivityPress,
   onUsernamePress,
 }) => {
   const truncateText = (text: string, maxLength: number) => {
@@ -67,7 +68,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
           </Text>
           <Text variant="labelSmall" style={styles.description}>
             {actionDescription}{" "}
-            <Text style={styles.link} onPress={onExercisePress}>
+            <Text style={styles.link} onPress={onActivityPress}>
               {truncateText(exerciseLinkText ?? '', 15)}
             </Text>
           </Text>
@@ -79,10 +80,12 @@ const ActuCard: React.FC<ActuCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#161626",
+    backgroundColor: "transparent",
     marginBottom: 10,
     borderRadius: 10,
     padding: 10,
+    borderBottomColor: "#36363e",
+    borderBottomWidth: 1,
   },
   headerContainer: {
     flexDirection: "row",

@@ -17,9 +17,10 @@ import { RegisterScreen } from "../screens/RegisterScreen";
 import LandingScreen from "../screens/LandingScreen";
 import { ExerciseListScreen } from "../screens/ExerciseListScreen";
 import { ProgramListScreen } from "../screens/ProgramListScreen";
+import ProfilDetailScreen from "../screens/ProfilDetailScreen";
 
 export type AppParamListBase = {
-  Actualites: undefined;
+  Actualites: { id?: number; user_id?: number; type?: string };
   DashboardScreen: undefined;
   ExerciseDetailsScreen: { id: number };
   ExerciseFormScreen: { id?: number };
@@ -31,6 +32,7 @@ export type AppParamListBase = {
   LandingScreen: undefined;
   LoginScreen: undefined;
   ProfileFormScreen: undefined;
+  ProfilDetailScreen: { id: number };
   ProgramDetailsScreen: { id: number };
   ProgramListScreen: { filters?: any };
   ProgramFormScreen: { id?: number };
@@ -96,6 +98,10 @@ export const MainNavigation = () => {
             <Stack.Screen
               name="ProfileFormScreen"
               component={ProfileFormScreen}
+            />
+            <Stack.Screen
+              name="ProfilDetailScreen"
+              component={ProfilDetailScreen}
             />
             <Stack.Screen
               name="ProgramListScreen"

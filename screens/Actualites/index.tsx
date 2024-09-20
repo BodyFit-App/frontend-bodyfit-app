@@ -1,25 +1,26 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchFolloweesActivity } from "../../api/followings";
-import { StackNavigationProp } from "@react-navigation/stack";
 import ActuCard from "../../components/ActuCard/ActuCard";
-import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
-import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
-import { useDebounce } from "../../hooks/useDebounce";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const ActualiteScreen = () => {
+const ActualiteScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  const fetchFolloweesActivityWithPagination = async ({ pageParam }: any) => {
+  const fetchFolloweesActivityWithPagination = async ({ pageParam = 1 }) => {
     try {
-      return fetchFolloweesActivity(pageParam);
+      const { data, nextCursor, count } = await fetchFolloweesActivity(
+        pageParam
+      );
+      return { data, nextCursor, count };
     } catch (error) {
       console.error(error);
       throw new Error((error as Error).message);
@@ -34,50 +35,65 @@ const ActualiteScreen = () => {
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["followeesActivity", profileId, { title: debouncedSearchQuery }],
+    queryKey: ["followeesActivity", profileId],
     queryFn: fetchFolloweesActivityWithPagination,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage.length === 0) return undefined;
-      return pages.length + 1;
-    },
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const mergedData = data?.pages.flatMap((page) => page) ?? [];
+  const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
+  const uniqueData = mergedData?.filter(
+    (item, index, self) =>
+      index === self.findIndex((t) => t.title === item.title)
+  );
 
-  const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
+  const handleActivityPress = (id?: number, type?: string) => {
+    if (type === "goals") {
+      navigation.push("GoalDetailsScreen", { id } as never);
+    } else if (type === "exercises") {
+      navigation.push("ExerciseDetailsScreen", { id } as never);
+    } else if (type === "programs") {
+      navigation.push("ProgramDetailsScreen", { id } as never);
+    } else {
+      console.warn("Unknown type", type);
+    }
   };
 
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const handlePseudoPress = (id?: number) => {
+    navigation.push("ProfilDetailScreen" as never, { id } as never);
+  };
 
-  const handleExercicePress = (id: number, type: string) => {
-    navigation.push(type, { id });
+  const adjustText = (item: any) => {
+    if (item === "goals") {
+      return "a atteint son objectif:";
+    } else if (item === "exercises") {
+      return "a créé un nouvel exercise:";
+    } else {
+      return "a ajouté le programme:";
+    }
   };
 
   return (
     <View style={styles.container}>
-      <CustomSearchBar
-        placeholder="Rechercher"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      />
-      <FilterBar
-        filters={["Plus récents", "Moins récents"]}
-        defaultFilter={selectedFilter}
-        onFilterChange={handleFilterChange}
-      />
       <FlatList
-        data={mergedData}
+        data={uniqueData}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
           <ActuCard
-            username={item.pseudo || "Unknown"}
+            username={item.pseudo || ""}
             fullName={`${item.firstname || ""} ${item.lastname || ""}`}
             profileImageUrl={item.avatar_url || ""}
-            exerciseLinkText={item.title || "Exercice"}
-            onExercisePress={() => console.log("Pressed on exercise")}
-            onUsernamePress={() => console.log("Pressed on username")}
+            actionDescription={adjustText(item.type) || ""}
+            exerciseLinkText={item.title || ""}
+            onActivityPress={() =>
+              handleActivityPress(
+                item.id ? item.id : undefined,
+                item.type ? item.type : undefined
+              )
+            }
+            onUsernamePress={() =>
+              handlePseudoPress(item.profile_id ? item.profile_id : undefined)
+            }
           />
         )}
         onEndReached={() => {

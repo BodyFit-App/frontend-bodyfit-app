@@ -31,12 +31,17 @@ export const deleteFolowing = async (id: number) => {
   if (error) throw new Error(error.message);
 };
 
-export const fetchFolloweesActivity = async () => {
-  const { data, error } = await client.from("user_content").select("*").range(
-    0,
-    NB_ELTS_PER_PAGE,
-  ).order("time");
+export const fetchFolloweesActivity = async (page: number = 1,) => {
+  const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
+const { data, error, count } = await client
+  .from("user_content")
+  .select("*", { count: "exact" })
+  .range(start, end)
+  .order("time");
   if (error) throw new Error(error.message);
-  return data;
-};
 
+  const totalPages = count ? Math.ceil(count! / NB_ELTS_PER_PAGE) : 0;
+  const nextPage = page + 1;
+  const nextCursor = nextPage > totalPages ? null : nextPage;
+  return {data, nextCursor, count};
+};

@@ -487,7 +487,9 @@ export type Database = {
         Row: {
           avatar_url: string | null
           firstname: string | null
+          id: number | null
           lastname: string | null
+          profile_id: number | null
           pseudo: string | null
           time: string | null
           title: string | null
