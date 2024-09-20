@@ -153,19 +153,19 @@ export type Database = {
           created_at: string
           exercise_id: number
           id: number
-          profile_id: number | null
+          profile_id: number
         }
         Insert: {
           created_at?: string
           exercise_id: number
           id?: number
-          profile_id?: number | null
+          profile_id?: number
         }
         Update: {
           created_at?: string
           exercise_id?: number
           id?: number
-          profile_id?: number | null
+          profile_id?: number
         }
         Relationships: [
           {
@@ -188,19 +188,19 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          profile_id: number | null
+          profile_id: number
           program_id: number
         }
         Insert: {
           created_at?: string
           id?: number
-          profile_id?: number | null
+          profile_id?: number
           program_id: number
         }
         Update: {
           created_at?: string
           id?: number
-          profile_id?: number | null
+          profile_id?: number
           program_id?: number
         }
         Relationships: [
@@ -258,7 +258,7 @@ export type Database = {
       }
       goals: {
         Row: {
-          achieved: boolean
+          achieved: string | null
           banner_image: string | null
           created_at: string
           date_end: string | null
@@ -271,7 +271,7 @@ export type Database = {
           visible: boolean
         }
         Insert: {
-          achieved?: boolean
+          achieved?: string | null
           banner_image?: string | null
           created_at?: string
           date_end?: string | null
@@ -284,7 +284,7 @@ export type Database = {
           visible?: boolean
         }
         Update: {
-          achieved?: boolean
+          achieved?: string | null
           banner_image?: string | null
           created_at?: string
           date_end?: string | null
@@ -475,21 +475,13 @@ export type Database = {
       }
     }
     Views: {
-      progress: {
-        Row: {
-          name: string | null
-          repetition_count: number | null
-          total_estimated_time: number | null
-        }
-        Relationships: []
-      }
       user_content: {
         Row: {
           avatar_url: string | null
-          created_at: string | null
           firstname: string | null
           lastname: string | null
           pseudo: string | null
+          time: string | null
           title: string | null
           type: string | null
         }
