@@ -9,8 +9,14 @@ import { getPublicUrl } from "../../lib/supabase";
 import GoalHeader from "../../components/GoalHeader";
 import { fetchGoalById, updateStepStatus } from "../../api/goals";
 import StepCard from "../../components/StepCard/StepCard";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-export const GoalDetailsScreen = () => {
+export const GoalDetailsScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "GoalDetailsScreen">) => {
   const id = 8;
 
   const queryClient = useQueryClient();

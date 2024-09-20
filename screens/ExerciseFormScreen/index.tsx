@@ -6,7 +6,6 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { Switch } from "react-native-paper";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
-import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   addExerciseCategories,
@@ -20,24 +19,22 @@ import { getPublicUrl } from "../../lib/supabase";
 import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
 import { useAuth } from "../../hooks/useAuth";
 import { slugify } from "../../lib/helpers";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-type ParamListBase = {
-  ExerciseFormScreen: {
-    exerciseId?: number;
-  };
-};
-
-export const ExerciseFormScreen = () => {
+export const ExerciseFormScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ExerciseFormScreen">) => {
   const { session } = useAuth();
-  const route = useRoute<RouteProp<ParamListBase>>();
-  const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const exerciseId = route.params?.exerciseId;
-  const isEditMode = !!exerciseId;
+  const id = route.params.id;
+  const isEditMode = !!id;
 
   const { data: exercise, isSuccess } = useQuery({
-    queryKey: ["exercise", exerciseId],
-    queryFn: () => fetchExerciseById(exerciseId!),
+    queryKey: ["exercise", id],
+    queryFn: () => fetchExerciseById(id!),
     enabled: isEditMode,
   });
 
@@ -73,7 +70,7 @@ export const ExerciseFormScreen = () => {
       const { categories, ...data } = body;
 
       const newBody = {
-        ...(isEditMode ? { id: exerciseId } : {}),
+        ...(isEditMode ? { id: id } : {}),
         ...data,
         banner_image: banner_image,
       };
@@ -99,7 +96,7 @@ export const ExerciseFormScreen = () => {
   const upsertMutation = useMutation({
     mutationFn: handleUpsert,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["exercise", exerciseId] });
+      queryClient.invalidateQueries({ queryKey: ["exercise", id] });
       // navigation.goBack();
     },
   });

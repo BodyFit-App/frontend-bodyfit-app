@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Text, Image } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import theme from "../../theme";
-import { getPublicUrl } from "../../lib/supabase";
 import { fetchProfileById, updateProfile } from "../../api/profiles";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
-
-type ParamListBase = {
-  ProfileFormScreen: undefined;
-};
+import { AppParamListBase } from "../../navigations/main";
 
 export const ProfileFormScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<ParamListBase, "ProfileFormScreen">) => {
+}: StackScreenProps<AppParamListBase, "ProfileFormScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
   const queryClient = useQueryClient();

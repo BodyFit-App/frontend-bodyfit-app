@@ -16,24 +16,23 @@ import {
   resetExerciseSession,
 } from "../../api/sessions";
 import { FormData } from "./types";
+import { AppParamListBase } from "../../navigations/main";
+import { StackScreenProps } from "@react-navigation/stack";
 
-type ParamListBase = {
-  ProgramFormScreen: {
-    programId?: number;
-  };
-};
-
-export const ProgramFormScreen = () => {
-  const route = useRoute<RouteProp<ParamListBase>>();
+export const ProgramFormScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ProgramFormScreen">) => {
   const queryClient = useQueryClient();
-  const programId = route.params?.programId;
-  const isEditMode = !!programId;
+  const id = route.params?.id;
+  const isEditMode = !!id;
 
   const [sessionToDelete, setSessionToDelete] = useState<number[]>([]);
 
   const { data: program, isSuccess } = useQuery({
-    queryKey: ["program", programId],
-    queryFn: () => fetchProgramById(programId!),
+    queryKey: ["program", id],
+    queryFn: () => fetchProgramById(id!),
     enabled: isEditMode,
   });
 
@@ -49,7 +48,7 @@ export const ProgramFormScreen = () => {
       const { sessions, ...rest } = body;
 
       const program = await upsertProgram({
-        ...(isEditMode && { id: programId }),
+        ...(isEditMode && { id: id }),
         ...rest,
       });
 
@@ -77,7 +76,7 @@ export const ProgramFormScreen = () => {
        * WARNING !! It does not "reset" sessions ids so you may need to force a complete refetch
        * if you try to modify a session and re-upsert, it might create a new session instead of updating it
        */
-      queryClient.invalidateQueries({ queryKey: ["program", programId] });
+      queryClient.invalidateQueries({ queryKey: ["program", id] });
       // navigation.goBack();
     },
   });

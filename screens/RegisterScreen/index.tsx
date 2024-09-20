@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import theme from "../../theme";
-import { client } from "../../lib/supabase";
 import { useAuth } from "../../hooks/useAuth";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "RegisterScreen">) => {
   const { signUp } = useAuth();
-  const navigation = useNavigation();
   const [checked, setChecked] = useState(false);
 
   const {

@@ -8,8 +8,14 @@ import { getPublicUrl } from "../../lib/supabase";
 import CreatorCard from "../../components/CreatorCard";
 import { handleToggleFavoriteExercise } from "../../api/favorites";
 import { useAuth } from "../../hooks/useAuth";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-export const ExerciseDetailsScreen = () => {
+export const ExerciseDetailsScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ExerciseDetailsScreen">) => {
   const id = 47;
   const { session } = useAuth();
 

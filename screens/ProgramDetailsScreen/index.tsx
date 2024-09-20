@@ -15,8 +15,14 @@ import ItemCard from "../../components/ItemCard";
 import { handleToggleFavoriteProgram } from "../../api/favorites";
 import { useAuth } from "../../hooks/useAuth";
 import theme from "../../theme";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-export const ProgramDetailsScreen = () => {
+export const ProgramDetailsScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ProgramDetailsScreen">) => {
   const id = 12;
 
   const { session } = useAuth();

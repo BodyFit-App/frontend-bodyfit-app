@@ -4,28 +4,30 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../screens/LoginScreen";
 import theme from "../theme";
 import { useAuth } from "../hooks/useAuth";
+import { HomeScreen } from "../screens/HomeScreen";
+import { ExerciseDetailsScreen } from "../screens/ExerciseDetailsScreen";
 
-export type ParamListBase = {
+export type AppParamListBase = {
   Actualites: undefined;
   DashboardScreen: undefined;
-  ExerciseDetailsScreen: { id: string };
-  ExerciseFormScreen: undefined;
+  ExerciseDetailsScreen: { id: number };
   ExerciseListScreen: { filters?: any };
+  ExerciseFormScreen: { id?: number };
   ExplorerScreen: undefined;
-  GoalDetailsScreen: { id: string };
-  GoalFormScreen: undefined;
+  GoalDetailsScreen: { id: number };
+  GoalFormScreen: { id?: number };
   GoalListScreen: { filters?: any };
   HomeScreen: undefined;
   LandingScreen: undefined;
   LoginScreen: undefined;
   ProfileFormScreen: undefined;
-  ProgramDetailsScreen: { id: string };
-  ProgramFormScreen: undefined;
+  ProgramDetailsScreen: { id: number };
   ProgramListScreen: { filters?: any };
+  ProgramFormScreen: { id?: number };
   RegisterScreen: undefined;
 };
 
-const Stack = createStackNavigator<ParamListBase>();
+export const Stack = createStackNavigator<AppParamListBase>();
 
 export const MainNavigation = () => {
   const { session } = useAuth();
@@ -48,21 +50,25 @@ export const MainNavigation = () => {
           headerLeftContainerStyle: { paddingBottom: 20 },
         }}
       >
-        {/* TODO: Uncomment later to protect routes 
-         {session ? (
+        {session ? (
+          <>
+            <Stack.Screen
+              name="HomeScreen"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ExerciseDetailsScreen"
+              component={ExerciseDetailsScreen}
+            />
+          </>
+        ) : (
           <Stack.Screen
-            name="Home"
-            component={BottomTabs}
+            name="LoginScreen"
+            component={LoginScreen}
             options={{ headerShown: false }}
           />
-        ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
-        )} */}
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

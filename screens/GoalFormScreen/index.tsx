@@ -25,12 +25,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 import { slugify } from "../../lib/helpers";
 import ProgramDropdown from "../../components/ProgramDropdown/ProgramDropdown";
-
-type ParamListBase = {
-  GoalFormScreen: {
-    goalId?: number;
-  };
-};
+import { AppParamListBase } from "../../navigations/main";
 
 export type GoalData = any;
 
@@ -40,11 +35,11 @@ export const GoalFormScreen = ({
   navigation,
   route,
   ...props
-}: StackScreenProps<ParamListBase, "GoalFormScreen">) => {
+}: StackScreenProps<AppParamListBase, "GoalFormScreen">) => {
   const { session } = useAuth();
   const queryClient = useQueryClient();
-  const { goalId } = route.params || {};
-  const isEditMode = !!goalId;
+  const id = route.params.id;
+  const isEditMode = !!id;
 
   const {
     control,
@@ -64,8 +59,8 @@ export const GoalFormScreen = ({
   });
 
   const { data: goal, isSuccess } = useQuery({
-    queryKey: ["goal", goalId],
-    queryFn: () => fetchGoalById(goalId!),
+    queryKey: ["goal", id],
+    queryFn: () => fetchGoalById(id!),
     enabled: isEditMode,
   });
 
@@ -83,7 +78,7 @@ export const GoalFormScreen = ({
       const { steps, ...data } = body;
 
       const newBody = {
-        ...(isEditMode ? { id: goalId } : {}),
+        ...(isEditMode ? { id: id } : {}),
         ...data,
         banner_image: banner_image,
       };
@@ -109,7 +104,7 @@ export const GoalFormScreen = ({
   const upsertMutation = useMutation({
     mutationFn: handleUpsert,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goal", goalId] });
+      queryClient.invalidateQueries({ queryKey: ["goal", id] });
       // navigation.goBack();
     },
   });

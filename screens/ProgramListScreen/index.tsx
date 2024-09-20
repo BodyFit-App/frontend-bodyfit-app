@@ -11,11 +11,16 @@ import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import { ProgramOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackScreenProps } from "@react-navigation/stack";
 import { handleToggleFavoriteProgram } from "../../api/favorites";
+import { AppParamListBase } from "../../navigations/main";
 
-export const ProgramListScreen = () => {
+export const ProgramListScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
+  const filters = route.params.filters;
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
@@ -73,10 +78,8 @@ export const ProgramListScreen = () => {
     }
   };
 
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
   const handleProgramPress = (id: number) => {
-    navigation.navigate("Program", { id });
+    navigation.navigate("ProgramDetailsScreen", { id });
   };
 
   const mutation = useMutation({

@@ -6,8 +6,7 @@ import {
 import React, { useState } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchExercises } from "../../api/exercises";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackScreenProps } from "@react-navigation/stack";
 import ItemCard from "../../components/ItemCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ExerciseOrder } from "../../types/orders.types";
@@ -15,8 +14,13 @@ import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
 import { handleToggleFavoriteExercise } from "../../api/favorites";
+import { AppParamListBase } from "../../navigations/main";
 
-export const ExerciseListScreen = () => {
+export const ExerciseListScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ExerciseListScreen">) => {
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
@@ -91,10 +95,8 @@ export const ExerciseListScreen = () => {
     }
   };
 
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
   const handleExercicePress = (id: number) => {
-    navigation.navigate("Exercise", { id });
+    navigation.navigate("ExerciseDetailsScreen", { id });
   };
 
   return (

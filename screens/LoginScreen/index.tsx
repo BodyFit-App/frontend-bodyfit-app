@@ -1,16 +1,20 @@
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import theme from "../../theme";
+import { StackScreenProps } from "@react-navigation/stack";
+import { AppParamListBase } from "../../navigations/main";
 
-const LoginScreen = () => {
+const LoginScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "LoginScreen">) => {
   const { signIn } = useAuth();
-  const navigation = useNavigation();
 
   const {
     control,
@@ -37,90 +41,95 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image source={require("../../assets/logo-app.png")} style={styles.img} />
-
-      <View>
-        <Text style={styles.title}>Bienvenue!</Text>
-        <Text style={styles.subtitle}>Connectez-vous à votre compte</Text>
-
-        <Controller
-          control={control}
-          rules={{
-            required: "Adresse email requise",
-            pattern: {
-              value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-              message: "Adresse email invalide",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              style={styles.textinput}
-              label="Adresse email"
-              placeholder="Adresse email"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={!!errors.email}
-              mode="outlined"
-            />
-          )}
-          name="email"
+    <ScrollView>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/logo-app.png")}
+          style={styles.img}
         />
-        {errors.email && (
-          <Text style={styles.errorText}>{errors.email.message}</Text>
-        )}
 
-        <Controller
-          control={control}
-          rules={{
-            required: "Mot de passe requis",
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              style={styles.textinput}
-              label="Mot de passe"
-              placeholder="Mot de passe"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry
-              error={!!errors.password}
-              mode="outlined"
-            />
-          )}
-          name="password"
-        />
-        {errors.password && (
-          <Text style={styles.errorText}>{errors.password.message}</Text>
-        )}
+        <View>
+          <Text style={styles.title}>Bienvenue!</Text>
+          <Text style={styles.subtitle}>Connectez-vous à votre compte</Text>
 
-        <Text
-          onPress={() => navigation.navigate("" as never)}
-          style={styles.textmdp}
-        >
-          Mot de passe oublié ?
-        </Text>
-
-        <CustomButton style={styles.button} onPress={handleSubmit(onSubmit)}>
-          Connectez-vous
-        </CustomButton>
-
-        <Text style={styles.textregister}>
-          Vous n'avez pas de compte ?{" "}
-          <Text
-            style={{
-              textDecorationLine: "underline",
-              color: theme.colors.primary,
-              fontWeight: "600",
+          <Controller
+            control={control}
+            rules={{
+              required: "Adresse email requise",
+              pattern: {
+                value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                message: "Adresse email invalide",
+              },
             }}
-            onPress={() => navigation.navigate("Register" as never)}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                style={styles.textinput}
+                label="Adresse email"
+                placeholder="Adresse email"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={!!errors.email}
+                mode="outlined"
+              />
+            )}
+            name="email"
+          />
+          {errors.email && (
+            <Text style={styles.errorText}>{errors.email.message}</Text>
+          )}
+
+          <Controller
+            control={control}
+            rules={{
+              required: "Mot de passe requis",
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                style={styles.textinput}
+                label="Mot de passe"
+                placeholder="Mot de passe"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry
+                error={!!errors.password}
+                mode="outlined"
+              />
+            )}
+            name="password"
+          />
+          {errors.password && (
+            <Text style={styles.errorText}>{errors.password.message}</Text>
+          )}
+
+          <Text
+            onPress={() => navigation.navigate("" as never)}
+            style={styles.textmdp}
           >
-            Inscrivez-vous
+            Mot de passe oublié ?
           </Text>
-        </Text>
+
+          <CustomButton style={styles.button} onPress={handleSubmit(onSubmit)}>
+            Connectez-vous
+          </CustomButton>
+
+          <Text style={styles.textregister}>
+            Vous n'avez pas de compte ?{" "}
+            <Text
+              style={{
+                textDecorationLine: "underline",
+                color: theme.colors.primary,
+                fontWeight: "600",
+              }}
+              onPress={() => navigation.navigate("Register" as never)}
+            >
+              Inscrivez-vous
+            </Text>
+          </Text>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
