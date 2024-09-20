@@ -1,5 +1,4 @@
 import {
-  deleteProfile,
   fetchProfileById,
   fetchProfiles,
   fetchProgress,
