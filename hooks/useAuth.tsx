@@ -42,11 +42,17 @@ export const useAuth = () => {
     setLoading(false);
   };
 
+  const deleteAccount = async () => {
+    if (!session?.user.id) throw new Error("No session");
+    return client.auth.admin.deleteUser(session.user.id);
+  };
+
   return {
     session,
     signIn,
     signUp,
     signOut,
     loading,
+    deleteAccount,
   };
 };

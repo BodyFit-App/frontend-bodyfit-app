@@ -16,7 +16,7 @@ export const ExerciseDetailsScreen = ({
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "ExerciseDetailsScreen">) => {
-  const id = 47;
+  const id = route.params.id;
   const { session } = useAuth();
 
   const queryClient = useQueryClient();

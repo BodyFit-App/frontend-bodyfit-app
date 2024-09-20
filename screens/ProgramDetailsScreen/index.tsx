@@ -23,7 +23,7 @@ export const ProgramDetailsScreen = ({
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "ProgramDetailsScreen">) => {
-  const id = 12;
+  const id = route.params.id;
 
   const { session } = useAuth();
 
