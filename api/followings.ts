@@ -39,3 +39,4 @@ export const fetchFolloweesActivity = async () => {
   if (error) throw new Error(error.message);
   return data;
 };
+
