@@ -17,7 +17,7 @@ export const GoalDetailsScreen = ({
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "GoalDetailsScreen">) => {
-  const id = 8;
+  const id = route.params.id;
 
   const queryClient = useQueryClient();
   const queryKey = ["goal", id];

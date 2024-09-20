@@ -62,7 +62,7 @@ export const GoalListScreen = ({
   );
 
   const handleObjectifPress = (id: number) => {
-    navigation.navigate("GoalDetailsScreen", { id });
+    navigation.push("GoalDetailsScreen", { id });
   };
 
   const handleFilterChange = (selectedFilter: string) => {

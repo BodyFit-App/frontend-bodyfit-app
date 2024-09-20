@@ -54,7 +54,7 @@ export const fetchPrograms = async (
   }
 
   if (filter?.profile_id) {
-    query = query.eq("profiles.id", filter.profile_id);
+    query = query.eq("profile_id", filter.profile_id);
   }
 
   if (filter?.title) {

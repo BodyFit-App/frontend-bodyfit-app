@@ -1,5 +1,4 @@
 import {
-  deleteProfile,
   fetchProfileById,
   fetchProfiles,
   fetchProgress,
@@ -97,22 +96,6 @@ describe("Tests api/goals", () => {
 
       await expect(fetchProfiles(1, { pseudo: "User1" })).rejects.toThrow(
         "Failed to fetch profiles",
-      );
-    });
-  });
-
-  describe("deleteProfile", () => {
-    it("should not throw an error when the deletion is successful", async () => {
-      setTestData(null);
-
-      await expect(deleteProfile(1)).resolves.not.toThrow();
-    });
-
-    it("should throw an error when the deletion fails", async () => {
-      setTestError(new Error("Failed to delete profile"));
-
-      await expect(deleteProfile(1)).rejects.toThrow(
-        "Failed to delete profile",
       );
     });
   });

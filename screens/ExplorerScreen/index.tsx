@@ -5,7 +5,7 @@ import { TabView, SceneMap } from "react-native-tab-view";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 import theme from "../../theme";
-import { ExerciseListScreen } from "../ExerciseListScreen";
+import { ExerciseListScene, ExerciseListScreen } from "../ExerciseListScreen";
 import { ProgramListScreen } from "../ProgramListScreen";
 
 const renderTabBar = (props: any) => (
@@ -33,7 +33,11 @@ const renderTabBar = (props: any) => (
   </View>
 );
 
-export const ExplorerScreen = ({ navigation, route, ...props }: any) => {
+export const ExplorerScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "exercises", title: "Exercices" },
@@ -43,7 +47,7 @@ export const ExplorerScreen = ({ navigation, route, ...props }: any) => {
 
   const renderScene = SceneMap({
     exercises: () => (
-      <ExerciseListScreen navigation={navigation} route={route} />
+      <ExerciseListScene navigation={navigation} route={route} />
     ),
     programs: () => <ProgramListScreen navigation={navigation} route={route} />,
   });

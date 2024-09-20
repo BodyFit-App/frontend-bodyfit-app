@@ -49,7 +49,7 @@ const ActualiteScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const handleExercicePress = (id: number, type: string) => {
-    navigation.navigate(type);
+    navigation.push(type, { id });
   };
 
   const adjustText = (item: any)=> {

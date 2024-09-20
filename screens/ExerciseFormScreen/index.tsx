@@ -97,7 +97,7 @@ export const ExerciseFormScreen = ({
     mutationFn: handleUpsert,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exercise", id] });
-      // navigation.goBack();
+      navigation.goBack();
     },
   });
 

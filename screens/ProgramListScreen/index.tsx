@@ -15,7 +15,16 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { handleToggleFavoriteProgram } from "../../api/favorites";
 import { AppParamListBase } from "../../navigations/main";
 
-export const ProgramListScreen = ({ navigation, route, ...props }: any) => {
+export const ProgramListScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ProgramListScreen">) => {
+  return <ProgramListScene navigation={navigation} route={route} />;
+};
+
+export const ProgramListScene = ({ navigation, route }: any) => {
+  const filtersParam = route.params?.filters || {};
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Plus récents");
@@ -26,16 +35,17 @@ export const ProgramListScreen = ({ navigation, route, ...props }: any) => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
+  const filters = { title: debouncedSearchQuery, ...filtersParam };
 
   const fetchProgramsInfinite = async ({ pageParam }: any) => {
     try {
-      return fetchPrograms(pageParam, { title: debouncedSearchQuery }, order);
+      return fetchPrograms(pageParam, filters, order);
     } catch (error) {
       throw new Error((error as Error).message);
     }
   };
 
-  const queryKey = ["programs", { title: debouncedSearchQuery }, order];
+  const queryKey = ["programs", filters, order];
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -74,7 +84,7 @@ export const ProgramListScreen = ({ navigation, route, ...props }: any) => {
   };
 
   const handleProgramPress = (id: number) => {
-    navigation.navigate("ProgramDetailsScreen", { id });
+    navigation.push("ProgramDetailsScreen", { id });
   };
 
   const mutation = useMutation({
