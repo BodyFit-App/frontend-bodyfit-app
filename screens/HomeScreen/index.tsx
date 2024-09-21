@@ -5,6 +5,7 @@ import theme from "../../theme";
 import { ExplorerScreen } from "../ExplorerScreen";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
+import FollowersScreen from "../FollowersScreen";
 import DashboardScreen from "../DashboardScreen";
 
 export const HomeScreen = ({
@@ -17,12 +18,14 @@ export const HomeScreen = ({
     { key: "actuality", title: "Actualité", focusedIcon: "newspaper" },
     { key: "explorer", title: "Explorer", focusedIcon: "compass" },
     { key: "dashboard", title: "Profil", focusedIcon: "account" },
+    { key: "followers", title: "Abonnés", focusedIcon: "account-multiple" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     actuality: () => <ActualiteScreen navigation={navigation} route={route} />,
     explorer: () => <ExplorerScreen navigation={navigation} route={route} />,
     dashboard: () => <DashboardScreen navigation={navigation} route={route} />,
+    followers: () => <FollowersScreen navigation={navigation} route={route} />,
   });
 
   return (
