@@ -10,7 +10,7 @@ const mockProps = {
   progress: 0.5,
 };
 
-xdescribe("GoalHeader Component", () => {
+describe("GoalHeader Component", () => {
   it("renders correctly with provided props", () => {
     const { getByText, getByTestId } = render(<GoalHeader {...mockProps} />);
 

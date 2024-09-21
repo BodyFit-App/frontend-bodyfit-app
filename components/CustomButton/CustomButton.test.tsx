@@ -5,7 +5,7 @@ import CustomButton from "./CustomButton";
 import theme from "../../theme";
 import { fireEvent } from "@testing-library/react-native";
 
-xdescribe("CustomButton", () => {
+describe("CustomButton", () => {
   it("should render correctly with children", () => {
     const { getByText } = render(<CustomButton>Click me</CustomButton>);
     expect(getByText("Click me")).toBeTruthy();

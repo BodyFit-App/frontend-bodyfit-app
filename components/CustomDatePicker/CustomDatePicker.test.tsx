@@ -2,7 +2,7 @@ import React from "react";
 import { fireEvent, render } from "@testing-library/react-native";
 import CustomDatePicker from "./CustomDatePicker";
 
-xdescribe("CustomDatePicker", () => {
+describe("CustomDatePicker", () => {
   it("renders correctly with default props", () => {
     const { getByTestId } = render(
       <CustomDatePicker

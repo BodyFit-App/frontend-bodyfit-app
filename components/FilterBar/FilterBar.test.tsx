@@ -7,7 +7,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <PaperProvider>{children}</PaperProvider>
 );
 
-xdescribe("FilterBar", () => {
+describe("FilterBar", () => {
   const filters = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
   const defaultFilter = "Plus récents";
   const resultsCount = 15;
