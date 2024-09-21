@@ -3,23 +3,21 @@ import { TextInput, TextInputProps } from "react-native-paper";
 import theme from "../../theme";
 
 export default function TextField({
-    children,
-
-    style = {},
-    ...props
-  }: TextInputProps) {
-
+  children,
+  style = {},
+  ...props
+}: TextInputProps) {
   return (
     <TextInput
-      placeholderTextColor= {theme.colors.textPlaceholder}
+      placeholderTextColor={theme.colors.textPlaceholder}
       outlineColor={theme.colors.primary}
+      testID="textInput"
       style={{
         width: "100%",
         backgroundColor: theme.colors.backgroundButton,
-        ...(style as object),
+        ...{ style },
       }}
       {...props}
     />
-   
   );
 }

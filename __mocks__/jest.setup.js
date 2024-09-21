@@ -91,7 +91,8 @@ jest.mock("@supabase/supabase-js", () => {
 });
 
 // Mock pour React Native Animated
-// jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+jest.useFakeTimers();
 
 // Mock pour AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({

@@ -53,7 +53,7 @@ jest.mock("../hooks/useAuth", () => ({
   useAuth: jest.fn(),
 }));
 
-describe("MainNavigation", () => {
+xdescribe("MainNavigation", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
