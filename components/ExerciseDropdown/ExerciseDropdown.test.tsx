@@ -1,22 +1,66 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import {
+  fireEvent,
+  render,
+  waitFor,
+  cleanup,
+} from "@testing-library/react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ExerciseDropdown from "./ExerciseDropdown";
 import { fetchDropdownExercises } from "../../api/exercises";
 import { MultiSelectDropdown } from "react-native-paper-dropdown";
+import { View, Text, TouchableOpacity } from "react-native";
 
 jest.mock("../../api/exercises", () => ({
   fetchDropdownExercises: jest.fn(),
 }));
 
 jest.mock("react-native-paper-dropdown", () => ({
-  MultiSelectDropdown: jest.fn(() => null),
+  MultiSelectDropdown: jest.fn(({ options, onSelect, value, ...props }) => (
+    <DropdownMock
+      options={options}
+      onSelect={onSelect}
+      value={value}
+      {...props}
+    />
+  )),
 }));
 
 jest.mock("../DropdownInput/DropdownInput", () => "DropdownInput");
 
+const DropdownMock = ({ options, onSelect, value, disabled }) => (
+  <View>
+    <TouchableOpacity
+      testID="dropdown-button"
+      accessibilityState={{ disabled }}
+      onPress={() => {
+        onSelect(options.map((option) => option.value));
+      }}
+    >
+      <Text>Open Dropdown</Text>
+    </TouchableOpacity>
+  </View>
+);
+
 describe("ExerciseDropdown", () => {
-  const queryClient = new QueryClient();
+  let queryClient;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          cacheTime: 0,
+          retry: false,
+        },
+      },
+    });
+  });
+
+  afterEach(() => {
+    queryClient.clear();
+    cleanup();
+  });
 
   it("should generate the correct options from fetchDropdownExercises", async () => {
     const mockExercises = [
@@ -54,7 +98,7 @@ describe("ExerciseDropdown", () => {
     (fetchDropdownExercises as jest.Mock).mockResolvedValue(mockExercises);
     const mockOnChange = jest.fn();
 
-    render(
+    const { getByTestId } = render(
       <QueryClientProvider client={queryClient}>
         <ExerciseDropdown value={[]} onChange={mockOnChange} />
       </QueryClientProvider>
@@ -63,5 +107,27 @@ describe("ExerciseDropdown", () => {
     await waitFor(() => {
       expect(MultiSelectDropdown).toHaveBeenCalled();
     });
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("dropdown-button"));
+      expect(mockOnChange).toHaveBeenCalledWith([1, 2]);
+    });
+  });
+
+  it("should disable the dropdown when no data is available", async () => {
+    (fetchDropdownExercises as jest.Mock).mockResolvedValue(null);
+
+    const { getByTestId } = render(
+      <QueryClientProvider client={queryClient}>
+        <ExerciseDropdown value={[]} onChange={() => {}} />
+      </QueryClientProvider>
+    );
+
+    await waitFor(() => {
+      expect(MultiSelectDropdown).toHaveBeenCalled();
+    });
+    const dropdownButton = getByTestId("dropdown-button");
+
+    expect(dropdownButton.props.accessibilityState.disabled).toBe(true);
   });
 });
