@@ -26,6 +26,7 @@ export default function ExerciseDropdown({ value, onChange }: Props) {
     <MultiSelectDropdown
       CustomMultiSelectDropdownInput={DropdownInput}
       label="Exercices"
+      testID="dropdown"
       placeholder="Sélectionner vos exercices"
       disabled={!data}
       options={options}

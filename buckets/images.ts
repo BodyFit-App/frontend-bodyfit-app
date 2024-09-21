@@ -1,8 +1,6 @@
 import { decode } from "base64-arraybuffer";
 import { client } from "../lib/supabase";
 import * as FileSystem from "expo-file-system";
-import { slugify } from "../lib/helpers";
-import { User } from "@supabase/supabase-js";
 
 export const uploadImage = async (
   uri: string,
