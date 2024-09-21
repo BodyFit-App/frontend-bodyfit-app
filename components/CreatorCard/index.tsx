@@ -24,10 +24,7 @@ export default function CreatorCard({
           source={{ uri: avatarUrl }}
         />
         <View style={styles.containerInfo}>
-          <Text style={styles.titleLarge}>
-            {firstname}
-            {lastname}
-          </Text>
+          <Text style={styles.titleLarge}>{`${firstname} ${lastname}`}</Text>
           <Text style={styles.bodyMedium}>@{pseudo}</Text>
         </View>
       </Card.Content>

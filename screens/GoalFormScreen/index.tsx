@@ -147,6 +147,7 @@ export const GoalFormScreen = ({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                testID="goal-title"
               />
             )}
             name="title"
@@ -172,6 +173,7 @@ export const GoalFormScreen = ({
                 value={value || ""}
                 multiline
                 numberOfLines={10}
+                testID="goal-description"
               />
             )}
             name="description"

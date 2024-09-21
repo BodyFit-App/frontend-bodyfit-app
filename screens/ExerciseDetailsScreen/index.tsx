@@ -39,7 +39,13 @@ export const ExerciseDetailsScreen = ({
   };
 
   if (isLoading)
-    return <ActivityIndicator animating={true} color={MD2Colors.red800} />;
+    return (
+      <ActivityIndicator
+        testID="loading-indicator"
+        animating={true}
+        color={MD2Colors.red800}
+      />
+    );
 
   if (error) return <Text>{error.message}</Text>;
 

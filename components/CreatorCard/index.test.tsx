@@ -19,7 +19,7 @@ describe("CreatorCard", () => {
 
     // Check if the first and last names are rendered
     expect(
-      getByText(`${mockProps.firstname}${mockProps.lastname}`)
+      getByText(`${mockProps.firstname} ${mockProps.lastname}`)
     ).toBeTruthy();
 
     // Check if the pseudo is rendered
