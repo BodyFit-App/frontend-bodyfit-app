@@ -5,11 +5,9 @@ import theme from "../../theme";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import PieChart from "react-native-pie-chart";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
-import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProfileById, fetchProgress } from "../../api/profiles";
-import { fetchFollowingsByProfileId } from "../../api/followings";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -26,12 +24,6 @@ const DashboardScreen = ({
   const { data: profile } = useQuery({
     queryKey: ["profile", profileId],
     queryFn: () => fetchProfileById(profileId),
-    enabled: !!profileId,
-  });
-
-  const { data: followers } = useQuery({
-    queryKey: ["followers", profileId],
-    queryFn: () => fetchFollowingsByProfileId(profileId, 2),
     enabled: !!profileId,
   });
 
@@ -84,15 +76,6 @@ const DashboardScreen = ({
   const pieChartColors = chartData.length > 0 ? sliceColors : [];
   const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      navigation.navigate("Landing" as never);
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion", error);
-    }
-  };
-
   return (
     <ScrollView>
       <View style={styles.profilheader}>
@@ -106,7 +89,9 @@ const DashboardScreen = ({
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
             goalsCount={profile.goals?.length ?? 0}
-            onEditProfile={() => { navigation.navigate("ProfileFormScreen" as never) }}
+            onEditProfile={() => {
+              navigation.push("ProfileFormScreen");
+            }}
             onSignOutProfile={() => {
               signOut();
             }}
@@ -159,7 +144,11 @@ const DashboardScreen = ({
           <Text style={styles.titletxt}>Mes objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalsScreen" as never)}
+            onPress={() =>
+              navigation.push("GoalListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -183,7 +172,11 @@ const DashboardScreen = ({
           <Text style={styles.titletxt}>Mes exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ExercisesScreen" as never)}
+            onPress={() =>
+              navigation.push("ExerciseListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -198,9 +191,9 @@ const DashboardScreen = ({
                   exercise.categories.map((categorie) => categorie.name) ?? []
                 }
                 pseudo={profile.pseudo ?? ""}
-                isFav={true}
-                onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => navigation.navigate("Exercise" as never)}
+                onPressNav={() =>
+                  navigation.push("ExerciseDetailsScreen", { id: exercise.id })
+                }
               />
             </View>
           ))}
@@ -212,7 +205,11 @@ const DashboardScreen = ({
           <Text style={styles.titletxt}>Mes programmes</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.push("HomeScreen")}
+            onPress={() =>
+              navigation.push("ProgramListScreen", {
+                filters: { profile_id: profileId },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -224,9 +221,9 @@ const DashboardScreen = ({
                 title={program.title}
                 description={program.description ?? ""}
                 pseudo={profile.pseudo ?? ""}
-                isFav={true}
-                onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => console.log("Go to program")}
+                onPressNav={() =>
+                  navigation.push("ProgramDetailsScreen", { id: program.id })
+                }
               />
             </View>
           ))}

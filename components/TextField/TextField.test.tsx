@@ -1,32 +1,38 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
-import TextField from "./TextField";
-import theme from "../../theme";
+import { Provider as PaperProvider } from "react-native-paper";
+import TextField from "./TextField"; // Adjust the path to your TextField component
+import theme from "../../theme"; // Adjust the path to your theme
 
 describe("TextField Component", () => {
-  it("renders correctly", () => {
-    const { getByPlaceholderText } = render(
-      <TextField placeholder="Enter text" />
+  it("applies placeholder and other props", () => {
+    const { getByPlaceholderText, getByTestId } = render(
+      <PaperProvider theme={theme}>
+        <TextField placeholder="Enter text" testID="textInput" />
+      </PaperProvider>
     );
 
-    const input = getByPlaceholderText("Enter text");
-    expect(input).toBeTruthy();
+    expect(getByPlaceholderText("Enter text")).toBeTruthy();
+    expect(getByTestId("textInput")).toBeTruthy();
   });
 
-  it("forwards props correctly", () => {
+  it("passes other props correctly", () => {
     const mockOnChangeText = jest.fn();
-    const { getByPlaceholderText } = render(
-      <TextField
-        placeholder="Test onChange"
-        onChangeText={mockOnChangeText}
-        value="Hello"
-      />
+    const { getByTestId } = render(
+      <PaperProvider theme={theme}>
+        <TextField
+          placeholder="Test"
+          onChangeText={mockOnChangeText}
+          value="Sample text"
+          testID="textInput"
+        />
+      </PaperProvider>
     );
 
-    const input = getByPlaceholderText("Test onChange");
-    expect(input.props.value).toBe("Hello");
+    const input = getByTestId("textInput");
 
-    // Simule un changement de texte
+    expect(input.props.value).toBe("Sample text");
+
     input.props.onChangeText("New text");
     expect(mockOnChangeText).toHaveBeenCalledWith("New text");
   });

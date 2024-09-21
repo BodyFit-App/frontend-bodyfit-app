@@ -13,6 +13,12 @@ jest.mock("@supabase/supabase-js", () => {
           signOut: jest.fn(),
         },
         from: jest.fn().mockReturnThis(),
+        storage: jest.fn().mockImplementation(() => ({
+          from: jest.fn().mockReturnThis(),
+          getPublicUrl: jest.fn(),
+          data: testData,
+          error: testError,
+        })),
         select: jest.fn().mockImplementation(() => ({
           eq: jest.fn().mockReturnThis(),
           in: jest.fn().mockReturnThis(),
@@ -85,7 +91,8 @@ jest.mock("@supabase/supabase-js", () => {
 });
 
 // Mock pour React Native Animated
-// jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
+jest.useFakeTimers();
 
 // Mock pour AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
