@@ -10,6 +10,7 @@ import OtherProfilHeader from "../../components/OtherProfileHeader/OtherProfileH
 import { StackScreenProps } from "@react-navigation/stack";
 import { handleToggleFollow } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 export const ProfileDetailsScreen = ({
   navigation,
@@ -20,7 +21,11 @@ export const ProfileDetailsScreen = ({
 
   const queryClient = useQueryClient();
   const queryKey = ["profile", id];
-  const { data: profile } = useQuery({
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["profile", id],
     queryFn: () => fetchProfileById(id),
     enabled: !!id,
@@ -35,6 +40,17 @@ export const ProfileDetailsScreen = ({
   const toggleFavorite = (id: number, isFollowed: boolean) => {
     mutation.mutate({ id, isFollowed });
   };
+
+  if (isLoading)
+    return (
+      <ActivityIndicator
+        testID="activity-indicator"
+        animating={true}
+        color={MD2Colors.red800}
+      />
+    );
+
+  if (error) return <Text>{error.message}</Text>;
 
   return (
     <ScrollView>

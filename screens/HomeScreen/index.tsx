@@ -1,5 +1,5 @@
 import React from "react";
-import { BottomNavigation } from "react-native-paper";
+import { BottomNavigation, Text } from "react-native-paper";
 import ActualiteScreen from "../Actualites";
 import theme from "../../theme";
 import { ExplorerScreen } from "../ExplorerScreen";
@@ -7,6 +7,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 import { FollowersScreen } from "../FollowersScreen";
 import DashboardScreen from "../DashboardScreen";
+import { View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export const HomeScreen = ({
   navigation,
@@ -15,10 +17,30 @@ export const HomeScreen = ({
 }: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "actuality", title: "Actualité", focusedIcon: "newspaper" },
-    { key: "explorer", title: "Explorer", focusedIcon: "compass" },
-    { key: "dashboard", title: "Profil", focusedIcon: "account" },
-    { key: "followers", title: "Abonnés", focusedIcon: "account-multiple" },
+    {
+      key: "actuality",
+      title: "Actualité",
+      focusedIcon: "newspaper",
+      testID: "tab-actuality",
+    },
+    {
+      key: "explorer",
+      title: "Explorer",
+      focusedIcon: "compass",
+      testID: "tab-explorer",
+    },
+    {
+      key: "dashboard",
+      title: "Profil",
+      focusedIcon: "account",
+      testID: "tab-dashboard",
+    },
+    {
+      key: "followers",
+      title: "Abonnés",
+      focusedIcon: "account-multiple",
+      testID: "tab-followers",
+    },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
@@ -29,7 +51,11 @@ export const HomeScreen = ({
   });
 
   return (
-    <BottomNavigation
+    <SafeAreaProvider>
+      <View testID="debug-view">
+        <Text>Home Screen Test</Text>
+      </View>
+      {/* <BottomNavigation
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
@@ -42,6 +68,7 @@ export const HomeScreen = ({
       activeColor="#2F80ED"
       inactiveColor="#2F80ED"
       style={{ paddingTop: 32 }}
-    />
+    /> */}
+    </SafeAreaProvider>
   );
 };

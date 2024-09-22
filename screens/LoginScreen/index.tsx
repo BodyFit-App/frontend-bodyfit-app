@@ -41,11 +41,16 @@ export const LoginScreen = ({
         <Image
           source={require("../../assets/logo-app.png")}
           style={styles.img}
+          testID="logo-image"
         />
 
         <View>
-          <Text style={styles.title}>Bienvenue!</Text>
-          <Text style={styles.subtitle}>Connectez-vous à votre compte</Text>
+          <Text style={styles.title} testID="welcome-title">
+            Bienvenue!
+          </Text>
+          <Text style={styles.subtitle} testID="login-subtitle">
+            Connectez-vous à votre compte
+          </Text>
 
           <Controller
             control={control}
@@ -66,12 +71,15 @@ export const LoginScreen = ({
                 onBlur={onBlur}
                 error={!!errors.email}
                 mode="outlined"
+                testID="email-input"
               />
             )}
             name="email"
           />
           {errors.email && (
-            <Text style={styles.errorText}>{errors.email.message}</Text>
+            <Text style={styles.errorText} testID="email-error">
+              {errors.email.message}
+            </Text>
           )}
 
           <Controller
@@ -90,15 +98,22 @@ export const LoginScreen = ({
                 secureTextEntry
                 error={!!errors.password}
                 mode="outlined"
+                testID="password-input"
               />
             )}
             name="password"
           />
           {errors.password && (
-            <Text style={styles.errorText}>{errors.password.message}</Text>
+            <Text style={styles.errorText} testID="password-error">
+              {errors.password.message}
+            </Text>
           )}
 
-          <CustomButton style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <CustomButton
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}
+            testID="submit-button"
+          >
             Connectez-vous
           </CustomButton>
 
@@ -111,6 +126,7 @@ export const LoginScreen = ({
                 fontWeight: "600",
               }}
               onPress={() => navigation.replace("RegisterScreen")}
+              testID="register-link"
             >
               Inscrivez-vous
             </Text>

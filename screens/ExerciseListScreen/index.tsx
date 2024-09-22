@@ -15,6 +15,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
 import { handleToggleFavoriteExercise } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
+import { useFilterOrder } from "../../hooks/useFilterOrder";
 
 export const ExerciseListScreen = ({
   navigation,
@@ -28,16 +29,11 @@ export const ExerciseListScene = ({ navigation, route }: any) => {
   const filtersParam = route?.params?.filters || {};
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-  const [order, setOrder] = useState<ExerciseOrder>({
-    field: "created_at",
-    asc: false,
-  });
+  const { order, handleFilterChange, selectedFilter, filterList } =
+    useFilterOrder();
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const filters = { title: debouncedSearchQuery, ...filtersParam };
-
-  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
 
   const fetchExercicesInfinite = async ({ pageParam }: any) => {
     try {
@@ -82,26 +78,6 @@ export const ExerciseListScene = ({ navigation, route }: any) => {
     mutation.mutate({ id, isFav });
   };
 
-  const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
-    switch (selectedFilter) {
-      case "Plus récents":
-        setOrder({ field: "created_at", asc: false });
-        break;
-      case "Moins récents":
-        setOrder({ field: "created_at", asc: true });
-        break;
-      case "A-Z":
-        setOrder({ field: "title", asc: true });
-        break;
-      case "Z-A":
-        setOrder({ field: "title", asc: false });
-        break;
-      default:
-        setOrder({ field: "created_at", asc: false });
-    }
-  };
-
   const handleExercicePress = (id: number) => {
     navigation.navigate("ExerciseDetailsScreen", { id });
   };
@@ -122,6 +98,7 @@ export const ExerciseListScene = ({ navigation, route }: any) => {
         resultsCount={count}
       />
       <FlatList
+        testID="flat-list"
         data={uniqueData ?? []}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
