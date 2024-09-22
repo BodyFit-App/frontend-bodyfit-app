@@ -12,16 +12,22 @@ export default function LandingScreen({
 }: StackScreenProps<AppParamListBase, "LandingScreen">) {
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/logo-app.png")} style={styles.img} />
+      <Image
+        source={require("../../assets/logo-app.png")}
+        style={styles.img}
+        testID="logo-image"
+      />
       <CustomButton
         style={styles.button}
         children="Connexion"
         onPress={() => navigation.push("LoginScreen")}
+        testID="login-button"
       />
       <CustomButton
         style={styles.button}
         children="Inscription"
         onPress={() => navigation.push("RegisterScreen")}
+        testID="register-button"
       />
     </View>
   );

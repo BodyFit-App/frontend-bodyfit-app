@@ -47,7 +47,13 @@ export const GoalDetailsScreen = ({
   };
 
   if (isLoading)
-    return <ActivityIndicator animating={true} color={MD2Colors.red800} />;
+    return (
+      <ActivityIndicator
+        testID="activity-indicator"
+        animating={true}
+        color={MD2Colors.red800}
+      />
+    );
 
   if (error) return <Text>{error.message}</Text>;
 

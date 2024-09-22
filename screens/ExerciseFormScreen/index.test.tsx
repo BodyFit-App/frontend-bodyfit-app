@@ -2,14 +2,8 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { ExerciseFormScreen } from "."; // Adjust the path accordingly
 import { useAuth } from "../../hooks/useAuth";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadImage } from "../../buckets/images";
-import {
-  fetchExerciseById,
-  upsertExercise,
-  addExerciseCategories,
-  resetExerciseCategories,
-} from "../../api/exercises";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { fetchExerciseById } from "../../api/exercises";
 
 // Mock dependencies
 jest.mock("@tanstack/react-query", () => ({
@@ -88,7 +82,7 @@ describe("ExerciseFormScreen", () => {
     });
   });
 
-  test("renders form with default values for new exercise", async () => {
+  it("renders form with default values for new exercise", async () => {
     (useQuery as jest.Mock).mockReturnValue({
       data: undefined,
       isSuccess: false,
@@ -105,7 +99,7 @@ describe("ExerciseFormScreen", () => {
     expect(getByText("Créer")).toBeTruthy();
   });
 
-  test("renders form with exercise data in edit mode", async () => {
+  it("renders form with exercise data in edit mode", async () => {
     const mockExercise = {
       id: 1,
       title: "Test Exercise",
@@ -133,7 +127,7 @@ describe("ExerciseFormScreen", () => {
     });
   });
 
-  test("handles form submission for new exercise", async () => {
+  it("handles form submission for new exercise", async () => {
     const mockMutate = jest.fn();
     (useMutation as jest.Mock).mockReturnValue({ mutate: mockMutate });
     (useQuery as jest.Mock).mockReturnValue({
@@ -165,7 +159,7 @@ describe("ExerciseFormScreen", () => {
     });
   });
 
-  test("triggers update on form submission in edit mode", async () => {
+  it("triggers update on form submission in edit mode", async () => {
     const mockExercise = {
       id: 1,
       title: "Test Exercise",
@@ -195,7 +189,7 @@ describe("ExerciseFormScreen", () => {
     });
   });
 
-  test("handles visibility toggle correctly", async () => {
+  it("handles visibility toggle correctly", async () => {
     (useQuery as jest.Mock).mockReturnValue({
       data: undefined,
       isSuccess: false,

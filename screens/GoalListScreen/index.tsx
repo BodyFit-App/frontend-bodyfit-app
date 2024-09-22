@@ -10,6 +10,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import { AppParamListBase } from "../../navigations/main";
+import { useFilterOrder } from "../../hooks/useFilterOrder";
 
 export const GoalListScreen = ({
   navigation,
@@ -18,15 +19,9 @@ export const GoalListScreen = ({
 }: StackScreenProps<AppParamListBase, "GoalListScreen">) => {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const [order, setOrder] = useState<GoalOrder>({
-    field: "created_at",
-    asc: false,
-  });
+  const { order, handleFilterChange, selectedFilter, filterList } =
+    useFilterOrder();
   const [count, setCount] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-
-  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
-
   const handleFetchGoals = async ({ pageParam }: any) => {
     try {
       const goals = await fetchGoals(
@@ -65,26 +60,6 @@ export const GoalListScreen = ({
     navigation.push("GoalDetailsScreen", { id });
   };
 
-  const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
-    switch (selectedFilter) {
-      case "Plus récents":
-        setOrder({ field: "created_at", asc: false });
-        break;
-      case "Moins récents":
-        setOrder({ field: "created_at", asc: true });
-        break;
-      case "A-Z":
-        setOrder({ field: "title", asc: true });
-        break;
-      case "Z-A":
-        setOrder({ field: "title", asc: false });
-        break;
-      default:
-        setOrder({ field: "created_at", asc: false });
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
@@ -101,6 +76,7 @@ export const GoalListScreen = ({
         resultsCount={count}
       />
       <FlatList
+        testID="flat-list"
         data={uniqueData ?? []}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (

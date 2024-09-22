@@ -183,6 +183,7 @@ export const GoalFormScreen = ({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDatePicker
+                testID="date-picker-start"
                 onChange={(date) => onChange(date?.toDateString())}
                 onBlur={onBlur}
                 value={value ? new Date(value) : undefined}
@@ -198,6 +199,7 @@ export const GoalFormScreen = ({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDatePicker
+                testID="date-picker-end"
                 onChange={(date) => onChange(date?.toDateString())}
                 onBlur={onBlur}
                 value={value ? new Date(value) : undefined}
@@ -263,6 +265,7 @@ export const GoalFormScreen = ({
                   Je souhaite partager cet objectif
                 </Text>
                 <Switch
+                  testID="visible-switch"
                   style={{ marginLeft: 16 }}
                   onValueChange={onChange}
                   value={value}

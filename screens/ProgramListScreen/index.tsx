@@ -14,6 +14,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { StackScreenProps } from "@react-navigation/stack";
 import { handleToggleFavoriteProgram } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
+import { useFilterOrder } from "../../hooks/useFilterOrder";
 
 export const ProgramListScreen = ({
   navigation,
@@ -27,14 +28,10 @@ export const ProgramListScene = ({ navigation, route }: any) => {
   const filtersParam = route.params?.filters || {};
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-  const [order, setOrder] = useState<ProgramOrder>({
-    field: "created_at",
-    asc: false,
-  });
+  const { order, handleFilterChange, selectedFilter, filterList } =
+    useFilterOrder();
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
   const filters = { title: debouncedSearchQuery, ...filtersParam };
 
   const fetchProgramsInfinite = async ({ pageParam }: any) => {
@@ -62,26 +59,6 @@ export const ProgramListScene = ({ navigation, route }: any) => {
   const uniqueData = mergedData?.filter(
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
   );
-
-  const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
-    switch (selectedFilter) {
-      case "Plus récents":
-        setOrder({ field: "created_at", asc: false });
-        break;
-      case "Moins récents":
-        setOrder({ field: "created_at", asc: true });
-        break;
-      case "A-Z":
-        setOrder({ field: "title", asc: true });
-        break;
-      case "Z-A":
-        setOrder({ field: "title", asc: false });
-        break;
-      default:
-        setOrder({ field: "created_at", asc: false });
-    }
-  };
 
   const handleProgramPress = (id: number) => {
     navigation.push("ProgramDetailsScreen", { id });
@@ -113,6 +90,7 @@ export const ProgramListScene = ({ navigation, route }: any) => {
         resultsCount={count}
       />
       <FlatList
+        testID="flat-list"
         data={uniqueData ?? []}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (

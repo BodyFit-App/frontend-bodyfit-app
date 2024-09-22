@@ -32,7 +32,6 @@ export const RegisterScreen = ({
 
   const onSubmit = async (data: { email: string; password: string }) => {
     if (!checked) {
-      console.log("Veuillez accepter les termes et conditions.");
     }
 
     const { error } = await signUp(data.email, data.password);
@@ -59,6 +58,7 @@ export const RegisterScreen = ({
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
+            testID="email-input"
             style={styles.textinput}
             label="Adresse email"
             placeholder="Email"
@@ -86,6 +86,7 @@ export const RegisterScreen = ({
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
+            testID="password-input"
             style={styles.textinput}
             label="Mot de passe"
             placeholder="Mot de passe"
@@ -113,6 +114,7 @@ export const RegisterScreen = ({
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
+            testID="password-confirm-input"
             style={styles.textinput}
             label="Confirmer mot de passe"
             placeholder="Confirmation mot de passe"
@@ -132,6 +134,7 @@ export const RegisterScreen = ({
 
       <View style={styles.checkboxContainer}>
         <Checkbox.Item
+          testID="checkbox"
           status={checked ? "checked" : "unchecked"}
           onPress={() => setChecked(!checked)}
           label="J’ai lu et accepté les termes et les conditions"
