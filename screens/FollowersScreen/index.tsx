@@ -1,6 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { fetchProfiles } from "../../api/profiles";
 import ActuCard from "../../components/ActuCard/ActuCard";
 import { useAuth } from "../../hooks/useAuth";
@@ -24,18 +30,23 @@ const FollowersScreen = ({
     asc: false,
   });
 
-
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
   const filters = { pseudo: debouncedSearchQuery };
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
 
   const fetchProfileInfinite = async ({ pageParam }: any) => {
     try {
-      const { data, nextCursor, count } = await fetchProfiles(pageParam, filters, order);
+      const { data, nextCursor, count } = await fetchProfiles(
+        pageParam,
+        { pseudo: debouncedSearchQuery },
+        order
+      );
+
       return { data, nextCursor, count };
     } catch (error) {
       console.error(error);
+
       throw new Error((error as Error).message);
     }
   };
@@ -90,6 +101,7 @@ const FollowersScreen = ({
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Rechercher un pseudo"
+        style={{ marginTop: 10 }}
       />
       <FilterBar
         defaultFilter={selectedFilter}
@@ -105,8 +117,9 @@ const FollowersScreen = ({
             username={item?.pseudo || ""}
             fullName={item?.firstname + " " + item?.lastname || ""}
             profileImageUrl={item.avatar_url || ""}
-            followed={true}
-            onFollowToggle={() => handlePseudoPress(item?.id || undefined)}
+            followed={false} // trouver un moyen de gérer le satus du suivit de l'utilisateur
+            onFollowToggle={() => console.log("Follow toggle")}
+            onPressPseudo={() => handlePseudoPress(item?.id || undefined)}
             followersCount={item?.followedBy?.length || 0}
             exercisesCount={item?.exercises?.length || 0}
             goalsCount={item?.goals?.length || 0}
