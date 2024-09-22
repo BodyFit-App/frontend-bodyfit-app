@@ -14,3 +14,8 @@ export type GoalOrder = {
   field: keyof Tables<"goals">;
   asc?: boolean;
 };
+
+export type ProfileOrder = {
+  field: keyof Tables<"profiles">;
+  asc?: boolean;
+};

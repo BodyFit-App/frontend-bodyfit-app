@@ -3,6 +3,7 @@ import { getRange } from "../lib/helpers";
 import { client } from "../lib/supabase";
 import { TablesInsert, TablesUpdate } from "../types/database.types";
 import { ProfileFilter } from "../types/filters.types";
+import { ProfileOrder } from "../types/orders.types";
 
 export const fetchProfileById = async (id: number) => {
   const { data, error } = await client.from("profiles").select(
@@ -18,23 +19,28 @@ export const fetchProfileById = async (id: number) => {
 export const fetchProfiles = async (
   page: number = 1,
   filter: ProfileFilter,
+  order: ProfileOrder = { field: "created_at", asc: false },
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
   let query = client
     .from("profiles")
-    .select("*")
+    .select("*,followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))", { count: "exact" },)
     .range(start, end);
 
   if (filter?.pseudo) {
     query = query.eq("profiles.pseudo", filter.pseudo);
   }
+  query = query.order(order.field, { ascending: order.asc });
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) throw new Error(error.message);
+  const totalPages = count ? Math.ceil(count! / NB_ELTS_PER_PAGE) : 0;
+  const nextPage = page + 1;
+  const nextCursor = nextPage > totalPages ? null : nextPage;
 
-  return data;
+  return { data, nextCursor, count };
 };
 
 export const updateProfile = async (
