@@ -6,6 +6,7 @@ import ActuCard from "../../components/ActuCard/ActuCard";
 import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
+import { Text } from "react-native-paper";
 
 const ActualiteScreen = ({
   navigation,
@@ -42,9 +43,7 @@ const ActualiteScreen = ({
   });
 
   const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
-  const uniqueData = mergedData?.filter(
-    (item, index, self) =>
-      index === self.findIndex((t) => t.title === item.title)
+  const uniqueData = mergedData?.filter((item, index, self) => index === self.findIndex((t) => t.title === item.title)
   );
 
   const handleActivityPress = (id?: number, type?: string) => {
@@ -75,35 +74,42 @@ const ActualiteScreen = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={uniqueData}
-        keyExtractor={(_, i) => i.toString()}
-        renderItem={({ item }) => (
-          <ActuCard
-            username={item.pseudo || ""}
-            fullName={`${item.firstname || ""} ${item.lastname || ""}`}
-            profileImageUrl={item.avatar_url || ""}
-            actionDescription={adjustText(item.type) || ""}
-            exerciseLinkText={item.title || ""}
-            onActivityPress={() =>
-              handleActivityPress(
-                item.id ? item.id : undefined,
-                item.type ? item.type : undefined
-              )
-            }
-            onUsernamePress={() =>
-              handlePseudoPress(item.profile_id ? item.profile_id : undefined)
-            }
-          />
-        )}
-        onEndReached={() => {
-          if (hasNextPage) fetchNextPage();
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          isFetchingNextPage ? <ActivityIndicator size="large" /> : null
-        }
-      />
+      <Text style={styles.title}>Fil d'actualités</Text>
+      {uniqueData?.length === 0 ? (
+        <Text style={styles.noDataText}>
+          Aucune activité à afficher pour le moment
+        </Text>
+      ) : (
+        <FlatList
+          data={uniqueData}
+          keyExtractor={(_, i) => i.toString()}
+          renderItem={({ item }) => (
+            <ActuCard
+              username={item.pseudo || ""}
+              fullName={`${item.firstname || ""} ${item.lastname || ""}`}
+              profileImageUrl={item.avatar_url || ""}
+              actionDescription={adjustText(item.type) || ""}
+              exerciseLinkText={item.title || ""}
+              onActivityPress={() =>
+                handleActivityPress(
+                  item.id ? item.id : undefined,
+                  item.type ? item.type : undefined
+                )
+              }
+              onUsernamePress={() =>
+                handlePseudoPress(item.profile_id ? item.profile_id : undefined)
+              }
+            />
+          )}
+          onEndReached={() => {
+            if (hasNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isFetchingNextPage ? <ActivityIndicator size="large" /> : null
+          }
+        />
+      )}
     </View>
   );
 };
@@ -113,6 +119,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+    color: "#2F80ED",
+  },
+  noDataText: {
+    textAlign: "center",
+    margin: "auto",
+    color: "#A0A0A0",
   },
 });
 

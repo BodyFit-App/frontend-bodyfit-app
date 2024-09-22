@@ -18,6 +18,7 @@ import LandingScreen from "../screens/LandingScreen";
 import { ExerciseListScreen } from "../screens/ExerciseListScreen";
 import { ProgramListScreen } from "../screens/ProgramListScreen";
 import ProfilDetailScreen from "../screens/ProfilDetailScreen";
+import FollowersScreen from "../screens/FollowersScreen";
 
 export type AppParamListBase = {
   Actualites: { id?: number; user_id?: number; type?: string };
@@ -25,6 +26,7 @@ export type AppParamListBase = {
   ExerciseDetailsScreen: { id: number };
   ExerciseFormScreen: { id?: number };
   ExerciseListScreen: { filters?: any };
+  FollowersScreen: undefined;
   GoalDetailsScreen: { id: number };
   GoalFormScreen: { id?: number };
   GoalListScreen: { filters?: any };
@@ -81,6 +83,7 @@ export const MainNavigation = () => {
               name="ExerciseFormScreen"
               component={ExerciseFormScreen}
             />
+           
             <Stack.Screen
               name="GoalDetailsScreen"
               component={GoalDetailsScreen}

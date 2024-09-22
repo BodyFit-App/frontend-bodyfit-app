@@ -28,14 +28,15 @@ import theme from "../../theme";
  */
 
 interface FollowerCardProps {
-  username: string;
-  fullName: string;
+  username?: string;
+  fullName?: string;
   profileImageUrl?: string;
-  followersCount: number;
-  exercisesCount: number;
-  goalsCount: number;
-  followed: boolean;
-  onFollowToggle: () => void;
+  followersCount?: number;
+  exercisesCount?: number;
+  goalsCount?: number;
+  followed?: boolean;
+  onFollowToggle?: () => void;
+  onPressPseudo?: () => void;
 }
 
 const FollowerCard: React.FC<FollowerCardProps> = ({
@@ -47,6 +48,7 @@ const FollowerCard: React.FC<FollowerCardProps> = ({
   goalsCount,
   followed,
   onFollowToggle,
+  onPressPseudo,
 }) => {
   return (
     <Card style={styles.card}>
@@ -58,19 +60,26 @@ const FollowerCard: React.FC<FollowerCardProps> = ({
               ? { uri: profileImageUrl }
               : require("../../assets/default-avatar.png")
           }
-          testID={profileImageUrl ? 'profile-image' : 'default-avatar'}
+          testID={profileImageUrl ? "profile-image" : "default-avatar"}
         />
         <View style={styles.infoContainer}>
-          <Text style={styles.username}>@{username}</Text>
+          <Text style={styles.username} onPress={onPressPseudo}>
+            @{username}
+          </Text>
           <Text style={styles.fullName}>{fullName}</Text>
         </View>
-        <CustomButton
-          {...(followed ? { style: { backgroundColor: theme.colors.primary, borderWidth: 0} } : "")}
-          {...(followed ? { textColor: theme.colors.textFollow  } : "")}
+        <Button
+          style={styles.button}
+          mode="contained"
+          labelStyle={{ fontSize: 10 }}
+          textColor={followed ? "#ffffff" : "#2F80ED"}
+          buttonColor={followed ? "#2F80ED" : "transparent"}
+          //{...(followed ? { style: { backgroundColor: theme.colors.primary, borderWidth: 0}} : "")}
+          //{...(followed ? { textColor: theme.colors.textFollow } : "")}
           onPress={onFollowToggle}
         >
           {followed ? "Suivi(e)" : "Suivre"}
-        </CustomButton>
+        </Button>
       </Card.Content>
       <View style={styles.statsContainer}>
         <Text variant="labelSmall" style={styles.statTextCount}>
@@ -130,6 +139,14 @@ const styles = StyleSheet.create({
   statTextCount: {
     color: "#2F80ED",
     marginRight: 10,
+  },
+  button: {
+    borderColor: "#42424D",
+    borderRadius: 6,
+    borderWidth: 1,
+    marginRight: 10,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
   },
 });
 
