@@ -13,7 +13,7 @@ import { ExerciseOrder } from "../../types/orders.types";
 import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import { useAuth } from "../../hooks/useAuth";
-import { handleToggleFavoriteExercise } from "../../api/favorites";
+import { handleToggleFavoriteExercise } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
 
 export const ExerciseListScreen = ({

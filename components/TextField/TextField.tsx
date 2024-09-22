@@ -15,7 +15,7 @@ export default function TextField({
       style={{
         width: "100%",
         backgroundColor: theme.colors.backgroundButton,
-        ...{ style },
+        ...(style as object),
       }}
       {...props}
     />

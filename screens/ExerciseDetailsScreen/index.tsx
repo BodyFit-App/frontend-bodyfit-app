@@ -6,7 +6,7 @@ import { Divider, MD2Colors, Text } from "react-native-paper";
 import TrainingHeader from "../../components/TrainingHeader/TrainingHeader";
 import { getPublicUrl } from "../../lib/supabase";
 import CreatorCard from "../../components/CreatorCard";
-import { handleToggleFavoriteExercise } from "../../api/favorites";
+import { handleToggleFavoriteExercise } from "../../api/toggles";
 import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
