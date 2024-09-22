@@ -17,8 +17,8 @@ import { RegisterScreen } from "../screens/RegisterScreen";
 import LandingScreen from "../screens/LandingScreen";
 import { ExerciseListScreen } from "../screens/ExerciseListScreen";
 import { ProgramListScreen } from "../screens/ProgramListScreen";
-import ProfilDetailScreen from "../screens/ProfilDetailScreen";
-import FollowersScreen from "../screens/FollowersScreen";
+import { ProfileDetailsScreen } from "../screens/ProfileDetailScreen";
+import { FollowersScreen } from "../screens/FollowersScreen";
 
 export type AppParamListBase = {
   Actualites: { id?: number; user_id?: number; type?: string };
@@ -26,7 +26,6 @@ export type AppParamListBase = {
   ExerciseDetailsScreen: { id: number };
   ExerciseFormScreen: { id?: number };
   ExerciseListScreen: { filters?: any };
-  FollowersScreen: undefined;
   GoalDetailsScreen: { id: number };
   GoalFormScreen: { id?: number };
   GoalListScreen: { filters?: any };
@@ -34,7 +33,7 @@ export type AppParamListBase = {
   LandingScreen: undefined;
   LoginScreen: undefined;
   ProfileFormScreen: undefined;
-  ProfilDetailScreen: { id: number };
+  ProfileDetailsScreen: { id: number };
   ProgramDetailsScreen: { id: number };
   ProgramListScreen: { filters?: any };
   ProgramFormScreen: { id?: number };
@@ -83,7 +82,7 @@ export const MainNavigation = () => {
               name="ExerciseFormScreen"
               component={ExerciseFormScreen}
             />
-           
+
             <Stack.Screen
               name="GoalDetailsScreen"
               component={GoalDetailsScreen}
@@ -103,8 +102,8 @@ export const MainNavigation = () => {
               component={ProfileFormScreen}
             />
             <Stack.Screen
-              name="ProfilDetailScreen"
-              component={ProfilDetailScreen}
+              name="ProfileDetailsScreen"
+              component={ProfileDetailsScreen}
             />
             <Stack.Screen
               name="ProgramListScreen"

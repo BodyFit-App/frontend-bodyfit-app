@@ -4,15 +4,8 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import React, { useState } from "react";
-import {
-  View,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchProfiles } from "../../api/profiles";
-import ActuCard from "../../components/ActuCard/ActuCard";
 import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
@@ -23,7 +16,7 @@ import { ProfileOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { handleToggleFollow } from "../../api/toggles";
 
-const FollowersScreen = ({
+export const FollowersScreen = ({
   navigation,
   route,
   ...props
@@ -77,8 +70,8 @@ const FollowersScreen = ({
     (item, index, self) => index === self.findIndex((t) => t.id === item.id)
   );
 
-  const handlePseudoPress = (id?: number) => {
-    navigation.push("ProfilDetailScreen" as never, { id } as never);
+  const handlePseudoPress = (id: number) => {
+    navigation.push("ProfileDetailsScreen", { id });
   };
   const count = data?.pages[0].count ?? 0;
 
@@ -138,7 +131,7 @@ const FollowersScreen = ({
             onFollowToggle={() =>
               toggleFavorite(item.id, item.followedBy.length > 0)
             }
-            onPressPseudo={() => handlePseudoPress(item?.id || undefined)}
+            onPressPseudo={() => handlePseudoPress(item.id)}
             followersCount={item?.followedBy?.length || 0}
             exercisesCount={item?.exercises?.length || 0}
             goalsCount={item?.goals?.length || 0}
@@ -163,5 +156,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-
-export default FollowersScreen;

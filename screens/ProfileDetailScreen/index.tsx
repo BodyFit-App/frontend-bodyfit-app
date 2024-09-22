@@ -1,35 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import ProfilHeader from "../../components/ProfileHeader/ProfileHeader";
 import theme from "../../theme";
-import CustomButton from "../../components/CustomButton/CustomButton";
-import PieChart from "react-native-pie-chart";
 import ObjectifCard from "../../components/ObjectifCard/ObjectifCard";
-import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProfileById, fetchProgress } from "../../api/profiles";
-import { fetchFollowingsByProfileId } from "../../api/followings";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProfileById } from "../../api/profiles";
 import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
-import { fetchPrograms } from "../../api/programs";
 import OtherProfilHeader from "../../components/OtherProfileHeader/OtherProfileHeader";
+import { StackScreenProps } from "@react-navigation/stack";
+import { handleToggleFollow } from "../../api/toggles";
+import { AppParamListBase } from "../../navigations/main";
 
-const ProfilDetailScreen = () => {
-  const navigation = useNavigation();
-  const id = 10;
+export const ProfileDetailsScreen = ({
+  navigation,
+  route,
+  ...props
+}: StackScreenProps<AppParamListBase, "ProfileDetailsScreen">) => {
+  const id = route.params.id;
 
+  const queryClient = useQueryClient();
+  const queryKey = ["profile", id];
   const { data: profile } = useQuery({
     queryKey: ["profile", id],
     queryFn: () => fetchProfileById(id),
     enabled: !!id,
   });
 
-  const { data: followers } = useQuery({
-    queryKey: ["followers", id],
-    queryFn: () => fetchFollowingsByProfileId(id, 2),
-    enabled: !!id,
+  const mutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: handleToggleFollow,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
+
+  const toggleFavorite = (id: number, isFollowed: boolean) => {
+    mutation.mutate({ id, isFollowed });
+  };
 
   return (
     <ScrollView>
@@ -39,13 +44,15 @@ const ProfilDetailScreen = () => {
             firstname={profile.firstname ?? ""}
             lastname={profile.lastname ?? ""}
             username={profile.pseudo ?? ""}
-            followers={followers?.length ?? 0}
+            followers={profile.followedBy?.length ?? 0}
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
             goalsCount={profile.goals?.length ?? 0}
-            followed={false}
-            onFollowToggle={() => console.log("Toggle Follow")}
+            followed={profile.followedBy.length > 0}
+            onFollowToggle={() =>
+              toggleFavorite(profile.id, profile.followedBy.length > 0)
+            }
           />
         )}
       </View>
@@ -79,7 +86,7 @@ const ProfilDetailScreen = () => {
           <Text style={styles.titletxt}>Ces exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ExercisesScreen" as never)}
+            onPress={() => navigation.push("ExerciseListScreen", {})}
           >
             Tout afficher
           </Text>
@@ -201,5 +208,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default ProfilDetailScreen;
