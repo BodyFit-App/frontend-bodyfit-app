@@ -53,35 +53,3 @@ export const deleteFavProgram = async (programId: number) => {
   );
   if (error) throw new Error(error.message);
 };
-
-export const handleToggleFavoriteExercise = async (
-  { id, isFav }: { id: number; isFav: boolean },
-) => {
-  try {
-    if (isFav) {
-      await deleteFavExercise(id);
-      return { id, isFav: false };
-    }
-    await addFavExercise(id);
-    return { id, isFav: true };
-  } catch (error) {
-    console.error(error);
-    throw new Error((error as Error).message);
-  }
-};
-
-export const handleToggleFavoriteProgram = async (
-  { id, isFav }: { id: number; isFav: boolean },
-) => {
-  try {
-    if (isFav) {
-      await deleteFavProgram(id);
-      return { id, isFav: false };
-    }
-    await addFavProgram(id);
-    return { id, isFav: true };
-  } catch (error) {
-    console.error(error);
-    throw new Error((error as Error).message);
-  }
-};

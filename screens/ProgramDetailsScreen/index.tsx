@@ -12,7 +12,7 @@ import { getPublicUrl } from "../../lib/supabase";
 import CreatorCard from "../../components/CreatorCard";
 import { fetchProgramById } from "../../api/programs";
 import ItemCard from "../../components/ItemCard";
-import { handleToggleFavoriteProgram } from "../../api/favorites";
+import { handleToggleFavoriteProgram } from "../../api/toggles";
 import { useAuth } from "../../hooks/useAuth";
 import theme from "../../theme";
 import { StackScreenProps } from "@react-navigation/stack";

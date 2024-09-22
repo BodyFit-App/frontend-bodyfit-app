@@ -12,7 +12,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import { ProgramOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { StackScreenProps } from "@react-navigation/stack";
-import { handleToggleFavoriteProgram } from "../../api/favorites";
+import { handleToggleFavoriteProgram } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
 
 export const ProgramListScreen = ({
