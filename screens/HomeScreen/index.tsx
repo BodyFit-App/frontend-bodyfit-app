@@ -52,23 +52,21 @@ export const HomeScreen = ({
 
   return (
     <SafeAreaProvider>
-      <View testID="debug-view">
-        <Text>Home Screen Test</Text>
-      </View>
-      {/* <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-      barStyle={{
-        backgroundColor: theme.colors.backgroundNav,
-        borderTopWidth: 1,
-        borderTopColor: theme.colors.border,
-        height: 90,
-      }}
-      activeColor="#2F80ED"
-      inactiveColor="#2F80ED"
-      style={{ paddingTop: 32 }}
-    /> */}
+      <BottomNavigation
+        testID="bottom-navigation"
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        barStyle={{
+          backgroundColor: theme.colors.backgroundNav,
+          borderTopWidth: 1,
+          borderTopColor: theme.colors.border,
+          height: 90,
+        }}
+        activeColor="#2F80ED"
+        inactiveColor="#2F80ED"
+        style={{ paddingTop: 32 }}
+      />
     </SafeAreaProvider>
   );
 };

@@ -32,7 +32,6 @@ export const RegisterScreen = ({
 
   const onSubmit = async (data: { email: string; password: string }) => {
     if (!checked) {
-      console.log("Veuillez accepter les termes et conditions.");
     }
 
     const { error } = await signUp(data.email, data.password);
