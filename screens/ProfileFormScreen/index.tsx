@@ -5,14 +5,13 @@ import TextField from "../../components/TextField/TextField";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import ImagePicker from "../../components/ImagePicker/ImagePicker";
 import theme from "../../theme";
-import {  fetchProfileById, updateProfile } from "../../api/profiles";
+import { fetchProfileById, updateProfile } from "../../api/profiles";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { AppParamListBase } from "../../navigations/main";
-
 
 export const ProfileFormScreen = ({
   navigation,
@@ -78,27 +77,29 @@ export const ProfileFormScreen = ({
 
   const handleDeleteProfile = async () => {
     try {
-      await deleteAccount();   
+      await deleteAccount();
     } catch (error) {
       console.error("Erreur lors de la suppression du profil :", error);
     }
   };
 
- 
   const confirmDelete = () => {
-    Alert.alert("Supprimer le profil", "Êtes-vous sûr de vouloir supprimer votre profil ?", [
-      {
-        text: "Annuler",
-        style: "cancel",
-      },
-      {
-        text: "Supprimer",
-        style: "destructive",
-        onPress: handleDeleteProfile,
-      },
-    ]);
-  }
-    
+    Alert.alert(
+      "Supprimer le profil",
+      "Êtes-vous sûr de vouloir supprimer votre profil ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel",
+        },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: handleDeleteProfile,
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
     if (isSuccess && profile) {
@@ -112,13 +113,17 @@ export const ProfileFormScreen = ({
   }, [isSuccess, profile, reset]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      testID="profile-form-screen"
+    >
       <View style={styles.imagePseudoContainer}>
         <Controller
           control={control}
           render={({ field: { onChange, value } }) => (
             <View style={styles.imagePickerContainer}>
               <ImagePicker
+                testID="image-picker"
                 onChange={onChange}
                 value={value || ""}
                 imageStyle={styles.imagePicker}
@@ -132,7 +137,9 @@ export const ProfileFormScreen = ({
         />
 
         <View style={styles.pseudoDisplayContainer}>
-          <Text style={styles.pseudoText}>@{pseudoValue || "pseudo"}</Text>
+          <Text style={styles.pseudoText} testID="pseudo-display">
+            @{pseudoValue || "pseudo"}
+          </Text>
         </View>
       </View>
 
@@ -149,6 +156,7 @@ export const ProfileFormScreen = ({
             error={!!errors.pseudo}
             style={styles.textInput}
             mode="outlined"
+            testID="pseudo"
           />
         )}
         name="pseudo"
@@ -170,6 +178,7 @@ export const ProfileFormScreen = ({
             error={!!errors.firstname}
             style={styles.textInput}
             mode="outlined"
+            testID="firstname"
           />
         )}
         name="firstname"
@@ -191,6 +200,7 @@ export const ProfileFormScreen = ({
             error={!!errors.lastname}
             style={styles.textInput}
             mode="outlined"
+            testID="lastname"
           />
         )}
         name="lastname"
@@ -199,10 +209,15 @@ export const ProfileFormScreen = ({
         <Text style={styles.errorText}>{errors.lastname.message}</Text>
       )}
 
-      <CustomButton onPress={handleSubmit(onSubmit)}>
+      <CustomButton onPress={handleSubmit(onSubmit)} testID="submit-button">
         Modifier le profil
       </CustomButton>
-      <CustomButton onPress={confirmDelete} textColor="white" style={{ backgroundColor: "#AD2823", marginTop: 10 }}>
+      <CustomButton
+        onPress={confirmDelete}
+        textColor="white"
+        style={{ backgroundColor: "#AD2823", marginTop: 10 }}
+        testID="delete-button"
+      >
         Supprimer le profil
       </CustomButton>
     </ScrollView>
