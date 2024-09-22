@@ -6,7 +6,7 @@ import {
 } from "./profiles";
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
-describe("Tests api/goals", () => {
+describe("Tests api/profiles", () => {
   afterEach(() => {
     jest.clearAllMocks();
     setTestData(null);
@@ -60,7 +60,11 @@ describe("Tests api/goals", () => {
 
       const data = await fetchProfiles(1, { pseudo: "User1" });
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        "count": undefined,
+        "data": mockData,
+        "nextCursor": null,
+      });
     });
 
     it("should apply filters correctly", async () => {
@@ -80,7 +84,11 @@ describe("Tests api/goals", () => {
 
       const data = await fetchProfiles(1, { pseudo: "User1" });
 
-      expect(data).toEqual(mockData);
+      expect(data).toEqual({
+        "count": undefined,
+        "data": mockData,
+        "nextCursor": null,
+      });
     });
 
     it("should return empty array if no data matches filters", async () => {
@@ -88,7 +96,11 @@ describe("Tests api/goals", () => {
 
       const data = await fetchProfiles(1, { pseudo: "NonExistentUser" });
 
-      expect(data).toEqual([]);
+      expect(data).toEqual({
+        "count": undefined,
+        "data": [],
+        "nextCursor": null,
+      });
     });
 
     it("should throw an error when the fetch fails", async () => {

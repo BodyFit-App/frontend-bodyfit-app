@@ -1,4 +1,8 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
   View,
@@ -17,6 +21,7 @@ import CustomSearchBar from "../../components/CustomSearchBar/CustomSearchBar";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import { ProfileOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
+import { handleToggleFollow } from "../../api/toggles";
 
 const FollowersScreen = ({
   navigation,
@@ -51,6 +56,8 @@ const FollowersScreen = ({
     }
   };
 
+  const queryClient = useQueryClient();
+  const queryKey = ["profile", profileId, order, filters];
   const {
     data,
     fetchNextPage,
@@ -59,7 +66,7 @@ const FollowersScreen = ({
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["profile", profileId, order, filters],
+    queryKey,
     queryFn: fetchProfileInfinite,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -74,6 +81,16 @@ const FollowersScreen = ({
     navigation.push("ProfilDetailScreen" as never, { id } as never);
   };
   const count = data?.pages[0].count ?? 0;
+
+  const mutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: handleToggleFollow,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
+  const toggleFavorite = (id: number, isFollowed: boolean) => {
+    mutation.mutate({ id, isFollowed });
+  };
 
   const handleFilterChange = (selectedFilter: string) => {
     setSelectedFilter(selectedFilter);
@@ -117,8 +134,10 @@ const FollowersScreen = ({
             username={item?.pseudo || ""}
             fullName={item?.firstname + " " + item?.lastname || ""}
             profileImageUrl={item.avatar_url || ""}
-            followed={false} // trouver un moyen de gérer le satus du suivit de l'utilisateur
-            onFollowToggle={() => console.log("Follow toggle")}
+            followed={item.followedBy.length > 0}
+            onFollowToggle={() =>
+              toggleFavorite(item.id, item.followedBy.length > 0)
+            }
             onPressPseudo={() => handlePseudoPress(item?.id || undefined)}
             followersCount={item?.followedBy?.length || 0}
             exercisesCount={item?.exercises?.length || 0}

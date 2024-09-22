@@ -25,11 +25,14 @@ export const fetchProfiles = async (
 
   let query = client
     .from("profiles")
-    .select("*,followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))", { count: "exact" },)
+    .select(
+      "*,followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
+      { count: "exact" },
+    )
     .range(start, end);
 
   if (filter?.pseudo) {
-    query = query.eq("profiles.pseudo", filter.pseudo);
+    query = query.eq("pseudo", filter.pseudo);
   }
   query = query.order(order.field, { ascending: order.asc });
 

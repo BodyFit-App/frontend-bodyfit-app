@@ -17,7 +17,6 @@ export const handleToggleFavoriteExercise = async (
     await addFavExercise(id);
     return { id, isFav: true };
   } catch (error) {
-    console.error(error);
     throw new Error((error as Error).message);
   }
 };
@@ -33,7 +32,6 @@ export const handleToggleFavoriteProgram = async (
     await addFavProgram(id);
     return { id, isFav: true };
   } catch (error) {
-    console.error(error);
     throw new Error((error as Error).message);
   }
 };
@@ -49,7 +47,6 @@ export const handleToggleFollow = async (
     await addFollowing(id);
     return { id, isFollowed: true };
   } catch (error) {
-    console.error(error);
     throw new Error((error as Error).message);
   }
 };
