@@ -15,6 +15,7 @@ import FilterBar from "../../components/FilterBar/FilterBar";
 import { ProfileOrder } from "../../types/orders.types";
 import { useDebounce } from "../../hooks/useDebounce";
 import { handleToggleFollow } from "../../api/toggles";
+import { useFollowOrder } from "../../hooks/useFollowOrder";
 
 export const FollowersScreen = ({
   navigation,
@@ -22,11 +23,8 @@ export const FollowersScreen = ({
   ...props
 }: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Plus récents");
-  const [order, setOrder] = useState<ProfileOrder>({
-    field: "created_at",
-    asc: false,
-  });
+  const { order, selectedFilter, handleFilterChange, filterList } =
+    useFollowOrder();
 
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
   const filters = { pseudo: debouncedSearchQuery };
@@ -85,26 +83,6 @@ export const FollowersScreen = ({
     mutation.mutate({ id, isFollowed });
   };
 
-  const handleFilterChange = (selectedFilter: string) => {
-    setSelectedFilter(selectedFilter);
-    switch (selectedFilter) {
-      case "Plus récents":
-        setOrder({ field: "created_at", asc: false });
-        break;
-      case "Moins récents":
-        setOrder({ field: "created_at", asc: true });
-        break;
-      case "A-Z":
-        setOrder({ field: "pseudo", asc: true });
-        break;
-      case "Z-A":
-        setOrder({ field: "pseudo", asc: false });
-        break;
-      default:
-        setOrder({ field: "created_at", asc: false });
-    }
-  };
-
   return (
     <View style={styles.container}>
       <CustomSearchBar
@@ -115,7 +93,7 @@ export const FollowersScreen = ({
       />
       <FilterBar
         defaultFilter={selectedFilter}
-        filters={["Plus récents", "Moins récents", "A-Z", "Z-A"]}
+        filters={filterList}
         onFilterChange={handleFilterChange}
         resultsCount={count}
       />
