@@ -78,7 +78,11 @@ export const ProfileDetailsScreen = ({
           <Text style={styles.titletxt}>Ses objectifs</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("GoalsScreen" as never)}
+            onPress={() =>
+              navigation.push("GoalListScreen", {
+                filters: { profile_id: id },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -102,7 +106,11 @@ export const ProfileDetailsScreen = ({
           <Text style={styles.titletxt}>Ses exercices</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.push("ExerciseListScreen", {})}
+            onPress={() =>
+              navigation.push("ExerciseListScreen", {
+                filters: { profile_id: id },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -117,9 +125,9 @@ export const ProfileDetailsScreen = ({
                   exercise.categories.map((categorie) => categorie.name) ?? []
                 }
                 pseudo={profile.pseudo ?? ""}
-                isFav={true}
-                onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => navigation.navigate("Exercise" as never)}
+                onPressNav={() =>
+                  navigation.push("ExerciseDetailsScreen", { id: exercise.id })
+                }
               />
             </View>
           ))}
@@ -131,7 +139,11 @@ export const ProfileDetailsScreen = ({
           <Text style={styles.titletxt}>Ses programmes</Text>
           <Text
             style={styles.subtitletxt}
-            onPress={() => navigation.navigate("ProgramsScreen" as never)}
+            onPress={() =>
+              navigation.push("ProgramListScreen", {
+                filters: { profile_id: id },
+              })
+            }
           >
             Tout afficher
           </Text>
@@ -143,9 +155,9 @@ export const ProfileDetailsScreen = ({
                 title={program.title}
                 description={program.description ?? ""}
                 pseudo={profile.pseudo ?? ""}
-                isFav={true}
-                onPressFav={() => console.log("Toggle Favorite")}
-                onPressNav={() => console.log("Go to program")}
+                onPressNav={() =>
+                  navigation.push("ProgramDetailsScreen", { id: program.id })
+                }
               />
             </View>
           ))}
