@@ -7,6 +7,7 @@ import { AppParamListBase } from "../../navigations/main";
 import theme from "../../theme";
 import { ExerciseListScene, ExerciseListScreen } from "../ExerciseListScreen";
 import { ProgramListScreen } from "../ProgramListScreen";
+import { FollowersScreen } from "../FollowersScreen";
 
 const renderTabBar = (props: any) => (
   <View style={styles.tabBar}>
@@ -42,7 +43,12 @@ export const ExplorerScreen = ({
   const [routes] = React.useState([
     { key: "exercises", title: "Exercices" },
     { key: "programs", title: "Programmes" },
-    // { key: "profiles", title: "Utilisateurs" },
+    {
+      key: "followers",
+      title: "Utilisateurs",
+      focusedIcon: "account-multiple",
+      testID: "tab-followers",
+    },
   ]);
 
   const renderScene = SceneMap({
@@ -50,6 +56,7 @@ export const ExplorerScreen = ({
       <ExerciseListScene navigation={navigation} route={route} />
     ),
     programs: () => <ProgramListScreen navigation={navigation} route={route} />,
+    followers: () => <FollowersScreen navigation={navigation} route={route} />,
   });
 
   return (

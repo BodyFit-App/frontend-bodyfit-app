@@ -12,6 +12,8 @@ import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
+import { FabHome } from "../../components/FabHome/FabHome";
+import { Portal } from "react-native-paper";
 
 const DashboardScreen = ({
   navigation,
@@ -79,164 +81,171 @@ const DashboardScreen = ({
   const pieChartLabels = chartData.length > 0 ? chartLabels : [];
 
   return (
-    <ScrollView>
-      <View style={styles.profilheader}>
-        {profile && (
-          <ProfilHeader
-            firstname={profile.firstname ?? ""}
-            lastname={profile.lastname ?? ""}
-            username={profile.pseudo ?? ""}
-            followers={profile.followedBy?.length ?? 0}
-            profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
-            exercisesCount={profile.exercises?.length ?? 0}
-            programsCount={profile.programs?.length ?? 0}
-            goalsCount={
-              profile.goals?.filter(({ achieved }) => achieved).length ?? 0
-            }
-            onEditProfile={() => {
-              navigation.push("ProfileFormScreen");
-            }}
-            onSignOutProfile={() => {
-              signOut();
-            }}
-          />
-        )}
-      </View>
-
-      <View style={styles.containeract}>
-        <Text style={styles.titletxt}>Mon activité</Text>
-        <View style={styles.containerbtn}>
-          <CustomButton
-            children="Temps"
-            labelStyle={{ fontSize: 12, fontWeight: "600" }}
-            onPress={() => {}}
-          />
-        </View>
-
-        <View style={styles.containergrah}>
-          {chartData.length > 0 ? (
-            <>
-              <PieChart
-                widthAndHeight={250}
-                series={chartData}
-                sliceColor={pieChartColors}
-                coverRadius={0.5}
-                coverFill={theme.colors.background}
-              />
-              <View style={styles.legendContainer}>
-                {pieChartLabels.map((label, index) => (
-                  <View style={styles.legendItem} key={index}>
-                    <View
-                      style={[
-                        styles.legendColor,
-                        { backgroundColor: pieChartColors[index] },
-                      ]}
-                    />
-                    <Text style={styles.legendText}>{label}</Text>
-                  </View>
-                ))}
-              </View>
-            </>
-          ) : (
-            <Text style={styles.noDataText}>Aucune donnée disponible</Text>
+    <View>
+      <ScrollView>
+        <View style={styles.profilheader}>
+          {profile && (
+            <ProfilHeader
+              firstname={profile.firstname ?? ""}
+              lastname={profile.lastname ?? ""}
+              username={profile.pseudo ?? ""}
+              followers={profile.followedBy?.length ?? 0}
+              profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
+              exercisesCount={profile.exercises?.length ?? 0}
+              programsCount={profile.programs?.length ?? 0}
+              goalsCount={
+                profile.goals?.filter(({ achieved }) => achieved).length ?? 0
+              }
+              onEditProfile={() => {
+                navigation.push("ProfileFormScreen");
+              }}
+              onSignOutProfile={() => {
+                signOut();
+              }}
+            />
           )}
         </View>
-      </View>
 
-      <View style={styles.containerobj}>
-        <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Mes objectifs</Text>
-          <Text
-            style={styles.subtitletxt}
-            onPress={() =>
-              navigation.push("GoalListScreen", {
-                filters: { profile_id: profileId },
-              })
-            }
-          >
-            Tout afficher
-          </Text>
-        </View>
-        <View style={styles.containercard}>
-          {profile?.goals?.slice(-2).map((goal) => (
-            <ObjectifCard
-              key={goal.id}
-              title={goal.title}
-              description={goal.description ?? ""}
-              progress={
-                (goal.steps.filter(({ achieved }) => achieved).length || 1) /
-                (goal.steps.length || 1)
-              }
-              startDate={goal.date_start ?? ""}
-              endDate={goal.date_end ?? ""}
+        <View style={styles.containeract}>
+          <Text style={styles.titletxt}>Mon activité</Text>
+          <View style={styles.containerbtn}>
+            <CustomButton
+              children="Temps"
+              labelStyle={{ fontSize: 12, fontWeight: "600" }}
+              onPress={() => {}}
             />
-          ))}
-        </View>
-      </View>
+          </View>
 
-      <View style={styles.containerobj}>
-        <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Mes exercices</Text>
-          <Text
-            style={styles.subtitletxt}
-            onPress={() =>
-              navigation.push("ExerciseListScreen", {
-                filters: { profile_id: profileId },
-              })
-            }
-          >
-            Tout afficher
-          </Text>
+          <View style={styles.containergrah}>
+            {chartData.length > 0 ? (
+              <>
+                <PieChart
+                  widthAndHeight={250}
+                  series={chartData}
+                  sliceColor={pieChartColors}
+                  coverRadius={0.5}
+                  coverFill={theme.colors.background}
+                />
+                <View style={styles.legendContainer}>
+                  {pieChartLabels.map((label, index) => (
+                    <View style={styles.legendItem} key={index}>
+                      <View
+                        style={[
+                          styles.legendColor,
+                          { backgroundColor: pieChartColors[index] },
+                        ]}
+                      />
+                      <Text style={styles.legendText}>{label}</Text>
+                    </View>
+                  ))}
+                </View>
+              </>
+            ) : (
+              <Text style={styles.noDataText}>Aucune donnée disponible</Text>
+            )}
+          </View>
         </View>
-        <View style={styles.containercard}>
-          {profile?.exercises?.slice(-2).map((exercise) => (
-            <View style={styles.itemCardContainer} key={exercise.id}>
-              <ItemCard
-                title={exercise.title}
-                time={exercise.estimated_time_seconds ?? 0}
-                categories={
-                  exercise.categories.map((categorie) => categorie.name) ?? []
-                }
-                pseudo={profile.pseudo ?? ""}
-                onPressNav={() =>
-                  navigation.push("ExerciseDetailsScreen", { id: exercise.id })
-                }
-              />
-            </View>
-          ))}
-        </View>
-      </View>
 
-      <View style={styles.containerobj}>
-        <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Mes programmes</Text>
-          <Text
-            style={styles.subtitletxt}
-            onPress={() =>
-              navigation.push("ProgramListScreen", {
-                filters: { profile_id: profileId },
-              })
-            }
-          >
-            Tout afficher
-          </Text>
-        </View>
-        <View style={styles.containercard}>
-          {profile?.programs?.slice(-2).map((program) => (
-            <View style={styles.itemCardContainer} key={program.id}>
-              <ItemCard
-                title={program.title}
-                description={program.description ?? ""}
-                pseudo={profile.pseudo ?? ""}
-                onPressNav={() =>
-                  navigation.push("ProgramDetailsScreen", { id: program.id })
+        <View style={styles.containerobj}>
+          <View style={styles.headerRow}>
+            <Text style={styles.titletxt}>Mes objectifs</Text>
+            <Text
+              style={styles.subtitletxt}
+              onPress={() =>
+                navigation.push("GoalListScreen", {
+                  filters: { profile_id: profileId },
+                })
+              }
+            >
+              Tout afficher
+            </Text>
+          </View>
+          <View style={styles.containercard}>
+            {profile?.goals?.slice(-2).map((goal) => (
+              <ObjectifCard
+                key={goal.id}
+                title={goal.title}
+                description={goal.description ?? ""}
+                progress={
+                  (goal.steps.filter(({ achieved }) => achieved).length || 1) /
+                  (goal.steps.length || 1)
                 }
+                startDate={goal.date_start ?? ""}
+                endDate={goal.date_end ?? ""}
               />
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+
+        <View style={styles.containerobj}>
+          <View style={styles.headerRow}>
+            <Text style={styles.titletxt}>Mes exercices</Text>
+            <Text
+              style={styles.subtitletxt}
+              onPress={() =>
+                navigation.push("ExerciseListScreen", {
+                  filters: { profile_id: profileId },
+                })
+              }
+            >
+              Tout afficher
+            </Text>
+          </View>
+          <View style={styles.containercard}>
+            {profile?.exercises?.slice(-2).map((exercise) => (
+              <View style={styles.itemCardContainer} key={exercise.id}>
+                <ItemCard
+                  title={exercise.title}
+                  time={exercise.estimated_time_seconds ?? 0}
+                  categories={
+                    exercise.categories.map((categorie) => categorie.name) ?? []
+                  }
+                  pseudo={profile.pseudo ?? ""}
+                  onPressNav={() =>
+                    navigation.push("ExerciseDetailsScreen", {
+                      id: exercise.id,
+                    })
+                  }
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.containerobj}>
+          <View style={styles.headerRow}>
+            <Text style={styles.titletxt}>Mes programmes</Text>
+            <Text
+              style={styles.subtitletxt}
+              onPress={() =>
+                navigation.push("ProgramListScreen", {
+                  filters: { profile_id: profileId },
+                })
+              }
+            >
+              Tout afficher
+            </Text>
+          </View>
+          <View style={styles.containercard}>
+            {profile?.programs?.slice(-2).map((program) => (
+              <View style={styles.itemCardContainer} key={program.id}>
+                <ItemCard
+                  title={program.title}
+                  description={program.description ?? ""}
+                  pseudo={profile.pseudo ?? ""}
+                  onPressNav={() =>
+                    navigation.push("ProgramDetailsScreen", { id: program.id })
+                  }
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+      <Portal.Host>
+        <FabHome navigation={navigation} />
+      </Portal.Host>
+    </View>
   );
 };
 
