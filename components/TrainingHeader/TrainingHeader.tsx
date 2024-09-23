@@ -28,6 +28,8 @@ interface TrainingHeaderProps {
   categories: string[];
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  onPressEdit?: () => void;
+  isMine?: boolean;
 }
 
 const { width } = Dimensions.get("window");
@@ -39,10 +41,23 @@ const TrainingHeader: React.FC<TrainingHeaderProps> = ({
   categories,
   isFavorite,
   onToggleFavorite,
+  onPressEdit = () => console.log("onPressEdit not implemented"),
+  isMine = false,
 }) => {
   return (
     <Card style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      <View
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Text style={styles.title}>{title}</Text>
+        {!!isMine && (
+          <IconButton onPress={onPressEdit} size={24} icon="pencil" />
+        )}
+      </View>
       <Image
         source={{ uri: imageUrl }}
         style={styles.image}

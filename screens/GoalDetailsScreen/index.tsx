@@ -11,6 +11,7 @@ import { fetchGoalById, updateStepStatus } from "../../api/goals";
 import StepCard from "../../components/StepCard/StepCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
+import { useAuth } from "../../hooks/useAuth";
 
 export const GoalDetailsScreen = ({
   navigation,
@@ -18,6 +19,7 @@ export const GoalDetailsScreen = ({
   ...props
 }: StackScreenProps<AppParamListBase, "GoalDetailsScreen">) => {
   const id = route.params.id;
+  const { session } = useAuth();
 
   const queryClient = useQueryClient();
   const queryKey = ["goal", id];
@@ -70,6 +72,15 @@ export const GoalDetailsScreen = ({
               ? data.steps.filter((step) => step.achieved).length /
                 data.steps.length
               : 0
+          }
+          onPressEdit={() =>
+            navigation.push("ExerciseFormScreen", { id: data?.id })
+          }
+          isMine={
+            !!(
+              data?.profile_id &&
+              session?.user.user_metadata.profile_id === data.profile_id
+            )
           }
         />
       </View>

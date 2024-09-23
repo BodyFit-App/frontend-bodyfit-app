@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GoalDetailsScreen } from "./";
 import { getPublicUrl } from "../../lib/supabase";
+import { useAuth } from "../../hooks/useAuth";
 
 jest.mock("@tanstack/react-query", () => ({
   useQuery: jest.fn(),
@@ -28,6 +29,10 @@ jest.mock("../../components/GoalHeader", () => {
   );
 });
 
+jest.mock("../../hooks/useAuth", () => ({
+  useAuth: jest.fn(),
+}));
+
 jest.mock("../../components/StepCard/StepCard", () => {
   const { TouchableOpacity, Text } = jest.requireActual("react-native");
   return (props) => (
@@ -38,6 +43,18 @@ jest.mock("../../components/StepCard/StepCard", () => {
 });
 
 describe("GoalDetailsScreen", () => {
+  beforeEach(() => {
+    (useAuth as jest.Mock).mockReturnValue({
+      session: {
+        user: {
+          user_metadata: {
+            profile_id: "123",
+          },
+        },
+      },
+    });
+  });
+
   const mockNavigation = { navigate: jest.fn() };
   const mockRoute = { params: { id: 1 } };
 

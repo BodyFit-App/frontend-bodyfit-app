@@ -17,18 +17,16 @@ export const GoalListScreen = ({
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "GoalListScreen">) => {
+  const filtersParam = route?.params?.filters || {};
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const { order, handleFilterChange, selectedFilter, filterList } =
     useFilterOrder();
   const [count, setCount] = useState(0);
+  const filters = { title: debouncedSearchQuery, ...filtersParam };
   const handleFetchGoals = async ({ pageParam }: any) => {
     try {
-      const goals = await fetchGoals(
-        pageParam,
-        { title: debouncedSearchQuery },
-        order
-      );
+      const goals = await fetchGoals(pageParam, filters, order);
       setCount(goals.count ?? 0);
       return goals;
     } catch (error) {
