@@ -35,6 +35,10 @@ export const fetchGoals = async (
     query = query.ilike("title", `%${filter.title}%`);
   }
 
+  if (filter?.profile_id) {
+    query = query.eq("profile_id", filter.profile_id);
+  }
+
   const { data, count, error } = await query;
 
   if (error) throw new Error(error.message);

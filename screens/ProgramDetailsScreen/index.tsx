@@ -90,6 +90,15 @@ export const ProgramDetailsScreen = ({
           onToggleFavorite={() => {
             toggleFavorite(data!.id, data!.favorite_programs.length > 0);
           }}
+          onPressEdit={() =>
+            navigation.push("ProgramFormScreen", { id: data?.id })
+          }
+          isMine={
+            !!(
+              data?.profile_id &&
+              session?.user.user_metadata.profile_id === data.profile_id
+            )
+          }
         />
       </View>
       <View style={styles.containertxt}>

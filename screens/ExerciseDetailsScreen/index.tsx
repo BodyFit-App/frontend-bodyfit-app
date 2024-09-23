@@ -63,6 +63,15 @@ export const ExerciseDetailsScreen = ({
           onToggleFavorite={() =>
             toggleFavorite(data!.id, data!.favorite_exercises.length > 0)
           }
+          onPressEdit={() =>
+            navigation.push("ExerciseFormScreen", { id: data?.id })
+          }
+          isMine={
+            !!(
+              data?.profile_id &&
+              session?.user.user_metadata.profile_id === data.profile_id
+            )
+          }
         />
       </View>
       <View style={styles.containertxt}>
