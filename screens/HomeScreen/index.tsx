@@ -1,5 +1,5 @@
 import React from "react";
-import { BottomNavigation, Text } from "react-native-paper";
+import { BottomNavigation, FAB, Portal, Text } from "react-native-paper";
 import ActualiteScreen from "../Actualites";
 import theme from "../../theme";
 import { ExplorerScreen } from "../ExplorerScreen";
@@ -9,6 +9,7 @@ import { FollowersScreen } from "../FollowersScreen";
 import DashboardScreen from "../DashboardScreen";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { FabHome } from "../../components/FabHome/FabHome";
 
 export const HomeScreen = ({
   navigation,
@@ -35,19 +36,12 @@ export const HomeScreen = ({
       focusedIcon: "account",
       testID: "tab-dashboard",
     },
-    {
-      key: "followers",
-      title: "Abonnés",
-      focusedIcon: "account-multiple",
-      testID: "tab-followers",
-    },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     actuality: () => <ActualiteScreen navigation={navigation} route={route} />,
     explorer: () => <ExplorerScreen navigation={navigation} route={route} />,
     dashboard: () => <DashboardScreen navigation={navigation} route={route} />,
-    followers: () => <FollowersScreen navigation={navigation} route={route} />,
   });
 
   return (
