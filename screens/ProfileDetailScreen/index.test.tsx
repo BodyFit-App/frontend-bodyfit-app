@@ -75,6 +75,7 @@ describe("ProfileDetailsScreen", () => {
             title: "Goal 1",
             description: "Description 1",
             achieved: false,
+            steps: [],
           },
         ],
         exercises: [
@@ -124,6 +125,7 @@ describe("ProfileDetailsScreen", () => {
             title: "Goal 1",
             description: "Description 1",
             achieved: false,
+            steps: [],
           },
         ],
         exercises: [],

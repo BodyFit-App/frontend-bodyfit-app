@@ -64,7 +64,9 @@ export const ProfileDetailsScreen = ({
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
-            goalsCount={profile.goals?.length ?? 0}
+            goalsCount={
+              profile.goals?.filter(({ achieved }) => achieved).length ?? 0
+            }
             followed={profile.followedBy.length > 0}
             onFollowToggle={() =>
               toggleFavorite(profile.id, profile.followedBy.length > 0)
@@ -93,7 +95,10 @@ export const ProfileDetailsScreen = ({
               key={goal.id}
               title={goal.title}
               description={goal.description ?? ""}
-              progress={goal.achieved ? 1 : 0}
+              progress={
+                (goal.steps.filter(({ achieved }) => achieved).length || 1) /
+                (goal.steps.length || 1)
+              }
               startDate={goal.date_start ?? ""}
               endDate={goal.date_end ?? ""}
             />
