@@ -55,7 +55,7 @@ export const ExerciseDetailsScreen = ({
         <TrainingHeader
           title={data?.title || ""}
           imageUrl={getPublicUrl("images", data?.banner_image ?? "")}
-          duration={`${data?.estimated_time_seconds} min`}
+          duration={`${data?.estimated_time_seconds}`}
           categories={data?.categories.map((c) => c.name) || []}
           isFavorite={
             !!data?.favorite_exercises && data.favorite_exercises.length > 0
