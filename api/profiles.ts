@@ -13,7 +13,7 @@ export const fetchProfileById = async (id: number) => {
   const profile_id = user?.user_metadata.profile_id;
 
   const { data, error } = await client.from("profiles").select(
-    "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
+    "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*,steps(*)),programs(*,sessions(*,exercises(*)))",
   ).eq(
     "id",
     id,

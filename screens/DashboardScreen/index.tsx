@@ -27,10 +27,12 @@ const DashboardScreen = ({
     enabled: !!profileId,
   });
 
-  const { data: progress } = useQuery({
+  const { data: progress, error: pr } = useQuery({
     queryFn: fetchProgress,
     queryKey: ["progress"],
   });
+
+  console.log(progress, pr);
 
   const [chartData, setChartData] = useState<number[]>([]);
   const [sliceColors, setSliceColors] = useState<string[]>([]);
@@ -88,7 +90,9 @@ const DashboardScreen = ({
             profileImage={getPublicUrl("images", profile.avatar_url ?? "")}
             exercisesCount={profile.exercises?.length ?? 0}
             programsCount={profile.programs?.length ?? 0}
-            goalsCount={profile.goals?.length ?? 0}
+            goalsCount={
+              profile.goals?.filter(({ achieved }) => achieved).length ?? 0
+            }
             onEditProfile={() => {
               navigation.push("ProfileFormScreen");
             }}
@@ -159,7 +163,10 @@ const DashboardScreen = ({
               key={goal.id}
               title={goal.title}
               description={goal.description ?? ""}
-              progress={goal.achieved ? 1 : 0}
+              progress={
+                (goal.steps.filter(({ achieved }) => achieved).length || 1) /
+                (goal.steps.length || 1)
+              }
               startDate={goal.date_start ?? ""}
               endDate={goal.date_end ?? ""}
             />
