@@ -44,7 +44,9 @@ export const useAuth = () => {
 
   const deleteAccount = async () => {
     if (!session?.user.id) throw new Error("No session");
-    return client.auth.admin.deleteUser(session.user.id);
+    const { data } = await client.auth.admin.deleteUser(session.user.id);
+    signOut();
+    return data;
   };
 
   return {

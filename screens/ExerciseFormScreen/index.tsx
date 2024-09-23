@@ -86,10 +86,10 @@ export const ExerciseFormScreen = ({
         if (data.id) await resetExerciseCategories(data.id);
         addExerciseCategories(exerciceCategories);
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

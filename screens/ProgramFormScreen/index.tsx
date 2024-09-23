@@ -65,7 +65,7 @@ export const ProgramFormScreen = ({
 
       sessionToDelete.forEach((idToDelete) => deleteSession(idToDelete));
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

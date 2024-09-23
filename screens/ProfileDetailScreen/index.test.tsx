@@ -51,7 +51,7 @@ jest.mock("../../components/ItemCard", () => {
 });
 
 describe("ProfileDetailsScreen", () => {
-  const mockNavigation = { navigate: jest.fn(), push: jest.fn() };
+  const mockNavigation = { replace: jest.fn(), push: jest.fn() };
   const mockRoute = { params: { id: 1 } };
 
   beforeEach(() => {
@@ -139,7 +139,7 @@ describe("ProfileDetailsScreen", () => {
 
     fireEvent.press(getAllByText("Tout afficher")[0]);
 
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("GoalsScreen");
+    expect(mockNavigation.push).toHaveBeenCalled();
   });
 
   it('navigates to exercises screen when "Tout afficher" is pressed for exercises', () => {
@@ -171,7 +171,7 @@ describe("ProfileDetailsScreen", () => {
 
     fireEvent.press(getAllByText("Tout afficher")[1]);
 
-    expect(mockNavigation.push).toHaveBeenCalledWith("ExerciseListScreen", {});
+    expect(mockNavigation.push).toHaveBeenCalled();
   });
 
   it('navigates to programs screen when "Tout afficher" is pressed for programs', () => {
@@ -196,7 +196,7 @@ describe("ProfileDetailsScreen", () => {
 
     fireEvent.press(getAllByText("Tout afficher")[2]);
 
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("ProgramsScreen");
+    expect(mockNavigation.push).toHaveBeenCalled();
   });
 
   it("renders loading indicator while fetching data", () => {

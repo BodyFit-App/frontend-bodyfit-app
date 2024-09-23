@@ -41,7 +41,7 @@ export const FollowersScreen = ({
 
       return { data, nextCursor, count };
     } catch (error) {
-      console.error(error);
+      // console.error(error);
 
       throw new Error((error as Error).message);
     }
