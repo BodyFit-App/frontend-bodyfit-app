@@ -71,7 +71,7 @@ export const ProgramDetailsScreen = ({
                 acc +
                 session.exercises.reduce(
                   (exAcc, exercise) =>
-                    exAcc + (exercise.estimated_time_seconds || 0),
+                    exAcc + (exercise.estimated_time_minutes || 0),
                   0
                 ),
               0
@@ -126,7 +126,7 @@ export const ProgramDetailsScreen = ({
               <View key={exercise.id} style={styles.itemCardContainer}>
                 <ItemCard
                   title={exercise.title}
-                  time={exercise.estimated_time_seconds ?? 0}
+                  time={exercise.estimated_time_minutes ?? 0}
                   categories={
                     exercise.categories.map((categorie) => categorie.name) ?? []
                   }
