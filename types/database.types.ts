@@ -72,7 +72,7 @@ export type Database = {
           banner_image: string | null
           created_at: string
           description: string | null
-          estimated_time_seconds: number | null
+          estimated_time_minutes: number | null
           id: number
           profile_id: number | null
           title: string
@@ -82,7 +82,7 @@ export type Database = {
           banner_image?: string | null
           created_at?: string
           description?: string | null
-          estimated_time_seconds?: number | null
+          estimated_time_minutes?: number | null
           id?: number
           profile_id?: number | null
           title: string
@@ -92,7 +92,7 @@ export type Database = {
           banner_image?: string | null
           created_at?: string
           description?: string | null
-          estimated_time_seconds?: number | null
+          estimated_time_minutes?: number | null
           id?: number
           profile_id?: number | null
           title?: string
@@ -499,6 +499,10 @@ export type Database = {
       }
     }
     Functions: {
+      delete_user: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_profile_id: {
         Args: Record<PropertyKey, never>
         Returns: number

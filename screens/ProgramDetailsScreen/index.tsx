@@ -71,7 +71,7 @@ export const ProgramDetailsScreen = ({
                 acc +
                 session.exercises.reduce(
                   (exAcc, exercise) =>
-                    exAcc + (exercise.estimated_time_seconds || 0),
+                    exAcc + (exercise.estimated_time_minutes || 0),
                   0
                 ),
               0
@@ -90,6 +90,15 @@ export const ProgramDetailsScreen = ({
           onToggleFavorite={() => {
             toggleFavorite(data!.id, data!.favorite_programs.length > 0);
           }}
+          onPressEdit={() =>
+            navigation.push("ProgramFormScreen", { id: data?.id })
+          }
+          isMine={
+            !!(
+              data?.profile_id &&
+              session?.user.user_metadata.profile_id === data.profile_id
+            )
+          }
         />
       </View>
       <View style={styles.containertxt}>
@@ -117,7 +126,7 @@ export const ProgramDetailsScreen = ({
               <View key={exercise.id} style={styles.itemCardContainer}>
                 <ItemCard
                   title={exercise.title}
-                  time={exercise.estimated_time_seconds ?? 0}
+                  time={exercise.estimated_time_minutes ?? 0}
                   categories={
                     exercise.categories.map((categorie) => categorie.name) ?? []
                   }

@@ -111,7 +111,7 @@ describe("ProgramDetailsScreen", () => {
               {
                 id: 1,
                 title: "Exercise 1",
-                estimated_time_seconds: 600,
+                estimated_time_minutes: 600,
                 categories: [{ name: "Category 1" }],
               },
             ],

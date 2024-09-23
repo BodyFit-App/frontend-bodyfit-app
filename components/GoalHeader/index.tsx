@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Image, Dimensions } from "react-native";
-import { Card, Text, ProgressBar } from "react-native-paper";
+import { Card, Text, ProgressBar, IconButton } from "react-native-paper";
 import theme from "../../theme";
 import DateChip from "../DateChip";
 
@@ -10,6 +10,8 @@ interface GoalHeaderProps {
   startDate: Date;
   endDate: Date;
   progress: number;
+  onPressEdit?: () => void;
+  isMine?: boolean;
 }
 
 const { width } = Dimensions.get("window");
@@ -20,10 +22,23 @@ const GoalHeader: React.FC<GoalHeaderProps> = ({
   startDate,
   endDate,
   progress,
+  onPressEdit = () => console.log("onPressEdit not implemented"),
+  isMine = false,
 }) => {
   return (
     <Card style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      <View
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Text style={styles.title}>{title}</Text>
+        {!!isMine && (
+          <IconButton onPress={onPressEdit} size={24} icon="pencil" />
+        )}
+      </View>
       <Image
         source={{ uri: imageUrl }}
         style={styles.image}

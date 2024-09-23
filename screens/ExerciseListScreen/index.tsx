@@ -110,9 +110,9 @@ export const ExerciseListScene = ({ navigation, route }: any) => {
                 item.categories ? item.categories.map((cat) => cat.name) : []
               }
               time={parseInt(
-                item.estimated_time_seconds
-                  ? `${Math.floor(item.estimated_time_seconds / 60)} min`
-                  : "0 min",
+                item.estimated_time_minutes
+                  ? `${Math.floor(item.estimated_time_minutes)}`
+                  : "0",
                 10
               )}
               isFav={item.favorite_exercises.length > 0}

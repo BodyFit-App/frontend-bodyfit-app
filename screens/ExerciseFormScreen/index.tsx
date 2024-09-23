@@ -48,7 +48,7 @@ export const ExerciseFormScreen = ({
       title: "",
       banner_image: "",
       description: "",
-      estimated_time_seconds: "1",
+      estimated_time_minutes: "1",
       visible: false,
       categories: [] as string[],
     },
@@ -111,8 +111,8 @@ export const ExerciseFormScreen = ({
         title: exercise.title || "",
         banner_image: getPublicUrl("images", exercise.banner_image!) || "",
         description: exercise.description || "",
-        estimated_time_seconds:
-          exercise.estimated_time_seconds?.toString() || "1",
+        estimated_time_minutes:
+          exercise.estimated_time_minutes?.toString() || "1",
         visible: exercise.visible || false,
         categories: exercise.categories.map(({ id }) => id.toString()) || [],
       });
@@ -178,7 +178,7 @@ export const ExerciseFormScreen = ({
                 keyboardType="numeric"
               />
             )}
-            name="estimated_time_seconds"
+            name="estimated_time_minutes"
           />
 
           <Controller

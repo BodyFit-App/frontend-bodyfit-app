@@ -55,13 +55,22 @@ export const ExerciseDetailsScreen = ({
         <TrainingHeader
           title={data?.title || ""}
           imageUrl={getPublicUrl("images", data?.banner_image ?? "")}
-          duration={`${data?.estimated_time_seconds} min`}
+          duration={`${data?.estimated_time_minutes || 0}`}
           categories={data?.categories.map((c) => c.name) || []}
           isFavorite={
             !!data?.favorite_exercises && data.favorite_exercises.length > 0
           }
           onToggleFavorite={() =>
             toggleFavorite(data!.id, data!.favorite_exercises.length > 0)
+          }
+          onPressEdit={() =>
+            navigation.push("ExerciseFormScreen", { id: data?.id })
+          }
+          isMine={
+            !!(
+              data?.profile_id &&
+              session?.user.user_metadata.profile_id === data.profile_id
+            )
           }
         />
       </View>

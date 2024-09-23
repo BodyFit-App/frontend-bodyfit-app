@@ -125,7 +125,7 @@ export const ProfileDetailsScreen = ({
             <View style={styles.itemCardContainer} key={exercise.id}>
               <ItemCard
                 title={exercise.title}
-                time={exercise.estimated_time_seconds ?? 0}
+                time={exercise.estimated_time_minutes ?? 0}
                 categories={
                   exercise.categories.map((categorie) => categorie.name) ?? []
                 }

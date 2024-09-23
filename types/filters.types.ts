@@ -15,6 +15,7 @@ export type ProgramFilter = {
 export type GoalFilter = {
   title?: string;
   achieved?: boolean;
+  profile_id?: number;
 };
 
 export type ProfileFilter = {

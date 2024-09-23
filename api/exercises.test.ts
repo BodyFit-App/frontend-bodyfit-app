@@ -64,7 +64,7 @@ describe("Tests api/exercices", () => {
           created_at: "2000-10-20",
           visible: true,
           banner_image: null,
-          estimated_time_seconds: null,
+          estimated_time_minutes: null,
         },
       ];
       setTestData(mockData);
@@ -94,7 +94,7 @@ describe("Tests api/exercices", () => {
           created_at: "2000-10-20",
           visible: true,
           banner_image: null,
-          estimated_time_seconds: null,
+          estimated_time_minutes: null,
         },
       ];
       setTestData(mockData);
@@ -140,7 +140,7 @@ describe("Tests api/exercices", () => {
           created_at: "2000-10-20",
           visible: true,
           banner_image: null,
-          estimated_time_seconds: null,
+          estimated_time_minutes: null,
         },
       ];
       setTestData(mockData);
