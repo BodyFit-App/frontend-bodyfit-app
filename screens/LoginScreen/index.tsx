@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: "70%",
+    objectFit: "contain",
     height: 200,
     marginHorizontal: "auto",
     marginBottom: 50,

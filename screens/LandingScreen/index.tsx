@@ -17,37 +17,40 @@ export default function LandingScreen({
         style={styles.img}
         testID="logo-image"
       />
-      <CustomButton
-        style={styles.button}
-        children="Connexion"
-        onPress={() => navigation.push("LoginScreen")}
-        testID="login-button"
-      />
-      <CustomButton
-        style={styles.button}
-        children="Inscription"
-        onPress={() => navigation.push("RegisterScreen")}
-        testID="register-button"
-      />
+      <View style={{ width: "100%" }}>
+        <CustomButton
+          style={styles.button}
+          children="Connexion"
+          onPress={() => navigation.push("LoginScreen")}
+          testID="login-button"
+        />
+        <CustomButton
+          style={styles.button}
+          children="Inscription"
+          onPress={() => navigation.push("RegisterScreen")}
+          testID="register-button"
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    padding: 16,
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#0B0B12",
   },
   img: {
-    width: "90%",
+    width: "100%",
     height: 200,
+    objectFit: "contain",
     marginTop: 150,
-    marginBottom: 180,
   },
   button: {
     marginBottom: 15,
-    width: "80%",
+    width: "100%",
   },
 });

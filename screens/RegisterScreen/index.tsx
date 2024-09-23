@@ -157,7 +157,7 @@ export const RegisterScreen = ({
             color: theme.colors.primary,
             fontWeight: "600",
           }}
-          onPress={() => navigation.push("LoginScreen")}
+          onPress={() => navigation.replace("LoginScreen")}
         >
           Connectez-vous
         </Text>
