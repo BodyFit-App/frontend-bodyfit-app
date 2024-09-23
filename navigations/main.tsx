@@ -73,41 +73,51 @@ export const MainNavigation = () => {
             <Stack.Screen
               name="ExerciseDetailsScreen"
               component={ExerciseDetailsScreen}
+              options={{ title: "Détails de l'exercice" }}
             />
             <Stack.Screen
               name="ExerciseListScreen"
               component={ExerciseListScreen}
+              options={{ title: "Liste des exercices" }}
             />
             <Stack.Screen
               name="ExerciseFormScreen"
               component={ExerciseFormScreen}
+              options={{ title: "Créer un exercice" }}
             />
 
             <Stack.Screen
               name="GoalDetailsScreen"
               component={GoalDetailsScreen}
+              options={{ title: "Détails de l'objectif" }}
             />
-            <Stack.Screen name="GoalFormScreen" component={GoalFormScreen} />
-            <Stack.Screen name="GoalListScreen" component={GoalListScreen} />
+            <Stack.Screen name="GoalFormScreen" component={GoalFormScreen} 
+            options={{title: 'Créer un objectif'}} />
+            <Stack.Screen name="GoalListScreen" component={GoalListScreen} options={{title:'Liste des objectifs'}} />
             <Stack.Screen
               name="ProgramDetailsScreen"
               component={ProgramDetailsScreen}
+              options={{ title: "Détails du programme" }}
             />
             <Stack.Screen
               name="ProgramFormScreen"
               component={ProgramFormScreen}
+              options={{ title: "Créer un programme" }}
             />
             <Stack.Screen
               name="ProfileFormScreen"
               component={ProfileFormScreen}
+              options={{ title: "Modifier le profil" }}
             />
             <Stack.Screen
               name="ProfileDetailsScreen"
               component={ProfileDetailsScreen}
+              options={{ title: "Profil" }}
             />
             <Stack.Screen
               name="ProgramListScreen"
               component={ProgramListScreen}
+              options={{ title: "Liste des programmes" }}
             />
           </>
         ) : (

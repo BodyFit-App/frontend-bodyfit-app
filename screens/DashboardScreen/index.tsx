@@ -12,7 +12,7 @@ import { getPublicUrl } from "../../lib/supabase";
 import ItemCard from "../../components/ItemCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
-import { FabHome } from "../../components/FabHome/FabHome";
+import { FabDashboard } from "../../components/FabDashboard/FabDashboard";
 import { Portal } from "react-native-paper";
 
 const DashboardScreen = ({
@@ -172,6 +172,9 @@ const DashboardScreen = ({
                 }
                 startDate={goal.date_start ?? ""}
                 endDate={goal.date_end ?? ""}
+                onPress={() =>
+                  navigation.push("GoalDetailsScreen", { id: goal.id })
+                }
               />
             ))}
           </View>
@@ -243,7 +246,7 @@ const DashboardScreen = ({
         </View>
       </ScrollView>
       <Portal.Host>
-        <FabHome navigation={navigation} />
+        <FabDashboard navigation={navigation} />
       </Portal.Host>
     </View>
   );
@@ -269,6 +272,7 @@ const styles = StyleSheet.create({
   containercard: {
     flexDirection: "column",
     marginTop: 20,
+    marginBottom: 20,
   },
   containergrah: {
     marginTop: 40,
