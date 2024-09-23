@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 jest.mock("../../hooks/useAuth");
 
 describe("RegisterScreen", () => {
-  const mockNavigation = { push: jest.fn() };
+  const mockNavigation = { push: jest.fn(), replace: jest.fn() };
   const mockSignUp = jest.fn();
 
   beforeEach(() => {
@@ -123,6 +123,6 @@ describe("RegisterScreen", () => {
 
     fireEvent.press(getByText("Connectez-vous"));
 
-    expect(mockNavigation.push).toHaveBeenCalledWith("LoginScreen");
+    expect(mockNavigation.replace).toHaveBeenCalledWith("LoginScreen");
   });
 });

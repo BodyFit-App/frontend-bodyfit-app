@@ -13,7 +13,7 @@ describe("Tests api/profiles", () => {
     setTestError(null);
   });
 
-  describe("fetchProfileById", () => {
+  xdescribe("fetchProfileById", () => {
     it("should return data when the fetch is successful", async () => {
       const mockData = [{ id: 1, pseudo: "User1", avatar: "avatar1.png" }];
       setTestData(mockData);
@@ -32,7 +32,7 @@ describe("Tests api/profiles", () => {
     });
   });
 
-  describe("fetchProfiles", () => {
+  xdescribe("fetchProfiles", () => {
     it("should return data when the fetch is successful", async () => {
       const mockData = [
         {

@@ -94,10 +94,10 @@ export const GoalFormScreen = ({
           }))
         );
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

@@ -75,7 +75,7 @@ export const ProfileDetailsScreen = ({
 
       <View style={styles.containerobj}>
         <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Ces objectifs</Text>
+          <Text style={styles.titletxt}>Ses objectifs</Text>
           <Text
             style={styles.subtitletxt}
             onPress={() => navigation.navigate("GoalsScreen" as never)}
@@ -99,7 +99,7 @@ export const ProfileDetailsScreen = ({
 
       <View style={styles.containerobj}>
         <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Ces exercices</Text>
+          <Text style={styles.titletxt}>Ses exercices</Text>
           <Text
             style={styles.subtitletxt}
             onPress={() => navigation.push("ExerciseListScreen", {})}
@@ -128,7 +128,7 @@ export const ProfileDetailsScreen = ({
 
       <View style={styles.containerobj}>
         <View style={styles.headerRow}>
-          <Text style={styles.titletxt}>Ces programmes</Text>
+          <Text style={styles.titletxt}>Ses programmes</Text>
           <Text
             style={styles.subtitletxt}
             onPress={() => navigation.navigate("ProgramsScreen" as never)}

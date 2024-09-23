@@ -23,7 +23,7 @@ const ActualiteScreen = ({
       );
       return { data, nextCursor, count };
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       throw new Error((error as Error).message);
     }
   };
@@ -43,7 +43,9 @@ const ActualiteScreen = ({
   });
 
   const mergedData = data?.pages.flatMap((page) => page.data) ?? [];
-  const uniqueData = mergedData?.filter((item, index, self) => index === self.findIndex((t) => t.title === item.title)
+  const uniqueData = mergedData?.filter(
+    (item, index, self) =>
+      index === self.findIndex((t) => t.title === item.title)
   );
 
   const handleActivityPress = (id?: number, type?: string) => {

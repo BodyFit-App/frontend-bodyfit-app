@@ -44,7 +44,7 @@ export const ExerciseListScene = ({ navigation, route }: any) => {
         session?.user.user_metadata.profile_id
       );
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       throw new Error((error as Error).message);
     }
   };

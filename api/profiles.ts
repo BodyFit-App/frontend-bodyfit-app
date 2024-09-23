@@ -6,12 +6,18 @@ import { ProfileFilter } from "../types/filters.types";
 import { ProfileOrder } from "../types/orders.types";
 
 export const fetchProfileById = async (id: number) => {
+  const { data: session, error: sessionError } = await client.auth.getSession();
+
+  if (sessionError) throw new Error(sessionError.message);
+  const user = session?.session?.user;
+  const profile_id = user?.user_metadata.profile_id;
+
   const { data, error } = await client.from("profiles").select(
     "*,following:followings!profile_id(profiles!profile_id(*)),followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
   ).eq(
     "id",
     id,
-  ).single();
+  ).eq("followedBy.profile_id", profile_id).single();
   if (error) throw new Error(error.message);
   return data;
 };
@@ -23,12 +29,23 @@ export const fetchProfiles = async (
 ) => {
   const [start, end] = getRange(page, NB_ELTS_PER_PAGE);
 
+  const { data: session, error: sessionError } = await client.auth.getSession();
+
+  if (sessionError) throw new Error(sessionError.message);
+  const user = session?.session?.user;
+  const profile_id = user?.user_metadata.profile_id;
+
   let query = client
     .from("profiles")
     .select(
       "*,followedBy:followings!followee_id(profiles!followee_id(*)),exercises(*,categories(name)),goals(*),programs(*,sessions(*,exercises(*)))",
       { count: "exact" },
-    )
+    ).eq("followedBy.profile_id", profile_id)
+    .not("user_id", "is", null)
+    .not("pseudo", "is", null)
+    .not("lastname", "is", null)
+    .not("firstname", "is", null)
+    .not("id", "eq", profile_id)
     .range(start, end);
 
   if (filter?.pseudo) {

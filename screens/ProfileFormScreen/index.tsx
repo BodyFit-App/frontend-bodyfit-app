@@ -79,7 +79,7 @@ export const ProfileFormScreen = ({
     try {
       await deleteAccount();
     } catch (error) {
-      console.error("Erreur lors de la suppression du profil :", error);
+      // console.error("Erreur lors de la suppression du profil :", error);
     }
   };
 
