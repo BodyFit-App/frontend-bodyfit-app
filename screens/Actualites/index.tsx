@@ -6,7 +6,7 @@ import ActuCard from "../../components/ActuCard/ActuCard";
 import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
-import { Text } from "react-native-paper";
+import { Divider, Text } from "react-native-paper";
 
 const ActualiteScreen = ({
   navigation,
@@ -77,6 +77,7 @@ const ActualiteScreen = ({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fil d'actualités</Text>
+      <Divider />
       {uniqueData?.length === 0 ? (
         <Text style={styles.noDataText}>
           Aucune activité à afficher pour le moment
