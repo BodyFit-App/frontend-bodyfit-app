@@ -80,7 +80,8 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
       <View style={styles.headerContainer}>
         <Avatar.Image  testID="profile-image"  size={100} source={imageSource} />
         <View style={styles.userInfo}>
-          <Text style={styles.name}>{firstname} {lastname}</Text>
+          <Text style={styles.name}>{firstname}</Text>
+          <Text style={styles.name}>{lastname}</Text>
           <Text style={styles.username}>@{username}</Text>
           <Text style={styles.followers}>{followers} followers</Text>
         </View>

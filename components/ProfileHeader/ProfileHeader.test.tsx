@@ -22,7 +22,8 @@ describe('ProfilHeader Component', () => {
   it('renders the user information correctly', () => {
     const { getByText, getByTestId } = render(<ProfilHeader {...defaultProps} />);
  
-    expect(getByText('John Doe')).toBeTruthy();
+    expect(getByText('John')).toBeTruthy();
+    expect(getByText('Doe')).toBeTruthy();
     expect(getByText('@johndoe')).toBeTruthy();
     expect(getByText('100 followers')).toBeTruthy();
     expect(getByText('10')).toBeTruthy();
