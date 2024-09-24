@@ -133,7 +133,11 @@ export const ProgramDetailsScreen = ({
                     exercise.categories.map((categorie) => categorie.name) ?? []
                   }
                   pseudo={data?.profiles?.pseudo || ""}
-                  onPressNav={() => console.log("Go to exercise")}
+                  onPressNav={() =>
+                    navigation.push("ExerciseDetailsScreen", {
+                      id: exercise.id,
+                    })
+                  }
                 />
               </View>
             ))}
