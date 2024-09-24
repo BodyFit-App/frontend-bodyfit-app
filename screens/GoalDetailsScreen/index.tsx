@@ -74,7 +74,7 @@ export const GoalDetailsScreen = ({
               : 0
           }
           onPressEdit={() =>
-            navigation.push("ExerciseFormScreen", { id: data?.id })
+            navigation.push("GoalFormScreen", { id: data?.id })
           }
           isMine={
             !!(

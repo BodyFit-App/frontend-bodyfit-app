@@ -2,11 +2,16 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { ProgramFormScreen } from "./";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../../hooks/useAuth";
 
 jest.mock("@tanstack/react-query", () => ({
   useQuery: jest.fn(),
   useMutation: jest.fn(),
   useQueryClient: jest.fn(),
+}));
+
+jest.mock("../../hooks/useAuth", () => ({
+  useAuth: jest.fn(),
 }));
 
 jest.mock("../../api/programs", () => ({
@@ -69,6 +74,11 @@ describe("ProgramFormScreen", () => {
         ],
       },
       isSuccess: true,
+    });
+
+    jest.clearAllMocks();
+    (useAuth as jest.Mock).mockReturnValue({
+      session: { user: { id: "test-user" } },
     });
   });
 

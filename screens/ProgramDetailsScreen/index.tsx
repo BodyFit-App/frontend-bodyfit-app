@@ -77,13 +77,15 @@ export const ProgramDetailsScreen = ({
               0
             ) || 0
           ).toString()}
-          categories={
-            data?.sessions.flatMap((session) =>
-              session.exercises.flatMap((exercise) =>
-                exercise.categories.map((category) => category.name)
-              )
-            ) || []
-          }
+          categories={[
+            ...new Set(
+              data?.sessions.flatMap((session) =>
+                session.exercises.flatMap((exercise) =>
+                  exercise.categories.map((category) => category.name)
+                )
+              ) || []
+            ),
+          ]}
           isFavorite={
             !!data?.favorite_programs && data.favorite_programs.length > 0
           }

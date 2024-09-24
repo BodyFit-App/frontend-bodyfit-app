@@ -18,12 +18,14 @@ import {
 import { FormData } from "./types";
 import { AppParamListBase } from "../../navigations/main";
 import { StackScreenProps } from "@react-navigation/stack";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ProgramFormScreen = ({
   navigation,
   route,
   ...props
 }: StackScreenProps<AppParamListBase, "ProgramFormScreen">) => {
+  const { session } = useAuth();
   const queryClient = useQueryClient();
   const id = route.params?.id;
   const isEditMode = !!id;
@@ -77,6 +79,9 @@ export const ProgramFormScreen = ({
        * if you try to modify a session and re-upsert, it might create a new session instead of updating it
        */
       queryClient.invalidateQueries({ queryKey: ["program", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["profile", session?.user.user_metadata.profile_id],
+      });
       navigation.goBack();
     },
   });

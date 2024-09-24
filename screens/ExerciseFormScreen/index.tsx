@@ -97,6 +97,9 @@ export const ExerciseFormScreen = ({
     mutationFn: handleUpsert,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exercise", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["profile", session?.user.user_metadata.profile_id],
+      });
       navigation.goBack();
     },
   });

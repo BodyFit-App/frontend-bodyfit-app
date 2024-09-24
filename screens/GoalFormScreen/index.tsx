@@ -105,6 +105,9 @@ export const GoalFormScreen = ({
     mutationFn: handleUpsert,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["goal", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["profile", session?.user.user_metadata.profile_id],
+      });
       navigation.goBack();
     },
   });
