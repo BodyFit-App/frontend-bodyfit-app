@@ -71,6 +71,20 @@ L'application met également un fort accent sur l'entraide entre les utilisateur
 - **React Query** : Gestion des données et des requêtes.
 - **Jest** : Tests unitaires et couverture de code.
 
+## Configuration Supabase
+
+L'application utilise **Supabase** pour la gestion des utilisateurs et la synchronisation des données. Pour configurer correctement l'application avec vos clés Supabase, vous devez créer un fichier `.env` à la racine du projet.
+
+### Étapes de configuration
+
+1. Créez un fichier `.env` à la racine du projet.
+   
+2. Ajoutez les variables d'environnement suivantes dans ce fichier :
+
+   ```bash
+   EXPO_PUBLIC_SUPABASE_URL=<SUPABASE_URL>
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=<YOUR_ANON_KEY>
+
 ## Dépendances principales
 
 - `react-native`: Version 0.74.3
