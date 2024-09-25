@@ -19,6 +19,7 @@ import { ExerciseListScreen } from "../screens/ExerciseListScreen";
 import { ProgramListScreen } from "../screens/ProgramListScreen";
 import { ProfileDetailsScreen } from "../screens/ProfileDetailScreen";
 import { FollowersScreen } from "../screens/FollowersScreen";
+import RgpdScreen from "../screens/RgpdScreen";
 
 export type AppParamListBase = {
   Actualites: { id?: number; user_id?: number; type?: string };
@@ -38,6 +39,7 @@ export type AppParamListBase = {
   ProgramListScreen: { filters?: any };
   ProgramFormScreen: { id?: number };
   RegisterScreen: undefined;
+  RgpdScreen: undefined;
 };
 
 export const Stack = createStackNavigator<AppParamListBase>();
@@ -136,6 +138,11 @@ export const MainNavigation = () => {
               name="RegisterScreen"
               component={RegisterScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RgpdScreen"
+              component={RgpdScreen}
+              options={{ title: "Politique de confidentialité" }}
             />
           </>
         )}
