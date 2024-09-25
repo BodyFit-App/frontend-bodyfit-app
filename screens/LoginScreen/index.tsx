@@ -9,6 +9,30 @@ import theme from "../../theme";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * LoginScreen Component
+ *
+ * This component represents the login screen where users can sign in with their credentials.
+ * It utilizes `react-hook-form` for form handling and `useAuth` for authentication management.
+ *
+ * @component
+ * @example
+ * return (
+ *   <LoginScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation for navigation between screens.
+ * @param {Object} props.route - The route object provided by React Navigation containing route-specific data.
+ *
+ * @returns {JSX.Element} A React component that renders the login screen with form inputs for email and password.
+ *
+ * @param {StackScreenProps<AppParamListBase, 'LoginScreen'>} props - Props passed down from React Navigation, including `navigation` and `route`.
+ */
+
 export const LoginScreen = ({
   navigation,
   route,

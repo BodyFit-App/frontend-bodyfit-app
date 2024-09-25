@@ -14,6 +14,27 @@ interface GoalHeaderProps {
   isMine?: boolean;
 }
 
+/**
+ * Props for the GoalHeader component.
+ *
+ * @typedef {Object} GoalHeaderProps
+ * @property {string} title - The title of the goal.
+ * @property {string} imageUrl - The URL of the image to be displayed.
+ * @property {Date} startDate - The start date of the goal.
+ * @property {Date} endDate - The end date of the goal.
+ * @property {number} progress - The current progress of the goal, a number between 0 and 1.
+ * @property {() => void} [onPressEdit] - Optional function called when the edit button is pressed.
+ * @property {boolean} [isMine] - Optional flag indicating if the goal belongs to the current user. Defaults to false.
+ */
+
+/**
+ * GoalHeader component displays a header for a goal, including its title, image, start and end dates,
+ * a progress bar, and an optional edit button if the goal belongs to the current user.
+ *
+ * @param {GoalHeaderProps} props - The props for the GoalHeader component.
+ * @returns {JSX.Element} A JSX element representing the goal header.
+ */
+
 const { width } = Dimensions.get("window");
 
 const GoalHeader: React.FC<GoalHeaderProps> = ({

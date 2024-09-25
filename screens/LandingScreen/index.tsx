@@ -5,6 +5,33 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * LandingScreen Component
+ *
+ * This component represents the landing screen of the application. It is the initial screen users see, offering options to log in or sign up.
+ * It uses the `CustomButton` component to navigate the user to either the login screen or the registration screen.
+ *
+ * @component
+ * @example
+ * return (
+ *   <LandingScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation.
+ * @param {Object} props.route - The route object provided by React Navigation.
+ *
+ * @returns {JSX.Element} A React component that renders the landing screen with options for login and registration.
+ *
+ * @param {StackScreenProps<AppParamListBase, 'LandingScreen'>} props - Props passed down from React Navigation, including `navigation` and `route`.
+ *
+ * @returns {JSX.Element} - Returns a JSX element representing the landing screen of the app.
+ */
+
+
 export default function LandingScreen({
   navigation,
   route,

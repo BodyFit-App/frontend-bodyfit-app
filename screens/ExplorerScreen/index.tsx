@@ -9,6 +9,14 @@ import { ExerciseListScene, ExerciseListScreen } from "../ExerciseListScreen";
 import { ProgramListScreen } from "../ProgramListScreen";
 import { FollowersScreen } from "../FollowersScreen";
 
+/**
+ * Custom render function for the tab bar in the `ExplorerScreen`.
+ * This function defines how the tab buttons are styled and allows switching between tabs.
+ *
+ * @param {any} props - The props provided by the TabView for rendering the tabs.
+ * @returns {JSX.Element} The rendered tab bar with buttons for each route.
+ */
+
 const renderTabBar = (props: any) => (
   <View style={styles.tabBar}>
     {props.navigationState.routes.map((route: any, i: number) => (
@@ -34,6 +42,21 @@ const renderTabBar = (props: any) => (
   </View>
 );
 
+/**
+ * ExplorerScreen Component
+ *
+ * This screen is responsible for navigating between different sections like Exercises, Programs, and Followers.
+ * It uses a tab view with multiple routes, each rendering a different list of items.
+ * The component handles navigation between these tabs and passing necessary props to the respective screens.
+ *
+ * @component
+ * @example
+ * return <ExplorerScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "HomeScreen">} props - Navigation and route props provided by the Stack Navigator.
+ * @returns {JSX.Element} The rendered ExplorerScreen component.
+ */
+
 export const ExplorerScreen = ({
   navigation,
   route,
@@ -51,6 +74,11 @@ export const ExplorerScreen = ({
     },
   ]);
 
+  /**
+   * Scene map for rendering different routes (tabs) in the `TabView`.
+   * Each key in the map corresponds to a route, and the value is a function returning the component for that route.
+   */
+  
   const renderScene = SceneMap({
     exercises: () => (
       <ExerciseListScene navigation={navigation} route={route} />

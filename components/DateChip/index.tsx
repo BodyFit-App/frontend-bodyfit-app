@@ -7,6 +7,17 @@ interface DateChipProps {
   date?: Date;
 }
 
+/**
+ * `DateChip` component displays a card with a title and an optional date, 
+ * along with a calendar icon.
+ *
+ * @param {DateChipProps} props - The props for the `DateChip` component.
+ * @param {string} props.title - The title text to display in the chip.
+ * @param {Date} [props.date] - Optional date to display, formatted as a string. 
+ * If no date is provided, an empty string is shown.
+ * @returns {JSX.Element} The rendered `DateChip` component.
+ */
+
 export default function DateChip({
   title,
   date,

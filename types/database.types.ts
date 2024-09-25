@@ -1,3 +1,9 @@
+/**
+ * Represents a JSON value, which can be a string, number, boolean, null, object, or array.
+ * 
+ * @typedef {string | number | boolean | null | { [key: string]: Json | undefined } | Json[]} Json
+ */
+
 export type Json =
   | string
   | number
@@ -5,6 +11,13 @@ export type Json =
   | null
   | { [key: string]: Json | undefined }
   | Json[]
+
+  /**
+ * Represents the main structure of the database schema.
+ * 
+ * @typedef {Object} Database
+ * @property {Object} public - The public schema of the database.
+ */
 
 export type Database = {
   public: {
@@ -519,6 +532,12 @@ export type Database = {
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
+/**
+ * Utility types to infer the row type of a table or view from the public schema.
+ * 
+ * @template PublicTableNameOrOptions - The name of the public table or an options object containing the schema.
+ */
+
 export type Tables<
   PublicTableNameOrOptions extends
     | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
@@ -544,6 +563,12 @@ export type Tables<
       : never
     : never
 
+/**
+ * Utility type to infer the insertable type for a table from the public schema.
+ * 
+ * @template PublicTableNameOrOptions - The name of the public table or an options object containing the schema.
+ */
+
 export type TablesInsert<
   PublicTableNameOrOptions extends
     | keyof PublicSchema["Tables"]
@@ -565,6 +590,12 @@ export type TablesInsert<
       : never
     : never
 
+    /**
+ * Utility type to infer the update type for a table from the public schema.
+ * 
+ * @template PublicTableNameOrOptions - The name of the public table or an options object containing the schema.
+ */
+
 export type TablesUpdate<
   PublicTableNameOrOptions extends
     | keyof PublicSchema["Tables"]
@@ -585,6 +616,12 @@ export type TablesUpdate<
       ? U
       : never
     : never
+
+/**
+ * Utility type to infer the types for enums from the public schema.
+ * 
+ * @template PublicEnumNameOrOptions - The name of the public enum or an options object containing the schema.
+ */
 
 export type Enums<
   PublicEnumNameOrOptions extends

@@ -31,6 +31,21 @@ export type GoalData = any;
 
 registerTranslation("fr", fr);
 
+/**
+ * GoalFormScreen Component
+ *
+ * This component renders a form for creating or editing a goal. It provides inputs for goal title, image, description,
+ * start and end dates, associated steps, and a program dropdown. It uses `react-hook-form` for form management and
+ * `react-query` for data fetching and mutations.
+ *
+ * @component
+ * @example
+ * return <GoalFormScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "GoalFormScreen">} props - Navigation and route props from the Stack Navigator.
+ * @returns {JSX.Element} The rendered GoalFormScreen component.
+ */
+
 export const GoalFormScreen = ({
   navigation,
   route,
@@ -64,6 +79,12 @@ export const GoalFormScreen = ({
     enabled: isEditMode,
   });
 
+  /**
+   * Handles the creation or update of a goal, including uploading the image and associating steps.
+   *
+   * @param {TablesInsert<"goals"> & { steps: [] }} body - The form data containing goal and step details.
+   */
+  
   const handleUpsert = async (body: TablesInsert<"goals"> & { steps: [] }) => {
     try {
       let banner_image = body.banner_image;

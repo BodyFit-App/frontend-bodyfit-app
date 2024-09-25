@@ -11,6 +11,21 @@ import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * ExerciseDetailsScreen Component
+ *
+ * This screen displays detailed information about an exercise, including the title, description, duration,
+ * categories, and creator. It also allows the user to mark the exercise as a favorite and edit the exercise if they are the creator.
+ * The component uses data fetched via React Query and handles the mutation to toggle the favorite status of the exercise.
+ *
+ * @component
+ * @example
+ * return <ExerciseDetailsScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "ExerciseDetailsScreen">} props - The navigation and route props provided by the Stack Navigator.
+ * @returns {JSX.Element} The rendered ExerciseDetailsScreen component.
+ */
+
 export const ExerciseDetailsScreen = ({
   navigation,
   route,

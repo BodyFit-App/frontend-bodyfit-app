@@ -1,5 +1,32 @@
 import { useState } from "react";
 
+/**
+ * Custom hook `useFollowOrder` for managing the sorting and filtering order of followers.
+ *
+ * This hook provides functionality to change the sorting order of a follower list based on filters like
+ * "Most Recent", "Oldest", "A-Z", and "Z-A". It maintains the sorting field and direction (ascending or descending).
+ *
+ * @returns {Object} - The sorting and filtering object with the following properties and methods:
+ * @property {string} selectedFilter - The currently selected filter (e.g., "Most Recent", "A-Z").
+ * @property {Object} order - The current order object with field and sorting direction (asc/desc).
+ * @property {string} order.field - The field used for sorting (e.g., "created_at", "pseudo").
+ * @property {boolean} order.asc - Whether the sorting is ascending (`true`) or descending (`false`).
+ * @property {function} handleFilterChange - Function to change the current filter based on the selected filter string.
+ * @property {string[]} filterList - The list of available filters ("Most Recent", "Oldest", "A-Z", "Z-A").
+ *
+ * @example
+ * const { selectedFilter, order, handleFilterChange, filterList } = useFollowOrder();
+ *
+ * // Example usage in a dropdown
+ * return (
+ *   <Dropdown
+ *     options={filterList}
+ *     value={selectedFilter}
+ *     onChange={(filter) => handleFilterChange(filter)}
+ *   />
+ * );
+ */
+
 export const useFollowOrder = () => {
   const filterList = ["Plus récents", "Moins récents", "A-Z", "Z-A"];
   const [order, setOrder] = useState<{

@@ -12,6 +12,43 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { AppParamListBase } from "../../navigations/main";
 import { useFilterOrder } from "../../hooks/useFilterOrder";
 
+/**
+ * GoalListScreen Component
+ *
+ * This component is responsible for displaying a paginated list of user goals. It features a search bar, filter options,
+ * and infinite scrolling to load more goals. It fetches data using React Query and allows users to filter and search goals.
+ *
+ * @component
+ * @example
+ * return (
+ *   <GoalListScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - Component props.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation.
+ * @param {Object} props.route - The route object that contains the current route's information.
+ *
+ * @returns {JSX.Element} A React component that renders a list of goals with search, filter, and infinite scrolling functionality.
+ *
+ * @typedef {Object} Goal - The goal object containing details about each goal.
+ * @property {number} id - The unique identifier of the goal.
+ * @property {string} title - The title of the goal.
+ * @property {string} [description] - A brief description of the goal.
+ * @property {string} [date_start] - The start date of the goal.
+ * @property {string} [date_end] - The end date of the goal.
+ * @property {Object[]} steps - An array of step objects representing the goal's steps.
+ * @property {boolean} [steps.achieved] - Indicates if the step is achieved.
+ *
+ * @typedef {Object} Filters - The filters object used to filter goals.
+ * @property {string} [title] - The search query used to filter by goal title.
+ *
+ * @param {Object} route.params - Contains the parameters passed through the route, including filters.
+ * @param {Filters} [route.params.filters] - Optional filters to be applied when fetching the goals list.
+ */
+
 export const GoalListScreen = ({
   navigation,
   route,

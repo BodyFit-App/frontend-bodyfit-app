@@ -2,12 +2,21 @@ import { Searchbar, SearchbarProps } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import theme from "../../theme";
 
-export default function CustomSearchBar({
-    children,
-    style = {},
-    ...props
-  }: SearchbarProps) {
+/**
+ * `CustomSearchBar` component that wraps the `Searchbar` from `react-native-paper`,
+ * applying custom styles while allowing default props to be passed through.
+ *
+ * @param {SearchbarProps} props - The props for the `Searchbar` component from `react-native-paper`.
+ * @param {React.ReactNode} [children] - Optional content passed as children (not used here).
+ * @param {Object} [style={}] - Optional custom style to be applied to the search bar.
+ * @returns {JSX.Element} The customized search bar component.
+ */
 
+export default function CustomSearchBar({
+  children,
+  style = {},
+  ...props
+}: SearchbarProps) {
   return (
     <Searchbar
       style={{
@@ -21,7 +30,7 @@ export default function CustomSearchBar({
         ...(style as object),
       }}
       inputStyle={{
-        fontSize: 16, 
+        fontSize: 16,
         alignSelf: "center",
       }}
       {...props}

@@ -22,6 +22,26 @@ type ImagePickerProps = {
   imageStyle?: {};
 };
 
+/**
+ * Props for the ImagePicker component.
+ *
+ * @typedef {Object} ImagePickerProps
+ * @property {string | null} value - The URI of the currently selected image.
+ * @property {(uri: string) => void} onChange - Callback function triggered when an image is selected or changed.
+ * @property {number} [width=300] - The width to resize the image to. Defaults to 300.
+ * @property {[number, number]} [aspect=[4, 3]] - The aspect ratio to maintain when cropping the image. Defaults to [4, 3].
+ * @property {Object} [imageStyle] - Optional styles to apply to the image.
+ */
+
+/**
+ * ImagePicker component allows users to pick an image from their device's media library,
+ * resize it, and apply an optional aspect ratio. It also displays the selected image
+ * or a placeholder icon when no image is selected.
+ *
+ * @param {ImagePickerProps & ViewProps} props - The props for the ImagePicker component.
+ * @returns {JSX.Element} The image picker component.
+ */
+
 function ImagePicker({
   value,
   onChange,

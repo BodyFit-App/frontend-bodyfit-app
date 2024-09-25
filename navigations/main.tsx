@@ -21,6 +21,38 @@ import { ProfileDetailsScreen } from "../screens/ProfileDetailScreen";
 import { FollowersScreen } from "../screens/FollowersScreen";
 import RgpdScreen from "../screens/RgpdScreen";
 
+/**
+ * The main navigation component that handles the navigation structure of the app. It contains routes for authenticated
+ * and unauthenticated users. If the user is authenticated, they will be shown various screens like Home, Exercises, Goals,
+ * Programs, etc. Otherwise, they will be directed to the login, register, or landing screens.
+ *
+ * @component
+ * @example
+ * return <MainNavigation />;
+ *
+ * @typedef {Object} AppParamListBase - The navigation parameter types for the app.
+ * @property {Object} Actualites - Parameters for the "Actualites" screen.
+ * @property {Object} DashboardScreen - Parameters for the "DashboardScreen".
+ * @property {Object} ExerciseDetailsScreen - Parameters for the "ExerciseDetailsScreen".
+ * @property {Object} ExerciseFormScreen - Parameters for the "ExerciseFormScreen".
+ * @property {Object} ExerciseListScreen - Parameters for the "ExerciseListScreen".
+ * @property {Object} GoalDetailsScreen - Parameters for the "GoalDetailsScreen".
+ * @property {Object} GoalFormScreen - Parameters for the "GoalFormScreen".
+ * @property {Object} GoalListScreen - Parameters for the "GoalListScreen".
+ * @property {Object} HomeScreen - Parameters for the "HomeScreen".
+ * @property {Object} LandingScreen - Parameters for the "LandingScreen".
+ * @property {Object} LoginScreen - Parameters for the "LoginScreen".
+ * @property {Object} ProfileFormScreen - Parameters for the "ProfileFormScreen".
+ * @property {Object} ProfileDetailsScreen - Parameters for the "ProfileDetailsScreen".
+ * @property {Object} ProgramDetailsScreen - Parameters for the "ProgramDetailsScreen".
+ * @property {Object} ProgramFormScreen - Parameters for the "ProgramFormScreen".
+ * @property {Object} ProgramListScreen - Parameters for the "ProgramListScreen".
+ * @property {Object} RegisterScreen - Parameters for the "RegisterScreen".
+ * @property {Object} RgpdScreen - Parameters for the "RgpdScreen".
+ *
+ * @returns {JSX.Element} - The main navigation component that renders navigation stacks.
+ */
+
 export type AppParamListBase = {
   Actualites: { id?: number; user_id?: number; type?: string };
   DashboardScreen: undefined;
@@ -93,9 +125,16 @@ export const MainNavigation = () => {
               component={GoalDetailsScreen}
               options={{ title: "Détails de l'objectif" }}
             />
-            <Stack.Screen name="GoalFormScreen" component={GoalFormScreen} 
-            options={{title: 'Créer un objectif'}} />
-            <Stack.Screen name="GoalListScreen" component={GoalListScreen} options={{title:'Liste des objectifs'}} />
+            <Stack.Screen
+              name="GoalFormScreen"
+              component={GoalFormScreen}
+              options={{ title: "Créer un objectif" }}
+            />
+            <Stack.Screen
+              name="GoalListScreen"
+              component={GoalListScreen}
+              options={{ title: "Liste des objectifs" }}
+            />
             <Stack.Screen
               name="ProgramDetailsScreen"
               component={ProgramDetailsScreen}

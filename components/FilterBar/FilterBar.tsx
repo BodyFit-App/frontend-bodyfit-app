@@ -41,7 +41,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
   const openMenu = () => setVisibleMenu(true);
   const closeMenu = () => setVisibleMenu(false);
 
-   /**
+     /**
    * Gère la sélection d'un filtre.
    * Met à jour le filtre affiché et déclenche la fonction de rappel `onFilterChange`.
    *

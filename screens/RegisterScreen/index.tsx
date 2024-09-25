@@ -15,6 +15,22 @@ import { useAuth } from "../../hooks/useAuth";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * RegisterScreen Component
+ *
+ * This component handles the user registration process. It allows users to sign up by providing
+ * an email, password, and password confirmation. The form also requires the user to agree to terms and conditions.
+ *
+ * @component
+ * @example
+ * return (
+ *   <RegisterScreen navigation={navigation} route={route} />
+ * )
+ *
+ * @param {StackScreenProps<AppParamListBase, "RegisterScreen">} props - Navigation and route props.
+ * @returns {JSX.Element} - A screen that displays a registration form.
+ */
+
 export const RegisterScreen = ({
   navigation,
   route,
@@ -35,6 +51,18 @@ export const RegisterScreen = ({
       confirmPassword: "",
     },
   });
+
+  /**
+   * Handles form submission for user registration.
+   *
+   * @async
+   * @function onSubmit
+   *
+   * @param {object} data - The form data containing the user's email and password.
+   * @param {string} data.email - The user's email address.
+   * @param {string} data.password - The user's password.
+   * @returns {Promise<void>} - Redirects the user to the ProfileFormScreen on successful sign-up.
+   */
 
   const onSubmit = async (data: { email: string; password: string }) => {
     if (!checked) {

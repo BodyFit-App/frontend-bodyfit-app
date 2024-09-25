@@ -16,6 +16,21 @@ import { handleToggleFavoriteProgram } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
 import { useFilterOrder } from "../../hooks/useFilterOrder";
 
+/**
+ * ProgramListScreen Component
+ *
+ * This component serves as the wrapper for the `ProgramListScene`. It receives navigation and route props.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProgramListScreen navigation={navigation} route={route} />
+ * )
+ *
+ * @param {StackScreenProps<AppParamListBase, "ProgramListScreen">} props - Navigation and route props.
+ * @returns {JSX.Element} The `ProgramListScene` component wrapped in navigation.
+ */
+
 export const ProgramListScreen = ({
   navigation,
   route,
@@ -23,6 +38,25 @@ export const ProgramListScreen = ({
 }: StackScreenProps<AppParamListBase, "ProgramListScreen">) => {
   return <ProgramListScene navigation={navigation} route={route} />;
 };
+
+/**
+ * ProgramListScene Component
+ *
+ * This component is responsible for displaying a list of programs with infinite scrolling. It also includes
+ * search functionality and a filter bar to sort and filter programs based on specific criteria.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProgramListScene navigation={navigation} route={route} />
+ * )
+ *
+ * @param {object} props - Component props.
+ * @param {any} props.navigation - Navigation object for navigating between screens.
+ * @param {any} props.route - Route object containing the parameters for the screen.
+ *
+ * @returns {JSX.Element} - A screen that displays a list of programs.
+ */
 
 export const ProgramListScene = ({ navigation, route }: any) => {
   const filtersParam = route.params?.filters || {};
@@ -33,6 +67,16 @@ export const ProgramListScene = ({ navigation, route }: any) => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const filters = { title: debouncedSearchQuery, ...filtersParam };
+
+  /**
+   * Fetches a list of programs with pagination.
+   *
+   * @async
+   * @function fetchProgramsInfinite
+   *
+   * @param {object} pageParam - Pagination parameter to fetch the next page of programs.
+   * @returns {Promise<object>} - Returns a paginated list of programs.
+   */
 
   const fetchProgramsInfinite = async ({ pageParam }: any) => {
     try {
@@ -69,6 +113,15 @@ export const ProgramListScene = ({ navigation, route }: any) => {
     mutationFn: handleToggleFavoriteProgram,
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
+
+  /**
+   * Handles toggling the favorite state of a program.
+   *
+   * @function toggleFavorite
+   *
+   * @param {number} id - The ID of the program to toggle.
+   * @param {boolean} isFav - The current favorite state of the program.
+   */
 
   const toggleFavorite = (id: number, isFav: boolean) => {
     mutation.mutate({ id, isFav });
