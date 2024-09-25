@@ -5,26 +5,26 @@ import CustomButton from "../CustomButton/CustomButton";
 import theme from "../../theme";
 
 /**
- * Props pour le composant FollowerCard.
+ * Props for the FollowerCard component.
  *
  * @typedef {Object} FollowerCardProps
- * @property {string} username - Le nom d'utilisateur (identifiant unique) de l'utilisateur.
- * @property {string} fullName - Le nom complet de l'utilisateur.
- * @property {string} [profileImageUrl] - L'URL de l'image de profil de l'utilisateur. Si aucune image n'est fournie, une image par défaut est utilisée.
- * @property {number} followersCount - Le nombre de personnes qui suivent cet utilisateur.
- * @property {number} exercisesCount - Le nombre d'exercices créés par l'utilisateur.
- * @property {number} goalsCount - Le nombre d'objectifs atteints par l'utilisateur.
- * @property {boolean} followed - Indique si l'utilisateur est suivi par l'utilisateur actuel.
- * @property {() => void} onFollowToggle - Fonction appelée lorsqu'on appuie sur le bouton pour suivre ou ne plus suivre l'utilisateur.
+ * @property {string} [username] - The user's unique username.
+ * @property {string} [fullName] - The user's full name.
+ * @property {string} [profileImageUrl] - The URL of the user's profile image. If no image is provided, a default image is used.
+ * @property {number} [followersCount] - The number of people following this user.
+ * @property {number} [exercisesCount] - The number of exercises created by the user.
+ * @property {number} [goalsCount] - The number of goals the user has achieved.
+ * @property {boolean} [followed] - Indicates whether the current user is following this user.
+ * @property {() => void} [onFollowToggle] - Function called when the follow/unfollow button is pressed.
+ * @property {() => void} [onPressPseudo] - Function called when the username (pseudo) is pressed.
  */
 
 /**
- * Composant représentant une carte d'utilisateur qui affiche des informations sur un follower,
- * telles que son nom d'utilisateur, son nom complet, son image de profil, ainsi que ses statistiques.
- * Un bouton permet de suivre ou de ne plus suivre l'utilisateur.
+ * FollowerCard component displays a user's follower information, including their username, full name, 
+ * profile image, and statistics. It also includes a button to follow or unfollow the user.
  *
- * @param {FollowerCardProps} props - Les props du composant.
- * @returns {JSX.Element} Un élément JSX représentant la carte du follower.
+ * @param {FollowerCardProps} props - The props for the FollowerCard component.
+ * @returns {JSX.Element} A JSX element representing the follower card.
  */
 
 interface FollowerCardProps {

@@ -5,20 +5,22 @@ import InputChip from "../InputChip/InputChip";
 import theme from "../../theme";
 
 /**
- * Propriétés pour le composant TrainingHeader
+ * Properties for the TrainingHeader component
  * @typedef {Object} TrainingHeaderProps
- * @property {string} title - Le titre de l'entraînement.
- * @property {string} imageUrl - URL de l'image représentant l'entraînement.
- * @property {string} duration - Durée de l'entraînement (ex. : "40 min").
- * @property {string[]} categories - Liste des catégories/tags de l'entraînement.
- * @property {boolean} isFavorite - Indique si l'entraînement est marqué comme favori.
- * @property {() => void} onToggleFavorite - Fonction de rappel pour basculer l'état favori.
+ * @property {string} title - The title of the training.
+ * @property {string} imageUrl - The URL of the image representing the training.
+ * @property {string} [duration] - The duration of the training (e.g., "40 min").
+ * @property {string[]} categories - The list of categories/tags for the training.
+ * @property {boolean} isFavorite - Indicates whether the training is marked as a favorite.
+ * @property {() => void} onToggleFavorite - Callback function to toggle the favorite status.
+ * @property {() => void} [onPressEdit] - Optional function called when the edit button is pressed.
+ * @property {boolean} [isMine] - Optional flag to indicate if the training belongs to the current user.
  */
 
 /**
- * Composant affichant les informations d'un entraînement sous forme de carte.
- * @param {TrainingHeaderProps} props - Les propriétés pour le composant.
- * @returns {JSX.Element} Le composant carte affiché.
+ * Component that displays training information in the form of a card.
+ * @param {TrainingHeaderProps} props - The properties for the component.
+ * @returns {JSX.Element} The rendered card component.
  */
 
 interface TrainingHeaderProps {

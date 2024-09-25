@@ -5,45 +5,45 @@ import { Card, Text, IconButton } from "react-native-paper";
 /**
  * StepCard Component
  *
- * Ce composant représente une carte d'étape qui affiche le numéro de l'étape, une description,
- * et permet soit de supprimer l'étape (mode éditable), soit de valider l'étape (mode validation).
- * L'icône de validation peut être un check plein ou outlined selon si l'étape est validée ou non.
+ * This component represents a step card that displays the step number, a description,
+ * and allows either deleting the step (editable mode) or validating the step (validation mode).
+ * The validation icon can be a filled check or an outlined check depending on whether the step is validated.
  *
  * @component
  * @example
- * // Exemple pour une étape éditable
+ * // Example for an editable step
  * return (
  *   <StepCard
  *     stepNumber={1}
- *     description="Ceci est la description de l'étape 1."
- *     onDelete={() => console.log('Étape supprimée')}
+ *     description="This is the description for step 1."
+ *     onDelete={() => console.log('Step deleted')}
  *     isEditable={true}
  *   />
  * );
  *
  * @example
- * // Exemple pour une étape non éditable mais validable
+ * // Example for a non-editable but validatable step
  * return (
  *   <StepCard
  *     stepNumber={2}
  *     totalSteps={4}
- *     description="Ceci est la description de l'étape 2 sur 4."
- *     onValidate={() => console.log('Étape validée')}
+ *     description="This is the description for step 2 of 4."
+ *     onValidate={() => console.log('Step validated')}
  *     isEditable={false}
  *     isValidated={true}
  *   />
  * );
  *
- * @param {Object} props - Props du composant.
- * @param {number} props.stepNumber - Le numéro de l'étape actuelle.
- * @param {number} [props.totalSteps] - Le nombre total d'étapes (affiché uniquement dans le mode validation).
- * @param {string} props.description - La description de l'étape.
- * @param {function} [props.onDelete] - Fonction appelée lors de la suppression de l'étape (mode éditable).
- * @param {function} [props.onValidate] - Fonction appelée lors de la validation de l'étape (mode validation).
- * @param {boolean} props.isEditable - Indique si l'étape est en mode éditable (affiche l'icône de suppression).
- * @param {boolean} [props.isValidated=false] - Indique si l'étape est validée dans le mode validation (affiche une icône "check" plein ou outlined).
+ * @param {Object} props - The component props.
+ * @param {number} props.stepNumber - The number of the current step.
+ * @param {number} [props.totalSteps] - The total number of steps (only displayed in validation mode).
+ * @param {string} props.description - The description of the step.
+ * @param {function} [props.onDelete] - Function called when the step is deleted (editable mode).
+ * @param {function} [props.onValidate] - Function called when the step is validated (validation mode).
+ * @param {boolean} props.isEditable - Indicates if the step is in editable mode (displays the delete icon).
+ * @param {boolean} [props.isValidated=false] - Indicates if the step is validated in validation mode (displays a filled or outlined check icon).
  *
- * @returns {JSX.Element} Un élément React représentant une carte d'étape avec des actions conditionnelles selon le mode.
+ * @returns {JSX.Element} A React element representing a step card with conditional actions depending on the mode.
  */
 
 interface StepCardProps {
@@ -91,12 +91,12 @@ const StepCard: React.FC<StepCardProps> = ({
               size={20}
               onPress={onValidate}
               style={styles.iconButton}
-              testID={isValidated ? 'check' : 'check-outline'}
+              testID={isValidated ? "check" : "check-outline"}
             />
           </>
         )}
       </View>
-      <Text  style={styles.description}>{description}</Text>
+      <Text style={styles.description}>{description}</Text>
     </Card>
   );
 };

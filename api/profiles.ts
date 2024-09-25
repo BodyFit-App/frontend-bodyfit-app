@@ -5,6 +5,14 @@ import { TablesInsert, TablesUpdate } from "../types/database.types";
 import { ProfileFilter } from "../types/filters.types";
 import { ProfileOrder } from "../types/orders.types";
 
+/**
+ * Fetches a profile by its ID along with related followings, exercises, goals, and programs.
+ *
+ * @param {number} id - The ID of the profile to fetch.
+ * @returns {Promise<any>} - Returns a promise resolving to the profile data with relationships.
+ * @throws {Error} - Throws an error if the fetch operation fails.
+ */
+
 export const fetchProfileById = async (id: number) => {
   const { data: session, error: sessionError } = await client.auth.getSession();
 
@@ -21,6 +29,16 @@ export const fetchProfileById = async (id: number) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+/**
+ * Fetches profiles with optional filters and sorting, paginated.
+ *
+ * @param {number} [page=1] - The page number to fetch (defaults to 1).
+ * @param {ProfileFilter} filter - Optional filter for profiles (e.g., pseudo).
+ * @param {ProfileOrder} [order={ field: "created_at", asc: false }] - Sorting order.
+ * @returns {Promise<{ data: any[], nextCursor: number | null, count: number }>} - Returns a promise resolving to paginated profiles.
+ * @throws {Error} - Throws an error if the fetch operation fails.
+ */
 
 export const fetchProfiles = async (
   page: number = 1,
@@ -63,6 +81,14 @@ export const fetchProfiles = async (
   return { data, nextCursor, count };
 };
 
+/**
+ * Updates a profile with the provided data.
+ *
+ * @param {TablesUpdate<"profiles">} body - The profile data to update.
+ * @returns {Promise<any>} - Returns a promise resolving to the updated profile data.
+ * @throws {Error} - Throws an error if the update operation fails.
+ */
+
 export const updateProfile = async (
   body: TablesUpdate<"profiles">,
 ) => {
@@ -74,6 +100,13 @@ export const updateProfile = async (
   if (error) throw new Error(error.message);
   return data;
 };
+
+/**
+ * Fetches progress data for all users.
+ *
+ * @returns {Promise<any[]>} - Returns a promise resolving to the progress data.
+ * @throws {Error} - Throws an error if the fetch operation fails.
+ */
 
 export const fetchProgress = async () => {
   const { data, error } = await client.from("progress").select("*");

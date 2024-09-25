@@ -22,6 +22,23 @@ import { slugify } from "../../lib/helpers";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * ExerciseFormScreen Component
+ *
+ * This screen allows users to create or edit an exercise. It includes fields for the exercise's title,
+ * image, description, estimated time, visibility, and categories. If the user is editing an exercise,
+ * the screen is pre-populated with the existing exercise data.
+ *
+ * The component uses React Hook Form for form handling and React Query for data fetching and mutations.
+ *
+ * @component
+ * @example
+ * return <ExerciseFormScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "ExerciseFormScreen">} props - Navigation and route props provided by the Stack Navigator.
+ * @returns {JSX.Element} The rendered ExerciseFormScreen component.
+ */
+
 export const ExerciseFormScreen = ({
   navigation,
   route,

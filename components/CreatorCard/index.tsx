@@ -2,6 +2,23 @@ import { View, Text, StyleSheet } from "react-native";
 import { Avatar, Card, IconButton } from "react-native-paper";
 import theme from "../../theme";
 
+/**
+ * Props for the `CreatorCard` component.
+ *
+ * @typedef {Object} CreatorCardProps
+ * @property {string} firstname - The first name of the creator.
+ * @property {string} lastname - The last name of the creator.
+ * @property {string} pseudo - The pseudonym or username of the creator.
+ * @property {string} avatarUrl - The URL of the creator's avatar image.
+ */
+
+/**
+ * `CreatorCard` component displays a card with the creator's information,
+ * including their avatar, full name, and pseudonym.
+ *
+ * @param {CreatorCardProps} props - The props for the `CreatorCard` component.
+ * @returns {JSX.Element} The rendered creator card component.
+ */
 interface CreatorCardProps {
   firstname: string;
   lastname: string;
@@ -32,6 +49,9 @@ export default function CreatorCard({
   );
 }
 
+/**
+ * Styles for the `CreatorCard` component.
+ */
 const styles = StyleSheet.create({
   card: {
     margin: 16,

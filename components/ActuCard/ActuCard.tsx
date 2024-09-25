@@ -1,27 +1,26 @@
-
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Text, Card } from "react-native-paper";
 /**
- * Props pour le composant ActuCard
+ * Props for the `ActuCard` component.
  *
  * @typedef {Object} ActuCardProps
- * @property {string} username - Le nom d'utilisateur du créateur de l'exercice.
- * @property {string} fullName - Le nom complet de l'utilisateur.
- * @property {string} [profileImageUrl] - L'URL de l'image de profil de l'utilisateur (facultatif). Une image par défaut est utilisée si non fourni.
- * @property {string} actionDescription - Description de l'action réalisée (ex: "a créé un nouvel exercice").
- * @property {string} exerciseLinkText - Le texte du lien vers l'exercice.
- * @property {function} onExercisePress - Fonction appelée lorsque le lien vers l'exercice est cliqué.
- * @property {function} onUsernamePress - Fonction appelée lorsque le nom d'utilisateur est cliqué.
+ * @property {string} username - The username of the exercise creator.
+ * @property {string} fullName - The full name of the user.
+ * @property {string} [profileImageUrl] - The URL of the user's profile image (optional). A default image is used if not provided.
+ * @property {string} [actionDescription] - Description of the action performed (e.g., "created a new exercise").
+ * @property {string} [exerciseLinkText] - The text for the exercise link (optional).
+ * @property {Function} onActivityPress - Function called when the exercise link is pressed.
+ * @property {Function} onUsernamePress - Function called when the username is pressed.
  */
 
 /**
- * Composant `ActuCard` qui affiche les informations d'une action effectuée par un utilisateur
- * dans une carte. Le composant affiche un avatar, un nom complet, un nom d'utilisateur cliquable,
- * une description de l'action et un lien cliquable vers l'exercice.
+ * `ActuCard` component displays information about an action performed by a user
+ * within a card. It shows an avatar, full name, clickable username,
+ * action description, and a clickable link to the exercise.
  *
- * @param {ActuCardProps} props - Les props du composant ActuCard.
- * @returns {JSX.Element} La carte d'actualité avec l'avatar, le nom d'utilisateur, la description de l'action et un lien.
+ * @param {ActuCardProps} props - The props for the `ActuCard` component.
+ * @returns {JSX.Element} The rendered activity card.
  */
 
 interface ActuCardProps {
@@ -57,7 +56,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
               ? { uri: profileImageUrl }
               : require("../../assets/default-avatar.png")
           }
-          testID={profileImageUrl ? 'profile-image' : 'default-avatar'} 
+          testID={profileImageUrl ? "profile-image" : "default-avatar"}
         />
         <View style={styles.infoContainer}>
           <Text style={styles.fullName}>
@@ -69,7 +68,7 @@ const ActuCard: React.FC<ActuCardProps> = ({
           <Text variant="labelSmall" style={styles.description}>
             {actionDescription}{" "}
             <Text style={styles.link} onPress={onActivityPress}>
-              {truncateText(exerciseLinkText ?? '', 15)}
+              {truncateText(exerciseLinkText ?? "", 15)}
             </Text>
           </Text>
         </View>
@@ -77,6 +76,10 @@ const ActuCard: React.FC<ActuCardProps> = ({
     </Card>
   );
 };
+
+/**
+ * Interface for `ActuCard` component props.
+ */
 
 const styles = StyleSheet.create({
   card: {

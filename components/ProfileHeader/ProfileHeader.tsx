@@ -4,45 +4,46 @@ import { Avatar, Text, Button, Icon } from "react-native-paper";
 import theme from "../../theme";
 
 /**
- * Composant `ProfilHeader` qui affiche les informations du profil utilisateur, y compris le nom, le nom d'utilisateur,
- * le nombre de followers, ainsi que des statistiques sur les exercices, programmes et objectifs créés.
- * Le composant affiche également des boutons pour modifier et partager le profil.
+ * `ProfilHeader` component displays a user's profile information, including name, username,
+ * number of followers, and statistics on exercises, programs, and goals created.
+ * The component also includes buttons to edit and sign out of the profile.
  *
  * @component
  * @example
  * const handleEditProfile = () => {
- *   console.log('Modifier le profil');
+ *   console.log('Edit Profile');
  * };
- * const handleShareProfile = () => {
- *   console.log('Partager le profil');
+ * const handleSignOut = () => {
+ *   console.log('Sign Out');
  * };
  * return (
  *   <ProfilHeader
- *     name="John Doe"
+ *     firstname="John"
+ *     lastname="Doe"
  *     username="johndoe"
- *     followers={0}
+ *     followers={100}
  *     profileImage="https://example.com/image.jpg"
  *     exercisesCount={10}
  *     programsCount={5}
  *     goalsCount={3}
  *     onEditProfile={handleEditProfile}
- *     onShareProfile={handleShareProfile}
+ *     onSignOutProfile={handleSignOut}
  *   />
  * );
  *
- * @param {Object} props - Les props du composant.
- * @param {string} props.firstname - Le prénom de l'utilisateur.
- * @param {string} props.lastname - Le nom de famille de l'utilisateur.
- * @param {string} props.username - Le nom d'utilisateur.
- * @param {number} props.followers - Le nombre de followers.
- * @param {string} [props.profileImage] - L'URL de l'image du profil (optionnelle).
- * @param {number} props.exercisesCount - Le nombre d'exercices créés par l'utilisateur.
- * @param {number} props.programsCount - Le nombre de programmes créés par l'utilisateur.
- * @param {number} props.goalsCount - Le nombre d'objectifs accomplis par l'utilisateur.
- * @param {function} props.onEditProfile - La fonction à appeler lorsque l'utilisateur clique sur "Modifier le profil".
- * @param {function} props.onShareProfile - La fonction à appeler lorsque l'utilisateur clique sur "Partager le profil".
+ * @param {Object} props - The component properties.
+ * @param {string} props.firstname - The user's first name.
+ * @param {string} props.lastname - The user's last name.
+ * @param {string} props.username - The user's username.
+ * @param {number} props.followers - The number of followers the user has.
+ * @param {string} [props.profileImage] - Optional URL of the user's profile image.
+ * @param {number} props.exercisesCount - The number of exercises created by the user.
+ * @param {number} props.programsCount - The number of programs created by the user.
+ * @param {number} props.goalsCount - The number of goals achieved by the user.
+ * @param {function} props.onEditProfile - Function to call when the user clicks "Edit Profile".
+ * @param {function} props.onSignOutProfile - Function to call when the user clicks "Sign Out".
  *
- * @returns {JSX.Element} Le composant `ProfilHeader`.
+ * @returns {JSX.Element} The `ProfilHeader` component.
  */
 
 interface ProfilHeaderProps {
@@ -78,7 +79,7 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Avatar.Image  testID="profile-image"  size={100} source={imageSource} />
+        <Avatar.Image testID="profile-image" size={100} source={imageSource} />
         <View style={styles.userInfo}>
           <Text style={styles.name}>{firstname}</Text>
           <Text style={styles.name}>{lastname}</Text>
@@ -122,7 +123,7 @@ const ProfilHeader: React.FC<ProfilHeaderProps> = ({
           style={styles.button}
           textColor="#2F80ED"
         >
-          <Icon source={'exit-to-app'} size={20} color={theme.colors.primary} />
+          <Icon source={"exit-to-app"} size={20} color={theme.colors.primary} />
         </Button>
       </View>
     </View>
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "transparent",
     padding: 20,
- 
   },
   headerContainer: {
     flexDirection: "row",

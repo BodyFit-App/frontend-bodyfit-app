@@ -10,6 +10,41 @@ type DeleteModalProps = {
   onConfirm: () => void;
 };
 
+/**
+ * DeleteModal Component
+ *
+ * This component renders a modal that asks the user to confirm a deletion action. It provides two options:
+ * "Annuler" to cancel the deletion and "Supprimer" to confirm the deletion.
+ *
+ * @component
+ * @example
+ * const [isVisible, setIsVisible] = useState(false);
+ *
+ * const handleConfirm = () => {
+ *   // Handle the confirm action
+ *   setIsVisible(false);
+ * };
+ *
+ * const handleClose = () => {
+ *   setIsVisible(false);
+ * };
+ *
+ * return (
+ *   <DeleteModal
+ *     visible={isVisible}
+ *     onClose={handleClose}
+ *     onConfirm={handleConfirm}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {boolean} props.visible - A boolean that determines if the modal is visible or not.
+ * @param {function} props.onClose - A function that is called when the modal is closed without confirming.
+ * @param {function} props.onConfirm - A function that is called when the user confirms the deletion.
+ *
+ * @returns {JSX.Element} The DeleteModal component.
+ */
+
 const DeleteModal = ({ visible, onClose, onConfirm }: DeleteModalProps) => {
   return (
     <Portal>

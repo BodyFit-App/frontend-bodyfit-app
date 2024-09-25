@@ -5,32 +5,32 @@ import { Card, Text, ProgressBar } from "react-native-paper";
 /**
  * ObjectifCard Component
  *
- * Ce composant représente une carte d'objectif, qui affiche un titre, une période (date de début et de fin),
- * une description, ainsi qu'une barre de progression indiquant l'avancement de l'objectif.
- * Il est possible d'ajouter une action lorsqu'on clique sur la carte via la prop `onPress`.
+ * This component represents a goal card, which displays a title, a time period (start and end dates),
+ * a description, and a progress bar showing the goal's completion status.
+ * It also supports an optional press action via the `onPress` prop.
  *
  * @component
  * @example
  * return (
  *   <ObjectifCard
- *     title="Perte de poids"
+ *     title="Weight Loss"
  *     startDate="2024-01-01"
  *     endDate="2024-12-31"
- *     description="Objectif de perte de poids pour l'année 2024."
+ *     description="Weight loss goal for the year 2024."
  *     progress={0.4}
- *     onPress={() => console.log('Accéder à l\'objectif')}
+ *     onPress={() => console.log('Access the goal')}
  *   />
  * );
  *
- * @param {Object} props - Les propriétés du composant.
- * @param {string} props.title - Le titre de l'objectif.
- * @param {string} [props.startDate] - La date de début de l'objectif.
- * @param {string} [props.endDate] - La date de fin de l'objectif.
- * @param {string} [props.description] - La description de l'objectif.
- * @param {number} props.progress - La progression de l'objectif, exprimée sous forme de nombre entre 0 et 1 (ex. 0.5 pour 50%).
- * @param {function} [props.onPress] - Fonction optionnelle appelée lorsque la carte est pressée.
+ * @param {Object} props - The component properties.
+ * @param {string} props.title - The title of the goal.
+ * @param {string} [props.startDate] - The start date of the goal.
+ * @param {string} [props.endDate] - The end date of the goal.
+ * @param {string} [props.description] - The description of the goal.
+ * @param {number} props.progress - The progress of the goal, expressed as a number between 0 and 1 (e.g., 0.5 for 50%).
+ * @param {function} [props.onPress] - Optional function called when the card is pressed.
  *
- * @returns {JSX.Element} Un élément React représentant une carte d'objectif avec titre, dates, description et progression.
+ * @returns {JSX.Element} A React element representing a goal card with a title, dates, description, and progress.
  */
 
 interface ObjectifCardProps {

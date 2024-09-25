@@ -5,46 +5,48 @@ import CustomButton from "../CustomButton/CustomButton";
 import theme from "../../theme";
 
 /**
- * Composant `OtherProfilHeader` qui affiche les informations du profil utilisateur, y compris le nom, le nom d'utilisateur,
- * le nombre de followers, ainsi que des statistiques sur les exercices, programmes et objectifs créés.
- * Le composant affiche également des boutons pour modifier et partager le profil.
+ * `OtherProfilHeader` component displays a user's profile information, including name, username,
+ * number of followers, and statistics on exercises, programs, and goals created.
+ * It also includes a button to follow or unfollow the user.
  *
  * @component
  * @example
- * const handleEditProfile = () => {
- *   console.log('Modifier le profil');
- * };
- * const handleShareProfile = () => {
- *   console.log('Partager le profil');
+ * const handleFollowToggle = () => {
+ *   console.log('Follow/unfollow the user');
  * };
  * return (
  *   <OtherProfilHeader
- *     name="John Doe"
+ *     firstname="John"
+ *     lastname="Doe"
  *     username="johndoe"
- *     followers={0}
+ *     followers={100}
  *     profileImage="https://example.com/image.jpg"
  *     exercisesCount={10}
  *     programsCount={5}
  *     goalsCount={3}
+ *     followed={false}
+ *     onFollowToggle={handleFollowToggle}
  *   />
  * );
  *
- * @param {Object} props - Les props du composant.
- * @param {string} props.firstname - Le prénom de l'utilisateur.
- * @param {string} props.lastname - Le nom de famille de l'utilisateur.
- * @param {string} props.username - Le nom d'utilisateur.
- * @param {number} props.followers - Le nombre de followers.
- * @param {string} [props.profileImage] - L'URL de l'image du profil (optionnelle).
- * @param {number} props.exercisesCount - Le nombre d'exercices créés par l'utilisateur.
- * @param {number} props.programsCount - Le nombre de programmes créés par l'utilisateur.
- * @param {number} props.goalsCount - Le nombre d'objectifs accomplis par l'utilisateur.
+ * @param {Object} props - The component props.
+ * @param {string} props.firstname - The user's first name.
+ * @param {string} props.lastname - The user's last name.
+ * @param {string} props.username - The user's username.
+ * @param {number} props.followers - The number of followers the user has.
+ * @param {string} [props.profileImage] - Optional URL of the user's profile image.
+ * @param {number} props.exercisesCount - The number of exercises created by the user.
+ * @param {number} props.programsCount - The number of programs created by the user.
+ * @param {number} props.goalsCount - The number of goals achieved by the user.
+ * @param {boolean} props.followed - Indicates whether the current user is following this user.
+ * @param {function} props.onFollowToggle - Function to call when the follow/unfollow button is pressed.
  *
- * @returns {JSX.Element} Le composant `OtherProfilHeader`.
+ * @returns {JSX.Element} The `OtherProfilHeader` component.
  */
 
 interface OtherProfilHeaderProps {
-firstname: string;
-lastname: string;
+  firstname: string;
+  lastname: string;
   username: string;
   followers: number;
   profileImage?: string;
@@ -57,16 +59,16 @@ lastname: string;
 
 const OtherProfilHeader: React.FC<OtherProfilHeaderProps> = ({
   firstname,
-    lastname,
+  lastname,
   username,
   followers,
   profileImage,
   exercisesCount,
   programsCount,
   goalsCount,
-    followed,
-  
-    onFollowToggle,
+  followed,
+
+  onFollowToggle,
 }) => {
   const defaultImage = "https://placekitten.com/200/200";
   const imageSource = profileImage
@@ -76,9 +78,11 @@ const OtherProfilHeader: React.FC<OtherProfilHeaderProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Avatar.Image  testID="profile-image"  size={100} source={imageSource} />
+        <Avatar.Image testID="profile-image" size={100} source={imageSource} />
         <View style={styles.userInfo}>
-          <Text style={styles.name}>{firstname} {lastname}</Text>
+          <Text style={styles.name}>
+            {firstname} {lastname}
+          </Text>
           <Text style={styles.username}>@{username}</Text>
           <Text style={styles.followers}>{followers} followers</Text>
         </View>
@@ -102,9 +106,16 @@ const OtherProfilHeader: React.FC<OtherProfilHeaderProps> = ({
         </View>
       </View>
       <View style={styles.buttonsContainer}>
-      <CustomButton
-          {...(followed ? { style: { backgroundColor: theme.colors.primary, borderWidth: 0} } : "")}
-          {...(followed ? { textColor: theme.colors.textFollow  } : "")}
+        <CustomButton
+          {...(followed
+            ? {
+                style: {
+                  backgroundColor: theme.colors.primary,
+                  borderWidth: 0,
+                },
+              }
+            : "")}
+          {...(followed ? { textColor: theme.colors.textFollow } : "")}
           onPress={onFollowToggle}
           style={styles.button}
         >
@@ -120,7 +131,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "transparent",
     padding: 20,
- 
   },
   headerContainer: {
     flexDirection: "row",

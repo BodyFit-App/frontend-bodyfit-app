@@ -13,6 +13,30 @@ import { TablesInsert } from "../../types/database.types";
 import { uploadImage } from "../../buckets/images";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * ProfileFormScreen Component
+ *
+ * This component renders a form for updating a user profile. It allows users to change their profile picture, pseudo, first name, and last name.
+ * Users can also delete their profile from this screen.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProfileFormScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation for navigating between screens.
+ * @param {Object} props.route - The route object provided by React Navigation containing route-specific data.
+ *
+ * @returns {JSX.Element} The ProfileFormScreen component for updating a user's profile.
+ *
+ * @param {StackScreenProps<AppParamListBase, 'ProfileFormScreen'>} props - Props passed down from React Navigation, including `navigation` and `route`.
+ */
+
 export const ProfileFormScreen = ({
   navigation,
   route,

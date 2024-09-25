@@ -4,6 +4,31 @@ import { IconButton, TouchableRipple } from "react-native-paper";
 import theme from "../../theme";
 import { TablesInsert } from "../../types/database.types";
 
+/**
+ * StepList Component
+ *
+ * This component renders a list of steps and allows users to delete a step from the list. Each step
+ * displays its title and includes a delete button.
+ *
+ * @component
+ * @example
+ * const handleStepsChange = (steps) => {
+ *   console.log(steps);
+ * };
+ * return (
+ *   <StepList
+ *     steps={[{ title: "Step 1" }, { title: "Step 2" }]}
+ *     onChange={handleStepsChange}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties of the component.
+ * @param {Partial<TablesInsert<"steps">>[]} props.steps - The array of steps to be displayed.
+ * @param {function} props.onChange - Function to update the list of steps when a step is deleted.
+ *
+ * @returns {JSX.Element} The rendered StepList component.
+ */
+
 export type StepListProps = {
   steps: Partial<TablesInsert<"steps">>[];
   onChange: (value: Partial<TablesInsert<"steps">>[]) => void;
