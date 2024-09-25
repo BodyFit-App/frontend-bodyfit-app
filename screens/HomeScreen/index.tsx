@@ -9,7 +9,6 @@ import { FollowersScreen } from "../FollowersScreen";
 import DashboardScreen from "../DashboardScreen";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { FabHome } from "../../components/FabDashboard/FabDashboard";
 
 export const HomeScreen = ({
   navigation,

@@ -17,6 +17,8 @@ module.exports = {
     "!jest.config.js",
     "!theme.ts",
     "!App.tsx",
+    "!**/navigations/**",
+    "!**/RgpdScreen/**",
   ],
   setupFilesAfterEnv: ["<rootDir>/__mocks__/jest.setup.js"],
 };

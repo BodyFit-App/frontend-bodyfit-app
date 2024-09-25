@@ -1,3 +1,4 @@
+import { client } from "../lib/supabase";
 import {
   fetchProfileById,
   fetchProfiles,
@@ -7,13 +8,22 @@ import {
 const { setTestData, setTestError } = require("@supabase/supabase-js");
 
 describe("Tests api/profiles", () => {
+  beforeEach(() => {
+    client.auth.getSession.mockResolvedValue({
+      data: {
+        session: { user: { id: 123, user_metadata: { profile_id: 1 } } },
+      },
+      error: null,
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
     setTestData(null);
     setTestError(null);
   });
 
-  xdescribe("fetchProfileById", () => {
+  describe("fetchProfileById", () => {
     it("should return data when the fetch is successful", async () => {
       const mockData = [{ id: 1, pseudo: "User1", avatar: "avatar1.png" }];
       setTestData(mockData);
@@ -32,7 +42,7 @@ describe("Tests api/profiles", () => {
     });
   });
 
-  xdescribe("fetchProfiles", () => {
+  describe("fetchProfiles", () => {
     it("should return data when the fetch is successful", async () => {
       const mockData = [
         {
