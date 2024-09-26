@@ -52,6 +52,8 @@ export const ProfileDetailsScreen = ({
 
   if (error) return <Text>{error.message}</Text>;
 
+  console.log(profile?.following);
+
   return (
     <ScrollView>
       <View style={styles.profilheader}>

@@ -17,7 +17,7 @@ export const fetchProfileById = async (id: number) => {
   ).eq(
     "id",
     id,
-  ).eq("followedBy.followee_id", profile_id).single();
+  ).eq("followedBy.profile_id", profile_id).single();
   if (error) throw new Error(error.message);
   return data;
 };
