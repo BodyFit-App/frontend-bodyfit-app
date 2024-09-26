@@ -259,7 +259,9 @@ const DashboardScreen = ({
         </View>
         <View>
           <Text style={styles.discordTxt}>
-            Besoin d'aide ? Rendez-vous sur notre{" "}
+            Besoin d'aide ? 
+            </Text> 
+            <Text style={styles.discordTxtbis}> Rendez-vous sur notre{" "}
             <Text
               style={styles.lienTxt}
               onPress={() => Linking.openURL("https://discord.gg/SG4x8K7pf6")}
@@ -350,7 +352,13 @@ const styles = StyleSheet.create({
   discordTxt: {
     color: theme.colors.textPlaceholder,
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 5,
+
+    fontStyle: "italic",
+  },
+  discordTxtbis: {
+    color: theme.colors.textPlaceholder,
+    textAlign: "center",
     marginBottom: 20,
     fontStyle: "italic",
   },
