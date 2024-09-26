@@ -235,24 +235,11 @@ export const GoalFormScreen = ({
             name="date_end"
           />
 
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextField
-                mode="outlined"
-                label="Description"
-                placeholder="Ex: Pensez à bien vous équiper"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value || ""}
-                multiline
-                numberOfLines={10}
-              />
-            )}
-            name="description"
-          />
-
           <Divider bold />
+
+          <Text style={{ color: theme.colors.secondary, fontSize: 16 }}>
+                  Ajouter une étape
+                </Text>
 
           <Controller
             control={control}
