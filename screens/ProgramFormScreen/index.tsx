@@ -20,6 +20,28 @@ import { AppParamListBase } from "../../navigations/main";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useAuth } from "../../hooks/useAuth";
 
+/**
+ * ProgramFormScreen Component
+ *
+ * This component allows users to create or update a program with sessions and exercises.
+ * It handles both adding and editing programs with session management, including the ability
+ * to add or remove sessions and exercises.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProgramFormScreen navigation={navigation} route={route} />
+ * );
+ *
+ * @param {Object} props - The props passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation.
+ * @param {Object} props.route - The route object provided by React Navigation.
+ * @param {Object} props.route.params - The route parameters.
+ * @param {number} [props.route.params.id] - The ID of the program to edit (if in edit mode).
+ *
+ * @returns {JSX.Element} The ProgramFormScreen component.
+ */
+
 export const ProgramFormScreen = ({
   navigation,
   route,

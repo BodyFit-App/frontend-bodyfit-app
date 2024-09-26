@@ -5,6 +5,14 @@ import { TablesInsert } from "../types/database.types";
 import { GoalFilter } from "../types/filters.types";
 import { GoalOrder } from "../types/orders.types";
 
+/**
+ * Fetches a goal by its ID, including associated steps.
+ *
+ * @param {number} id - The ID of the goal to fetch.
+ * @returns {Promise<any>} - Returns a promise resolving to the goal data.
+ * @throws {Error} - Throws an error if the fetch operation fails.
+ */
+
 export const fetchGoalById = async (id: number) => {
   const { data, error } = await client.from("goals")
     .select("*, steps(*)").eq("id", id)
@@ -14,6 +22,16 @@ export const fetchGoalById = async (id: number) => {
 
   return data;
 };
+
+/**
+ * Fetches goals with optional filters, pagination, and ordering.
+ *
+ * @param {number} [page=1] - The page number to fetch.
+ * @param {GoalFilter} [filter] - Optional filters to apply to the goal search.
+ * @param {GoalOrder} [order={ field: "created_at", asc: false }] - Optional ordering for the fetched goals.
+ * @returns {Promise<{ data: any[], nextCursor: number | null, count: number }>} - Returns a promise resolving to the goal data and pagination info.
+ * @throws {Error} - Throws an error if the fetch operation fails.
+ */
 
 export const fetchGoals = async (
   page: number = 1,
@@ -50,6 +68,14 @@ export const fetchGoals = async (
   return { data, nextCursor, count };
 };
 
+/**
+ * Upserts a goal (inserts or updates if existing).
+ *
+ * @param {TablesInsert<"goals">} body - The goal data to insert or update.
+ * @returns {Promise<any>} - Returns a promise resolving to the inserted or updated goal data.
+ * @throws {Error} - Throws an error if the upsert operation fails.
+ */
+
 export const upsertGoal = async (
   body: TablesInsert<"goals">,
 ) => {
@@ -60,6 +86,14 @@ export const upsertGoal = async (
   if (error) throw new Error(error.message);
   return data;
 };
+
+/**
+ * Deletes a goal by its ID.
+ *
+ * @param {number} id - The ID of the goal to delete.
+ * @returns {Promise<void>} - Returns a promise that resolves when the goal is deleted.
+ * @throws {Error} - Throws an error if the delete operation fails.
+ */
 
 export const deleteGoal = async (
   id: number,
@@ -72,6 +106,14 @@ export const deleteGoal = async (
   if (error) throw new Error(error.message);
 };
 
+/**
+ * Adds steps to a goal.
+ *
+ * @param {TablesInsert<"steps">[]} body - The step data to insert.
+ * @returns {Promise<any[]>} - Returns a promise resolving to the inserted steps.
+ * @throws {Error} - Throws an error if the insert operation fails.
+ */
+
 export const addSteps = async (
   body: TablesInsert<"steps">[],
 ) => {
@@ -83,6 +125,14 @@ export const addSteps = async (
   return data;
 };
 
+/**
+ * Deletes all steps associated with a specific goal.
+ *
+ * @param {number} goal_id - The ID of the goal whose steps are to be deleted.
+ * @returns {Promise<void>} - Returns a promise that resolves when the steps are deleted.
+ * @throws {Error} - Throws an error if the delete operation fails.
+ */
+
 export const resetSteps = async (
   goal_id: number,
 ) => {
@@ -93,6 +143,15 @@ export const resetSteps = async (
 
   if (error) throw new Error(error.message);
 };
+
+/**
+ * Updates the achieved status of a step.
+ *
+ * @param {number} id - The ID of the step to update.
+ * @param {boolean} isAchieved - The new achieved status of the step.
+ * @returns {Promise<any>} - Returns a promise resolving to the updated step.
+ * @throws {Error} - Throws an error if the update operation fails.
+ */
 
 export const updateStepStatus = async (
   id: number,

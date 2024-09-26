@@ -13,6 +13,21 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 import { useAuth } from "../../hooks/useAuth";
 
+/**
+ * GoalDetailsScreen Component
+ *
+ * This component displays the details of a specific goal, including its title, banner image, description, progress, and steps.
+ * It allows users to view and validate each step of the goal and provides an option to edit the goal if it belongs to the logged-in user.
+ * The screen fetches goal details using the `useQuery` hook and supports mutation for updating step statuses.
+ *
+ * @component
+ * @example
+ * return <GoalDetailsScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "GoalDetailsScreen">} props - Navigation and route props provided by the Stack Navigator.
+ * @returns {JSX.Element} The rendered GoalDetailsScreen component.
+ */
+
 export const GoalDetailsScreen = ({
   navigation,
   route,
@@ -29,6 +44,14 @@ export const GoalDetailsScreen = ({
   });
 
   const steps = data?.steps.sort((a, b) => a.id - b.id) || [];
+
+  /**
+   * Updates the achieved status of a goal step.
+   *
+   * @param {Object} params - Parameters for updating the step status.
+   * @param {number} params.id - Step ID.
+   * @param {boolean} params.isAchieved - New achieved status.
+   */
 
   const handleUpdateAchieved = async ({ id, isAchieved }: any) => {
     try {

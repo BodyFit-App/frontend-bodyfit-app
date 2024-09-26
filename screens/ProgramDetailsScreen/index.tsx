@@ -18,6 +18,31 @@ import theme from "../../theme";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 
+/**
+ * ProgramDetailsScreen Component
+ *
+ * This component displays the details of a specific program. It includes information such as the program's title, description, exercises, and sessions.
+ * Users can also toggle the program as a favorite or edit the program if it belongs to them.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProgramDetailsScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation for navigating between screens.
+ * @param {Object} props.route - The route object provided by React Navigation containing route-specific data.
+ * @param {Object} props.route.params - Route parameters, including the `id` of the program to fetch details for.
+ *
+ * @returns {JSX.Element} The ProgramDetailsScreen component displaying the details of the selected program.
+ *
+ * @param {StackScreenProps<AppParamListBase, 'ProgramDetailsScreen'>} props - Props passed down from React Navigation, including `navigation` and `route`.
+ */
+
 export const ProgramDetailsScreen = ({
   navigation,
   route,

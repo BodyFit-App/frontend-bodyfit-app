@@ -4,6 +4,24 @@ import { View } from "react-native";
 import TextField from "../../components/TextField/TextField";
 import { ProgramFormProps } from "./types";
 
+/**
+ * ProgramForm Component
+ *
+ * A form for creating or editing a program, including input fields for the title and description.
+ * This component is designed to work with React Hook Form's `Controller` to manage form state and validation.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProgramForm control={control} />
+ * );
+ *
+ * @param {Object} props - The props passed to the component.
+ * @param {Object} props.control - The control object provided by `react-hook-form` to manage form state.
+ *
+ * @returns {JSX.Element} The ProgramForm component.
+ */
+
 const ProgramForm = ({ control }: ProgramFormProps) => {
   return (
     <View style={{ gap: 16 }}>

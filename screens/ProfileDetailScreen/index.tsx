@@ -12,6 +12,31 @@ import { handleToggleFollow } from "../../api/toggles";
 import { AppParamListBase } from "../../navigations/main";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
+/**
+ * ProfileDetailsScreen Component
+ *
+ * This component renders the details of a user profile, including goals, exercises, and programs created by the user.
+ * It also allows toggling the follow status for the user.
+ *
+ * @component
+ * @example
+ * return (
+ *   <ProfileDetailsScreen
+ *     navigation={navigation}
+ *     route={route}
+ *   />
+ * );
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.navigation - The navigation object provided by React Navigation for navigation between screens.
+ * @param {Object} props.route - The route object provided by React Navigation containing route-specific data.
+ * @param {number} props.route.params.id - The ID of the user profile to be displayed.
+ *
+ * @returns {JSX.Element} A React component that displays the details of a user profile including their goals, exercises, and programs.
+ *
+ * @param {StackScreenProps<AppParamListBase, 'ProfileDetailsScreen'>} props - Props passed down from React Navigation, including `navigation` and `route`.
+ */
+
 export const ProfileDetailsScreen = ({
   navigation,
   route,

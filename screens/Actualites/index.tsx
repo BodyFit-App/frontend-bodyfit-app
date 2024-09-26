@@ -8,6 +8,22 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { AppParamListBase } from "../../navigations/main";
 import { Divider, Text } from "react-native-paper";
 
+/**
+ * ActualiteScreen Component
+ *
+ * This component displays a list of recent activities from users the current user follows.
+ * It uses infinite scrolling to load more activities as the user scrolls down the list.
+ * Each activity is displayed in an `ActuCard`, and users can navigate to detailed screens like
+ * Goal, Exercise, or Program details.
+ *
+ * @component
+ * @example
+ * return <ActualiteScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "HomeScreen">} props - The props for the component, including navigation and route.
+ * @returns {JSX.Element} The rendered ActualiteScreen component.
+ */
+
 const ActualiteScreen = ({
   navigation,
   route,
@@ -15,6 +31,14 @@ const ActualiteScreen = ({
 }: StackScreenProps<AppParamListBase, "HomeScreen">) => {
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
+
+  /**
+   * Fetches paginated activities from followees using the pageParam for pagination.
+   *
+   * @param {Object} params - Parameters for fetching paginated data.
+   * @param {number} params.pageParam - The current page number for fetching activities.
+   * @returns {Promise<Object>} - The fetched data, including the nextCursor for pagination.
+   */
 
   const fetchFolloweesActivityWithPagination = async ({ pageParam = 1 }) => {
     try {
@@ -48,6 +72,13 @@ const ActualiteScreen = ({
       index === self.findIndex((t) => t.title === item.title)
   );
 
+  /**
+   * Handles navigation to the appropriate details screen based on activity type.
+   *
+   * @param {number} id - The ID of the activity item.
+   * @param {string} type - The type of activity (goals, exercises, programs).
+   */
+
   const handleActivityPress = (id?: number, type?: string) => {
     if (type === "goals") {
       navigation.push("GoalDetailsScreen", { id } as never);
@@ -60,10 +91,21 @@ const ActualiteScreen = ({
     }
   };
 
+  /**
+   * Handles navigation to the user's profile when their username is clicked.
+   *
+   * @param {number} id - The profile ID of the user.
+   */
   const handlePseudoPress = (id?: number) => {
     navigation.push("ProfilDetailScreen" as never, { id } as never);
   };
 
+  /**
+   * Adjusts the description text based on the activity type.
+   *
+   * @param {string} item - The activity type.
+   * @returns {string} - The action description text.
+   */
   const adjustText = (item: any) => {
     if (item === "goals") {
       return "a atteint son objectif:";

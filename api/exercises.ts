@@ -6,6 +6,15 @@ import { TablesInsert } from "../types/database.types";
 import { ExerciseFilter } from "../types/filters.types";
 import { ExerciseOrder } from "../types/orders.types";
 
+/**
+ * Fetches an exercise by its ID, optionally checking if it is a favorite for a specific profile.
+ *
+ * @param {number} id - The ID of the exercise to fetch.
+ * @param {number} [profileIdForFavorites] - The profile ID to check if the exercise is a favorite.
+ * @returns {Promise<Tables<"exercises">>} - Returns a promise resolving to the exercise data.
+ * @throws {Error} - Throws an error if the fetch fails.
+ */
+
 export const fetchExerciseById = async (
   id: number,
   profileIdForFavorites?: number,
@@ -26,6 +35,17 @@ export const fetchExerciseById = async (
 
   return data;
 };
+
+/**
+ * Fetches exercises based on pagination, filters, and ordering.
+ *
+ * @param {number} [page=1] - The current page number.
+ * @param {ExerciseFilter} [filter] - Optional filters to apply to the exercises query.
+ * @param {ExerciseOrder} [order={ field: "created_at", asc: false }] - The order in which to sort the exercises.
+ * @param {number} [profileIdForFavorites] - The profile ID to check if exercises are favorited by the user.
+ * @returns {Promise<{ data: any[], nextCursor: number | null, count: number }>} - Returns a promise resolving to the exercise data, next page cursor, and total count.
+ * @throws {Error} - Throws an error if the fetch fails.
+ */
 
 export const fetchExercises = async (
   page: number = 1,
@@ -78,6 +98,13 @@ export const fetchExercises = async (
   return { data, nextCursor, count };
 };
 
+/**
+ * Fetches exercises for a dropdown list where the user has visibility and ownership.
+ *
+ * @returns {Promise<Array<{ id: number, title: string, profile_id: number, favorite_exercises: any[] }>>} - Returns a promise resolving to an array of exercises.
+ * @throws {Error} - Throws an error if the fetch fails.
+ */
+
 export const fetchDropdownExercises = async () => {
   const { data: session, error: sessionError } = await client.auth.getSession();
 
@@ -94,6 +121,14 @@ export const fetchDropdownExercises = async () => {
   return data;
 };
 
+/**
+ * Deletes an exercise by its ID.
+ *
+ * @param {number} id - The ID of the exercise to delete.
+ * @returns {Promise<void>} - Returns a promise that resolves when the deletion is complete.
+ * @throws {Error} - Throws an error if the delete request fails.
+ */
+
 export const deleteExercise = async (
   id: number,
 ) => {
@@ -104,6 +139,14 @@ export const deleteExercise = async (
 
   if (error) throw new Error(error.message);
 };
+
+/**
+ * Upserts (inserts or updates) an exercise.
+ *
+ * @param {TablesInsert<"exercises">} body - The exercise data to upsert.
+ * @returns {Promise<Tables<"exercises">>} - Returns a promise resolving to the upserted exercise data.
+ * @throws {Error} - Throws an error if the upsert request fails.
+ */
 
 export const upsertExercise = async (
   body: TablesInsert<"exercises">,
@@ -118,6 +161,14 @@ export const upsertExercise = async (
   return data;
 };
 
+/**
+ * Adds categories to an exercise.
+ *
+ * @param {TablesInsert<"categories_exercises">[]} categories - The categories to associate with the exercise.
+ * @returns {Promise<void>} - Returns a promise that resolves when the insertion is complete.
+ * @throws {Error} - Throws an error if the insert request fails.
+ */
+
 export const addExerciseCategories = async (
   categories: TablesInsert<"categories_exercises">[],
 ) => {
@@ -127,6 +178,14 @@ export const addExerciseCategories = async (
 
   if (error) throw new Error(error.message);
 };
+
+/**
+ * Resets (deletes) categories associated with an exercise.
+ *
+ * @param {number} exerciseId - The ID of the exercise to reset categories for.
+ * @returns {Promise<void>} - Returns a promise that resolves when the deletion is complete.
+ * @throws {Error} - Throws an error if the delete request fails.
+ */
 
 export const resetExerciseCategories = async (
   exerciseId: number,

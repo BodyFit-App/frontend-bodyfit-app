@@ -5,6 +5,33 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import ExerciseDropdown from "../../components/ExerciseDropdown/ExerciseDropdown";
 import theme from "../../theme";
 
+/**
+ * SessionForm Component
+ *
+ * A form component used to add or edit a session. It allows users to input session details like title, description, and associated exercises.
+ * The form validates that the title is required and updates the session information in the parent state.
+ *
+ * @component
+ * @example
+ * // Example usage
+ * return (
+ *   <SessionForm
+ *     value={sessions}
+ *     onChange={handleSessionsChange}
+ *     onBack={handleBack}
+ *     index={selectedSessionIndex}
+ *   />
+ * );
+ *
+ * @param {Object} props - The props for the SessionForm component.
+ * @param {Array<Object>} props.value - Array of session objects. Each session contains title, description, and associated exercise IDs.
+ * @param {Function} props.onChange - Callback function triggered when the form is submitted to update the sessions.
+ * @param {Function} props.onBack - Callback function to handle when the user wants to cancel or go back.
+ * @param {number} [props.index] - The index of the session being edited. If undefined, the form is in create mode.
+ *
+ * @returns {JSX.Element} The SessionForm component.
+ */
+
 type SessionFormProps = {
   value: Array<{
     id?: number;

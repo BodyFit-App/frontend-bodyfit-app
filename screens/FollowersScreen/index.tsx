@@ -17,6 +17,21 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { handleToggleFollow } from "../../api/toggles";
 import { useFollowOrder } from "../../hooks/useFollowOrder";
 
+/**
+ * FollowersScreen Component
+ *
+ * This screen displays a list of user profiles that can be searched, filtered, and followed/unfollowed.
+ * It fetches the profiles using infinite scrolling, allowing the user to load more profiles as they scroll.
+ * The screen provides search functionality, sorting by different criteria, and a follow toggle feature.
+ *
+ * @component
+ * @example
+ * return <FollowersScreen navigation={navigation} route={route} />;
+ *
+ * @param {StackScreenProps<AppParamListBase, "HomeScreen">} props - Navigation and route props provided by the Stack Navigator.
+ * @returns {JSX.Element} The rendered FollowersScreen component.
+ */
+
 export const FollowersScreen = ({
   navigation,
   route,
@@ -30,6 +45,13 @@ export const FollowersScreen = ({
   const filters = { pseudo: debouncedSearchQuery };
   const { session } = useAuth();
   const profileId = session?.user.user_metadata.profile_id;
+
+  /**
+   * Fetches profiles with pagination support for infinite scrolling.
+   *
+   * @param {Object} param - Contains the page parameter for pagination.
+   * @returns {Promise<Object>} The fetched profiles data.
+   */
 
   const fetchProfileInfinite = async ({ pageParam }: any) => {
     try {
@@ -78,7 +100,14 @@ export const FollowersScreen = ({
     mutationFn: handleToggleFollow,
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
-
+  
+  /**
+   * Toggles the follow status for a specific profile.
+   *
+   * @param {number} id - The profile ID.
+   * @param {boolean} isFollowed - Indicates whether the profile is currently followed.
+   */
+  
   const toggleFavorite = (id: number, isFollowed: boolean) => {
     mutation.mutate({ id, isFollowed });
   };

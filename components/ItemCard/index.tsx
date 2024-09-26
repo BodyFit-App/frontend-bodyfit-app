@@ -16,6 +16,30 @@ type Props = {
   disabledFav?: boolean;
 };
 
+/**
+ * Props for the ItemCard component.
+ *
+ * @typedef {Object} Props
+ * @property {string} title - The title of the item.
+ * @property {string} pseudo - The pseudonym or username of the user.
+ * @property {string} [description] - Optional description of the item.
+ * @property {string[]} [categories] - Optional list of categories associated with the item.
+ * @property {number} [time] - Optional time in minutes associated with the item.
+ * @property {number} [total] - Optional total count or number associated with the item (e.g., total exercises).
+ * @property {() => void} [onPressNav] - Optional callback function triggered when the item is pressed.
+ * @property {boolean} [isFav] - Optional boolean indicating if the item is marked as a favorite.
+ * @property {() => void} [onPressFav] - Optional callback function triggered when the favorite button is pressed.
+ * @property {boolean} [disabledFav] - Optional flag indicating whether the favorite button should be disabled.
+ */
+
+/**
+ * ItemCard component renders a card with item details such as title, pseudonym, description, 
+ * categories, and other relevant information. It also supports navigation and favorite toggle functionality.
+ *
+ * @param {Props} props - The props for the ItemCard component.
+ * @returns {JSX.Element} The rendered ItemCard component.
+ */
+
 export default function ItemCard({
   title,
   pseudo,

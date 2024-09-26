@@ -5,6 +5,31 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { SessionListProps } from "./types";
 import theme from "../../theme";
 
+/**
+ * SessionList Component
+ *
+ * This component displays a list of sessions. Each session includes a title and options to either edit or delete the session.
+ * The component also provides a button to add new sessions.
+ *
+ * @component
+ * @example
+ * // Example usage
+ * return (
+ *   <SessionList
+ *     sessions={sessions}
+ *     onAddSession={handleAddSession}
+ *     onDelete={handleDeleteSession}
+ *   />
+ * );
+ *
+ * @param {Object} props - The props for the SessionList component.
+ * @param {Array<Object>} props.sessions - An array of session objects, each containing a title.
+ * @param {Function} props.onAddSession - Callback function triggered to add or edit a session. It can optionally take an index to edit a session.
+ * @param {Function} props.onDelete - Callback function triggered to delete a session.
+ *
+ * @returns {JSX.Element} The SessionList component.
+ */
+
 const SessionList = ({
   sessions,
   onAddSession,
